@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-18
+**Last Updated:** 2026-01-18 (End of Day)
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -39,10 +39,12 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 11. **Phase 3: OpenGraph and Twitter Card meta tags** - 2026-01-18
 12. **Phase 3: Dynamic sitemap.xml and robots.txt** - 2026-01-18
 13. **Phase 3: Lazy loading for all images** - 2026-01-18
-14. **Phase 4: CMS infrastructure (urls, forms, views)** - 2026-01-18
-15. **Phase 4: CMS templates for all 8 content types** - 2026-01-18
-16. **Phase 4: CMS help page with content guidelines** - 2026-01-18
-17. **Phase 4: Superuser created, CMS operational** - 2026-01-18
+14. **Deployment prep: requirements.txt created** - 2026-01-18
+15. **Utility scripts added (check_env, push_keys)** - 2026-01-18
+16. **Phase 4: CMS infrastructure (urls, forms, views)** - 2026-01-18
+17. **Phase 4: CMS templates for all 8 content types** - 2026-01-18
+18. **Phase 4: CMS help page with content guidelines** - 2026-01-18
+19. **Phase 4: Superuser created, CMS operational** - 2026-01-18
 
 ---
 
