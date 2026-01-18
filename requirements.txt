@@ -1,0 +1,27 @@
+# Django and core
+Django==5.2.4
+asgiref==3.11.0
+sqlparse==0.5.5
+
+# Database
+psycopg2-binary==2.9.10
+
+# REST API
+djangorestframework==3.15.2
+
+# Forms
+django-crispy-forms==2.3
+crispy-bootstrap5==2024.10
+
+# Environment
+django-environ==0.12.0
+
+# Images
+pillow==10.4.0
+
+# Production server
+gunicorn==23.0.0
+
+# PDF processing (dev tools)
+PyMuPDF==1.26.7
+pypdf==6.6.0
