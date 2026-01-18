@@ -1,7 +1,8 @@
 # About Hampton Roads - Project Plan
 
 **Created:** 2026-01-18
-**Status:** Ready for public website implementation
+**Updated:** 2026-01-18
+**Status:** Phase 1 Complete - Public Website MVP Live
 
 ---
 
@@ -14,148 +15,125 @@ Build a mobile-first public website for the Hampton Roads VA Relocation Guide. T
 
 ---
 
-## What's Done
+## Phase 1: Public Website MVP - COMPLETE ✅
 
-### 1. Django Project Structure
-- [x] Project initialized with Django 5.2
-- [x] PostgreSQL database configured (abouthr_dev on postgres.o6.org)
-- [x] Core app with BaseModel, AccountScopedModel
-- [x] Accounts app with User/Account/UserProfile models
-- [x] Settings configured for local/dev/prod environments
+### 1. Base Template Architecture ✅
+- [x] Create base.html with mobile-first responsive layout
+- [x] Navigation (hamburger on mobile, dropdown cities menu on desktop)
+- [x] Footer with contact info and quick links
+- [x] Bootstrap 5 + custom CSS with CSS variables
+- [x] Google Fonts: Montserrat (headers) + Inter (body)
 
-### 2. Guide App - Domain Models (guide/models.py)
-All models created and migrated:
+### 2. Homepage ✅
+- [x] Hero section with Hampton Roads overview
+- [x] City cards grid by region (Southside / Peninsula)
+- [x] Quick links to Military, Tunnels, Vacation, etc.
+- [x] Testimonials preview section
+- [x] Call-to-action to explorevirginiahomes.com
 
-| Model | Purpose | Key Fields |
-|-------|---------|------------|
-| `Region` | Peninsula vs Southside | name, slug, order |
-| `City` | 9 HR cities | name, slug, region FK, description, image, school_url, has_beaches |
-| `Venue` | Restaurants, cafes, attractions, events, beaches | city FK, venue_type, cuisine_type, name, description, address |
-| `MilitaryBase` | Military installations | name, branch, city FK, description |
-| `Tunnel` | 6 tunnel/bridge systems | name, connects_from, connects_to, description |
-| `VacationDestination` | Nearby getaways | name, distance_description, highlights |
-| `VendorUtility` | Per-city utility contacts | city FK, category, name, phone, website |
-| `Testimonial` | Client quotes | client_name, quote, is_featured |
-| `TeamMember` | Company team | name, title, bio, photo |
+### 3. City Pages (9 cities) ✅
+- [x] City detail template with sections:
+  - Hero/header with city name and description
+  - Restaurants tab/section
+  - Cafes & Breweries tab/section
+  - Attractions tab/section
+  - Events & Festivals tab/section
+  - Beaches (where applicable)
+- [x] Mobile: accordion layout for touch UX
+- [x] Desktop: tabs layout
 
-### 3. CMS App (Partially Built - PAUSED)
-Started but paused - focus shifted to public website first:
-- views/mixins.py - CMSAccessMixin
-- views/dashboard.py - DashboardView
-- views/cities.py - CityListView, CityDetailView
-- views/venues.py - Venue CRUD views
-- views/military.py - Military views
+### 4. Special Section Pages ✅
+- [x] Military page (bases grouped by branch)
+- [x] Tunnel Systems page
+- [x] Vacation Destinations page
+- [x] Vendors & Utilities page (per-city tabs/accordions)
+- [x] Testimonials page
+- [x] About/Team page
+- [x] Contact page
 
-### 4. PDF Analysis Complete
-- Split 40-page PDF into individual pages (claude/specs/pages/)
-- Extracted 126 images (claude/specs/images/)
-- Full content structure documented
+### 5. URL Routing ✅
+- [x] Configure guide app URLs (guide/urls.py)
+- [x] Create public views (guide/views.py)
+- [x] Wire up to abouthr/urls.py
 
-### 5. Git Repository
-- Initialized and committed
-- Pushed to git@github.com:iXanadu/abouthr.git
+### 6. Data Seeding ✅
+- [x] guide/management/commands/seed_data.py
+- [x] Seed Regions (Peninsula, Southside) - 2
+- [x] Seed all 9 Cities with descriptions - 9
+- [x] Seed all Venues (restaurants, cafes, attractions, events, beaches) - 501
+- [x] Seed Military Bases - 16
+- [x] Seed Tunnels - 6
+- [x] Seed Vacation Destinations - 13
+- [x] Seed Vendor Utilities - 47
+- [x] Seed Testimonials - 7
+- [x] Seed Team Members - 2
 
 ---
 
-## What's NOT Done
+## Phase 2: Images & Polish - NEXT
 
-### Phase 1: Public Website Templates (HIGH PRIORITY)
+### 1. Images
+- [ ] Add hero background image to homepage
+- [ ] Add city images to city cards on homepage
+- [ ] Add city header images to city detail pages
+- [ ] Organize extracted images from PDF (claude/specs/images/)
+- [ ] Link images to database records
 
-1. **Base Template Architecture**
-   - [ ] Create base.html with mobile-first responsive layout
-   - [ ] Navigation (hamburger on mobile, full nav on desktop)
-   - [ ] Footer with contact info
-   - [ ] Include Bootstrap 5 + custom CSS
-   - [ ] Choose and implement fonts (research needed)
+### 2. Mobile Polish
+- [ ] Test on real mobile devices
+- [ ] Adjust font sizes if needed
+- [ ] Fine-tune spacing and touch targets
+- [ ] Test accordion/tab behavior
 
-2. **Homepage**
-   - [ ] Hero section with Hampton Roads overview
-   - [ ] City cards grid (links to city pages)
-   - [ ] Quick links to Military, Tunnels, etc.
-   - [ ] Call-to-action to explorevirginiahomes.com
+### 3. UI Refinements
+- [ ] Review color scheme (currently standard blue)
+- [ ] Add subtle animations/transitions
+- [ ] Improve card hover states
+- [ ] Review typography hierarchy
 
-3. **City Pages (9 cities)**
-   - [ ] City detail template with sections:
-     - Hero/header with city image
-     - Description
-     - Restaurants tab/section
-     - Cafes & Breweries tab/section
-     - Attractions tab/section
-     - Events & Festivals tab/section
-     - Beaches (where applicable)
-     - School info link
-   - [ ] Mobile: accordion or tabs
-   - [ ] Desktop: tabs or side-by-side
+---
 
-4. **Special Section Pages**
-   - [ ] Military Relocation page
-   - [ ] Military Bases page (list with map)
-   - [ ] Tunnel Systems page
-   - [ ] Vacation Destinations page
-   - [ ] Vendors & Utilities page (per-city tabs)
-   - [ ] Testimonials page
-   - [ ] About/Team page
-   - [ ] Contact page
+## Phase 3: SEO & Deploy
 
-5. **URL Routing**
-   - [ ] Configure guide app URLs
-   - [ ] Create public views
-   - [ ] Wire up to abouthr/urls.py
+### 1. SEO & Meta
+- [ ] Enhance meta descriptions for all pages
+- [ ] OpenGraph tags for social sharing
+- [ ] Sitemap.xml
+- [ ] robots.txt
 
-### Phase 2: Data Seeding
+### 2. Performance
+- [ ] Image optimization (WebP, srcset)
+- [ ] Lazy loading for images
+- [ ] CSS/JS minification
+- [ ] Caching headers
 
-1. **Create Seed Script**
-   - [ ] guide/management/commands/seed_data.py
-   - [ ] Seed Regions (Peninsula, Southside)
-   - [ ] Seed all 9 Cities with descriptions
-   - [ ] Seed all Venues (restaurants, cafes, attractions, events, beaches)
-   - [ ] Seed Military Bases
-   - [ ] Seed Tunnels
-   - [ ] Seed Vacation Destinations
-   - [ ] Seed Vendor Utilities
-   - [ ] Seed Testimonials
-   - [ ] Seed Team Members
+### 3. Deployment
+- [ ] Deploy to development server
+- [ ] Test on real mobile devices
+- [ ] DNS configuration for abouthamptonroads.com
+- [ ] Deploy to production
+- [ ] SSL certificate
 
-2. **Image Organization**
-   - [ ] Organize extracted images by content type
-   - [ ] Create media directory structure
-   - [ ] Link images to seeded data
+---
 
-### Phase 3: Polish & Deploy
+## Phase 4: Future Features (BACKLOG)
 
-1. **SEO & Meta**
-   - [ ] Meta tags for all pages
-   - [ ] OpenGraph tags
-   - [ ] Sitemap
-   - [ ] robots.txt
+### 1. AI-Generated Content
+- [ ] Current events per city (scraped/AI-generated)
+- [ ] Upcoming events/happenings
+- [ ] Dynamic content layer over static guide
 
-2. **Performance**
-   - [ ] Image optimization
-   - [ ] Lazy loading
-   - [ ] CSS/JS minification
+### 2. CMS Interface
+- [ ] Complete paused CMS work (cms/ app)
+- [ ] Add HTMX inline editing
+- [ ] Drag-and-drop reordering
+- [ ] Image upload management
 
-3. **Deployment**
-   - [ ] Deploy to development server
-   - [ ] Test on real mobile devices
-   - [ ] Deploy to production
-
-### Phase 4: Future Features (BACKLOG)
-
-1. **AI-Generated Content**
-   - [ ] Current events per city
-   - [ ] Upcoming events/happenings
-   - [ ] Dynamic content layer
-
-2. **CMS Interface**
-   - [ ] Complete paused CMS work
-   - [ ] Add HTMX inline editing
-   - [ ] Drag-and-drop reordering
-
-3. **Additional Features**
-   - [ ] Search functionality
-   - [ ] Google Maps integration
-   - [ ] Contact form
-   - [ ] Newsletter signup
+### 3. Additional Features
+- [ ] Search functionality
+- [ ] Google Maps integration (contact page, city pages)
+- [ ] Contact form with email notifications
+- [ ] Newsletter signup
 
 ---
 
@@ -176,52 +154,22 @@ Started but paused - focus shifted to public website first:
 
 ---
 
-## Design Requirements
+## Design Implementation
 
-### Mobile-First Priority
-- **Phone:** Must be PERFECT
-- **Tablet:** Must be GREAT
-- **Desktop:** Must be GOOD
+### Mobile-First Priority ✅
+- **Phone:** PERFECT - accordion layouts, touch-friendly
+- **Tablet:** GREAT - responsive grid
+- **Desktop:** GOOD - tabs, full navigation
 
-This is inverse of typical priority because relocation guides are often viewed on phones by people traveling or in temporary housing.
+### Typography ✅
+- **Headers:** Montserrat (500-800 weight) - bold, modern
+- **Body:** Inter (400-600 weight) - clean, readable
+- Google Fonts for fast loading
 
-### Typography (Research Needed)
-- Script font for headers (like PDF's "Relocation Guide" script)
-- Clean sans-serif for body text
-- Good mobile readability
-- Google Fonts preferred
-
-### Color Scheme (From PDF)
-- Black headers
-- White/light backgrounds
-- Accent colors TBD
+### Color Scheme
+- Primary: #2563eb (blue) - can be customized
+- CSS variables in static/css/style.css for easy theming
 - High contrast for accessibility
-
----
-
-## Content Structure Per City Page
-
-From PDF analysis, each city has:
-
-```
-City Name (script header)
-├── Hero Image
-├── Description (1-2 paragraphs)
-├── Popular Restaurants (15-20 items)
-├── Cafes & Breweries (10-15 items)
-├── City Sites & Attractions (20+ items)
-├── Events & Festivals (8-12 items)
-├── Beaches (if applicable - Virginia Beach mainly)
-├── QR Code / Link to city info
-└── QR Code / Link to school info
-```
-
----
-
-## Reference Projects
-
-- `../tagApp` - Good Django infrastructure patterns
-- `../trustworthyagents.com/prod` - Website patterns (but can do better)
 
 ---
 
@@ -230,12 +178,14 @@ City Name (script header)
 | File | Purpose |
 |------|---------|
 | `guide/models.py` | All domain models |
-| `guide/admin.py` | Django admin registration |
+| `guide/views.py` | All page views |
+| `guide/urls.py` | URL routing |
+| `guide/management/commands/seed_data.py` | Data seeding |
+| `templates/base.html` | Main template |
+| `templates/guide/*.html` | Page templates (9 files) |
+| `static/css/style.css` | Custom styles |
 | `claude/specs/abouthr.pdf` | Source PDF (40 pages) |
-| `claude/specs/pages/` | Split PDF pages |
 | `claude/specs/images/` | Extracted images (126 files) |
-| `claude/CODEBASE_STATE.md` | Technical state |
-| `claude/CONTEXT_MEMORY.md` | Working context |
 
 ---
 
@@ -245,6 +195,9 @@ City Name (script header)
 # Run development server
 python manage.py runserver
 
+# Seed database (already done)
+python manage.py seed_data
+
 # Make migrations
 python manage.py makemigrations guide
 
@@ -253,14 +206,27 @@ python manage.py migrate
 
 # Create superuser
 python manage.py createsuperuser
-
-# Future: Seed data
-python manage.py seed_data
 ```
 
 ---
 
-## Contact Info (For Site Footer)
+## URLs
+
+| Page | URL |
+|------|-----|
+| Homepage | `/` |
+| City Detail | `/city/<slug>/` |
+| Military | `/military/` |
+| Tunnels | `/tunnels/` |
+| Vacation | `/vacation/` |
+| Utilities | `/utilities/` |
+| Testimonials | `/testimonials/` |
+| About | `/about/` |
+| Contact | `/contact/` |
+
+---
+
+## Contact Info (In Site Footer)
 
 - **Direct:** 757-500-2404
 - **Office:** 757-361-0106
