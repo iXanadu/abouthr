@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Utilities & Vendors{% endblock %}
+
+{% block meta_description %}Set up utilities in Hampton Roads - electric, gas, water, trash services by city. Dominion, Virginia Natural Gas, and more.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-lightning-fill me-2"></i>Utilities & Vendors</h1>
+        <p>Essential contacts for setting up services in your new home</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- General Contacts -->
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <div class="info-card">
+                <h4><i class="bi bi-tv me-2"></i>Cable & Satellite</h4>
+                <ul>
+                    <li><strong>Cox:</strong> <a href="tel:1-866-961-0027">1-866-961-0027</a></li>
+                    <li><strong>Verizon Fios:</strong> <a href="tel:1-877-285-8592">1-877-285-8592</a></li>
+                    <li><strong>DISH:</strong> <a href="tel:1-800-311-3596">1-800-311-3596</a></li>
+                    <li><strong>DirecTV:</strong> <a href="tel:1-888-795-9488">1-888-795-9488</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="info-card">
+                <h4><i class="bi bi-wifi me-2"></i>Internet</h4>
+                <ul>
+                    <li><strong>Cox:</strong> <a href="tel:1-866-961-0027">1-866-961-0027</a></li>
+                    <li><strong>Verizon:</strong> <a href="tel:1-888-781-5510">1-888-781-5510</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- City-specific Utilities -->
+    <h2 class="mb-4">Utilities by City</h2>
+
+    <!-- City Tabs (Desktop) -->
+    <div class="d-none d-md-block">
+        <ul class="nav nav-tabs" id="cityTabs" role="tablist">
+            {% for city in cities %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ city.slug }}" data-bs-toggle="tab" data-bs-target="#pane-{{ city.slug }}" type="button" role="tab">
+                    {{ city.name }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content pt-4" id="cityTabsContent">
+            {% for city in cities %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pane-{{ city.slug }}" role="tabpanel">
+                <h4 class="mb-3">{{ city.name }} Utilities</h4>
+                {% if city.vendor_utilities.all %}
+                <div class="row">
+                    {% for utility in city.vendor_utilities.all %}
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                            <div>
+                                <strong>{{ utility.get_category_display }}</strong><br>
+                                <span class="text-muted small">{{ utility.name }}</span>
+                            </div>
+                            {% if utility.phone %}
+                            <a href="tel:{{ utility.phone }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-telephone me-1"></i>{{ utility.phone }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No utility information available for {{ city.name }}.</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- City Accordion (Mobile) -->
+    <div class="d-md-none">
+        <div class="accordion" id="cityAccordion">
+            {% for city in cities %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ city.slug }}">
+                        {{ city.name }}
+                    </button>
+                </h2>
+                <div id="collapse-{{ city.slug }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#cityAccordion">
+                    <div class="accordion-body">
+                        {% if city.vendor_utilities.all %}
+                        <ul class="list-unstyled">
+                            {% for utility in city.vendor_utilities.all %}
+                            <li class="mb-3 pb-3 border-bottom">
+                                <strong>{{ utility.get_category_display }}</strong><br>
+                                <span class="text-muted">{{ utility.name }}</span><br>
+                                {% if utility.phone %}
+                                <a href="tel:{{ utility.phone }}" class="small">
+                                    <i class="bi bi-telephone me-1"></i>{{ utility.phone }}
+                                </a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted mb-0">No utility information available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Vendor Referrals CTA -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3>Need Vendor Referrals?</h3>
+                <p class="text-muted mb-lg-0">
+                    We have reliable references for real estate attorneys, mortgage lenders, settlement companies, moving companies, home inspectors, home warranty companies, plumbers, electricians, painters, flooring, HVAC, and more!
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'guide:contact' %}" class="btn btn-primary">
+                    <i class="bi bi-envelope me-2"></i>Request Referrals
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

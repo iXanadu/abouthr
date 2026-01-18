@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Military Relocation{% endblock %}
+
+{% block meta_description %}Hampton Roads military relocation guide - Naval Station Norfolk, Langley AFB, and all military bases. PCS resources for active duty and families.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-shield-fill me-2"></i>Military Relocation</h1>
+        <p>Hampton Roads is proudly home to some of the most significant military bases in the U.S.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Intro -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <p class="lead">
+                Hampton Roads is proudly home to some of the most significant and strategically important military bases in the U.S., including Langley Air Force Base and Naval Station Norfolk, the largest naval base in the world.
+            </p>
+            <p>
+                25% of the nation's active-duty military personnel reside here, and they are often celebrated and honored through various community events and tributes, promoting the strong connection between the civilian population and those both currently and formerly enlisted in our nation's military.
+            </p>
+        </div>
+        <div class="col-lg-4">
+            <div class="info-card bg-primary text-white">
+                <h4 class="text-white"><i class="bi bi-people me-2"></i>Did You Know?</h4>
+                <p class="mb-0 opacity-75">25% of the nation's active-duty military personnel reside in Hampton Roads.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Military Bases by Branch -->
+    <h2 class="mb-4">Military Bases by Branch</h2>
+
+    <div class="row g-4">
+        <!-- Navy -->
+        {% if navy_bases %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-water me-2"></i>Navy</h4>
+                <ul>
+                    {% for base in navy_bases %}
+                    <li>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.city %}
+                        <br><small class="text-muted">{{ base.city.name }}</small>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Air Force -->
+        {% if air_force_bases %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-airplane me-2"></i>Air Force</h4>
+                <ul>
+                    {% for base in air_force_bases %}
+                    <li>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.city %}
+                        <br><small class="text-muted">{{ base.city.name }}</small>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Army -->
+        {% if army_bases %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-star me-2"></i>Army</h4>
+                <ul>
+                    {% for base in army_bases %}
+                    <li>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.city %}
+                        <br><small class="text-muted">{{ base.city.name }}</small>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Coast Guard -->
+        {% if coast_guard_bases %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-life-preserver me-2"></i>Coast Guard</h4>
+                <ul>
+                    {% for base in coast_guard_bases %}
+                    <li>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.city %}
+                        <br><small class="text-muted">{{ base.city.name }}</small>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Marines -->
+        {% if marine_bases %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-flag me-2"></i>Marine Corps</h4>
+                <ul>
+                    {% for base in marine_bases %}
+                    <li>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.city %}
+                        <br><small class="text-muted">{{ base.city.name }}</small>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h3 class="mb-3">PCS'ing to Hampton Roads?</h3>
+        <p class="mb-4 opacity-75">We specialize in helping military families find their perfect home.</p>
+        <a href="{% url 'guide:contact' %}" class="btn btn-light btn-lg">
+            <i class="bi bi-envelope me-2"></i>Contact Our Military Relocation Team
+        </a>
+    </div>
+</section>
+{% endblock %}

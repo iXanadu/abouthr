@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block meta_description %}Meet the Trustworthy Agents Group team - Robert and Nate Pickles. Your Hampton Roads real estate experts.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-people me-2"></i>About Us</h1>
+        <p>Meet the team behind your Hampton Roads relocation</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Company Intro -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">Trustworthy Agents Group</h2>
+            <p class="lead">
+                We're more than just real estate agents - we're your advocates, guides, and partners in finding your perfect home in Hampton Roads.
+            </p>
+            <p class="text-muted">
+                With deep roots in the Hampton Roads community and extensive experience helping families relocate - especially military families - we understand what it takes to make a successful move to our region. From the beaches of Virginia Beach to the historic streets of Williamsburg, we know every corner of Hampton Roads and we're here to help you find where you belong.
+            </p>
+        </div>
+    </div>
+
+    <!-- Team Members -->
+    {% if team_members %}
+    <h3 class="text-center mb-4">Meet Our Team</h3>
+    <div class="row g-4 justify-content-center">
+        {% for member in team_members %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center h-100 border-0 shadow-soft">
+                {% if member.photo %}
+                <img src="{{ member.photo.url }}" class="card-img-top" alt="{{ member.name }}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                    <i class="bi bi-person text-white" style="font-size: 5rem;"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ member.name }}</h5>
+                    <p class="text-muted mb-3">{{ member.title }}</p>
+                    {% if member.bio %}
+                    <p class="small">{{ member.bio }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-center gap-2">
+                        {% if member.phone %}
+                        <a href="tel:{{ member.phone }}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-telephone"></i>
+                        </a>
+                        {% endif %}
+                        {% if member.email %}
+                        <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        {% endif %}
+                        {% if member.linkedin_url %}
+                        <a href="{{ member.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Why Choose Us -->
+    <div class="row mt-5 pt-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Trustworthy Agents?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="bi bi-geo-alt-fill text-primary fs-1 mb-3 d-block"></i>
+                        <h5>Local Expertise</h5>
+                        <p class="text-muted small">We live, work, and raise our families here. We know Hampton Roads inside and out.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="bi bi-shield-fill-check text-primary fs-1 mb-3 d-block"></i>
+                        <h5>Military Specialists</h5>
+                        <p class="text-muted small">We understand PCS timelines, BAH considerations, and the unique needs of military families.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="bi bi-heart-fill text-primary fs-1 mb-3 d-block"></i>
+                        <h5>Client-First Approach</h5>
+                        <p class="text-muted small">We're your advocates, not just salespeople. Your satisfaction is our success.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light-custom">
+    <div class="container text-center">
+        <h3 class="mb-3">Ready to Get Started?</h3>
+        <p class="text-muted mb-4">We'd love to hear from you and learn how we can help with your Hampton Roads relocation.</p>
+        <a href="{% url 'guide:contact' %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-envelope me-2"></i>Contact Us Today
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Client Testimonials{% endblock %}
+
+{% block meta_description %}Read what our clients say about working with Trustworthy Agents Group for their Hampton Roads relocation.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-star-fill me-2"></i>Client Testimonials</h1>
+        <p>Real stories from families who've made Hampton Roads home</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for testimonial in testimonials %}
+        <div class="col-lg-6">
+            <div class="testimonial-card">
+                <div class="stars mb-3">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                </div>
+                <p class="quote">"{{ testimonial.quote }}"</p>
+                <div class="d-flex align-items-center">
+                    {% if testimonial.photo %}
+                    <img src="{{ testimonial.photo.url }}" class="rounded-circle me-3" width="50" height="50" alt="{{ testimonial.client_name }}">
+                    {% else %}
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <p class="client-name mb-0">{{ testimonial.client_name }}</p>
+                        {% if testimonial.client_location %}
+                        <small class="text-muted">{{ testimonial.client_location }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No testimonials available yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h3 class="mb-3">Ready to Write Your Own Success Story?</h3>
+        <p class="mb-4 opacity-75">Let us help you find your perfect home in Hampton Roads.</p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a href="https://explorevirginiahomes.com" target="_blank" class="btn btn-light btn-lg">
+                <i class="bi bi-search me-2"></i>Search Homes
+            </a>
+            <a href="{% url 'guide:contact' %}" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-envelope me-2"></i>Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

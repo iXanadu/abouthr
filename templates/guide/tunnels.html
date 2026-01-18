@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hampton Roads Tunnels{% endblock %}
+
+{% block meta_description %}Guide to Hampton Roads tunnel systems - HRBT, Downtown Tunnel, Midtown Tunnel, CBBT, and more. Connecting Southside and Peninsula.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-sign-merge-right-fill me-2"></i>Tunnel Systems</h1>
+        <p>Navigating the bridges and tunnels that connect Hampton Roads</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Intro -->
+    <div class="row mb-5">
+        <div class="col-lg-10">
+            <p class="lead">
+                One of the most remarkable features of our area is a network of underwater tunnels that connect various parts of the region. These engineering marvels offer practical transportation solutions while still allowing everything from international cargo ships to sailboats to travel in and out of our many ports and harbors.
+            </p>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Tip:</strong> The bridges & tunnels listed below connect the "Southside" of Hampton Roads (Norfolk, Virginia Beach, Chesapeake, Portsmouth, and Suffolk) to the "Peninsula" of Hampton Roads (Hampton, Newport News, Yorktown and Williamsburg).
+            </div>
+        </div>
+    </div>
+
+    <!-- Tunnel List -->
+    <div class="row g-4">
+        {% for tunnel in tunnels %}
+        <div class="col-lg-6">
+            <div class="info-card h-100">
+                <h4><i class="bi bi-sign-turn-slight-right me-2"></i>{{ tunnel.name }}</h4>
+                <p>{{ tunnel.description }}</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-geo-alt me-1"></i>From: {{ tunnel.connects_from }}
+                    </span>
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-geo-alt-fill me-1"></i>To: {{ tunnel.connects_to }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Tips Section -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <h3 class="mb-4">Tunnel Tips for New Residents</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-clock text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Avoid Rush Hour</h5>
+                    <p class="text-muted small">Peak tunnel traffic is typically 7-9 AM and 4-6 PM on weekdays. Plan accordingly.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-phone text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Check Traffic Apps</h5>
+                    <p class="text-muted small">Use Waze or Google Maps to check real-time tunnel delays before departing.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-arrows-angle-contract text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Know Alternatives</h5>
+                    <p class="text-muted small">If HRBT is backed up, the Monitor Merrimac or James River Bridge may be faster.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

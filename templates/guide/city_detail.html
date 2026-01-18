@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ city.name }}{% endblock %}
+
+{% block meta_description %}Explore {{ city.name }}, Virginia - restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
+
+{% block content %}
+<!-- City Hero -->
+<section class="city-hero" {% if city.image %}style="background-image: url('{{ city.image.url }}');"{% else %}style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);"{% endif %}>
+    <div class="container">
+        <span class="region-badge {% if city.region.slug == 'southside' %}southside{% else %}peninsula{% endif %} mb-3">
+            {{ city.region.name }}
+        </span>
+        <h1>{{ city.name }}</h1>
+    </div>
+</section>
+
+<!-- City Description -->
+<section class="py-4 py-md-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <p class="lead">{{ city.description }}</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="info-card">
+                    <h4><i class="bi bi-info-circle me-2"></i>Quick Info</h4>
+                    <ul>
+                        <li><strong>Region:</strong> {{ city.region.name }}</li>
+                        {% if city.has_beaches %}
+                        <li><strong>Beaches:</strong> Yes</li>
+                        {% endif %}
+                        {% if city.school_url %}
+                        <li>
+                            <a href="{{ city.school_url }}" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-mortarboard me-1"></i>School District Info
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Venues Tabs (Desktop) / Accordion (Mobile) -->
+<section class="pb-5">
+    <div class="container">
+        <!-- Desktop Tabs -->
+        <div class="d-none d-md-block">
+            <ul class="nav nav-tabs" id="venuesTabs" role="tablist">
+                {% if restaurants %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="restaurants-tab" data-bs-toggle="tab" data-bs-target="#restaurants" type="button" role="tab">
+                        <i class="bi bi-cup-hot me-1"></i>Restaurants
+                        <span class="badge bg-secondary ms-1">{{ restaurants.count }}</span>
+                    </button>
+                </li>
+                {% endif %}
+                {% if cafes %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if not restaurants %}active{% endif %}" id="cafes-tab" data-bs-toggle="tab" data-bs-target="#cafes" type="button" role="tab">
+                        <i class="bi bi-cup me-1"></i>Cafes & Breweries
+                        <span class="badge bg-secondary ms-1">{{ cafes.count }}</span>
+                    </button>
+                </li>
+                {% endif %}
+                {% if attractions %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="attractions-tab" data-bs-toggle="tab" data-bs-target="#attractions" type="button" role="tab">
+                        <i class="bi bi-geo-alt me-1"></i>Attractions
+                        <span class="badge bg-secondary ms-1">{{ attractions.count }}</span>
+                    </button>
+                </li>
+                {% endif %}
+                {% if events %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab">
+                        <i class="bi bi-calendar-event me-1"></i>Events
+                        <span class="badge bg-secondary ms-1">{{ events.count }}</span>
+                    </button>
+                </li>
+                {% endif %}
+                {% if beaches %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="beaches-tab" data-bs-toggle="tab" data-bs-target="#beaches" type="button" role="tab">
+                        <i class="bi bi-umbrella me-1"></i>Beaches
+                        <span class="badge bg-secondary ms-1">{{ beaches.count }}</span>
+                    </button>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="tab-content pt-4" id="venuesTabsContent">
+                {% if restaurants %}
+                <div class="tab-pane fade show active" id="restaurants" role="tabpanel">
+                    <div class="row">
+                        {% for restaurant in restaurants %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-dot text-primary fs-4"></i>
+                                <span>{{ restaurant.name }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if cafes %}
+                <div class="tab-pane fade {% if not restaurants %}show active{% endif %}" id="cafes" role="tabpanel">
+                    <div class="row">
+                        {% for cafe in cafes %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-dot text-primary fs-4"></i>
+                                <span>{{ cafe.name }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if attractions %}
+                <div class="tab-pane fade" id="attractions" role="tabpanel">
+                    <div class="row">
+                        {% for attraction in attractions %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-dot text-primary fs-4"></i>
+                                <span>{{ attraction.name }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if events %}
+                <div class="tab-pane fade" id="events" role="tabpanel">
+                    <div class="row">
+                        {% for event in events %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-dot text-primary fs-4"></i>
+                                <span>{{ event.name }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if beaches %}
+                <div class="tab-pane fade" id="beaches" role="tabpanel">
+                    <div class="row">
+                        {% for beach in beaches %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-dot text-primary fs-4"></i>
+                                <div>
+                                    <strong>{{ beach.name }}</strong>
+                                    {% if beach.address %}
+                                    <br><small class="text-muted">{{ beach.address }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Mobile Accordion -->
+        <div class="d-md-none">
+            <div class="accordion" id="venuesAccordion">
+                {% if restaurants %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRestaurants">
+                            <i class="bi bi-cup-hot me-2"></i>Restaurants
+                            <span class="badge bg-secondary ms-2">{{ restaurants.count }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapseRestaurants" class="accordion-collapse collapse show" data-bs-parent="#venuesAccordion">
+                        <div class="accordion-body">
+                            <ul class="venue-list">
+                                {% for restaurant in restaurants %}
+                                <li>{{ restaurant.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if cafes %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCafes">
+                            <i class="bi bi-cup me-2"></i>Cafes & Breweries
+                            <span class="badge bg-secondary ms-2">{{ cafes.count }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapseCafes" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
+                        <div class="accordion-body">
+                            <ul class="venue-list">
+                                {% for cafe in cafes %}
+                                <li>{{ cafe.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if attractions %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAttractions">
+                            <i class="bi bi-geo-alt me-2"></i>Attractions
+                            <span class="badge bg-secondary ms-2">{{ attractions.count }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapseAttractions" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
+                        <div class="accordion-body">
+                            <ul class="venue-list">
+                                {% for attraction in attractions %}
+                                <li>{{ attraction.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if events %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEvents">
+                            <i class="bi bi-calendar-event me-2"></i>Events & Festivals
+                            <span class="badge bg-secondary ms-2">{{ events.count }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapseEvents" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
+                        <div class="accordion-body">
+                            <ul class="venue-list">
+                                {% for event in events %}
+                                <li>{{ event.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if beaches %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBeaches">
+                            <i class="bi bi-umbrella me-2"></i>Beaches
+                            <span class="badge bg-secondary ms-2">{{ beaches.count }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapseBeaches" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
+                        <div class="accordion-body">
+                            <ul class="venue-list">
+                                {% for beach in beaches %}
+                                <li>
+                                    <strong>{{ beach.name }}</strong>
+                                    {% if beach.address %}
+                                    <br><small class="text-muted">{{ beach.address }}</small>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Explore Other Cities -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <h3 class="mb-4">Explore Other Cities</h3>
+        <div class="row g-3">
+            {% for other_city in other_cities %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{% url 'guide:city_detail' slug=other_city.slug %}" class="btn btn-outline-secondary w-100">
+                    {{ other_city.name }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h3 class="mb-3">Looking for a Home in {{ city.name }}?</h3>
+        <p class="mb-4 opacity-75">Let us help you find the perfect home in {{ city.name }}.</p>
+        <a href="https://explorevirginiahomes.com" target="_blank" class="btn btn-light btn-lg">
+            <i class="bi bi-search me-2"></i>Search {{ city.name }} Homes
+        </a>
+    </div>
+</section>
+{% endblock %}

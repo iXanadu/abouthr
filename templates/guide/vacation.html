@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vacation Destinations{% endblock %}
+
+{% block meta_description %}Vacation like a local - weekend getaways and day trips from Hampton Roads to D.C., Outer Banks, Shenandoah, and more.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-sun-fill me-2"></i>Vacation Like the Locals</h1>
+        <p>Weekend getaways and day trips from Hampton Roads</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Intro -->
+    <div class="row mb-5">
+        <div class="col-lg-10">
+            <p class="lead">
+                We may be biased, but there are several captivating vacation destinations within a few hours of Hampton Roads that strike the perfect balance - far enough from home to provide a true escape, yet conveniently close enough to be accomplishable.
+            </p>
+            <p>
+                From epic waterfall hikes to breathtaking mountain-scapes, national historic landmarks and off-the-beaten-path beaches, whether you're just looking for a fun day trip or a memorable weekend getaway, we have you covered with plenty of vacation spots within just a few hours of home.
+            </p>
+        </div>
+    </div>
+
+    <!-- Destinations Grid -->
+    <div class="row g-4">
+        {% for destination in destinations %}
+        <div class="col-md-6 col-lg-4">
+            <div class="info-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h4 class="mb-0">{{ destination.name }}</h4>
+                </div>
+                <p class="text-muted small mb-2">
+                    <i class="bi bi-geo-alt me-1"></i>{{ destination.distance_description }}
+                </p>
+                <p class="mb-0">{{ destination.highlights }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Travel Tips -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <h3 class="mb-4">Travel Tips</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-car-front text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Road Trip Ready</h5>
+                    <p class="text-muted small">Most destinations are 2-5 hours by car. Great for long weekends!</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-calendar-check text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Best Times</h5>
+                    <p class="text-muted small">Fall foliage in the mountains (Oct) and summer at the beaches (June-Aug) are peak seasons.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <i class="bi bi-house text-primary fs-1 mb-3 d-block"></i>
+                    <h5>Book Ahead</h5>
+                    <p class="text-muted small">Popular spots like Outer Banks fill up fast - book accommodations early!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -11,7 +11,8 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 - **Framework:** Django 5.2
 - **Database:** PostgreSQL (abouthr_dev / abouthr_prod on postgres.o6.org)
 - **Python:** 3.12+
-- **Frontend:** Bootstrap 5, Crispy Forms (mobile-first)
+- **Frontend:** Bootstrap 5, Google Fonts (Montserrat + Inter)
+- **CSS:** Custom mobile-first stylesheet with CSS variables
 - **API:** Django REST Framework
 
 ---
@@ -19,17 +20,19 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 ## Current State Summary
 
 ### Phase / Milestone
-- **Current Phase:** Domain Models Complete, Ready for Public Site Build
-- **Progress:** 25%
+- **Current Phase:** Phase 1 Complete - Public Website MVP
+- **Progress:** 50%
 - **Status:** Active
 
 ### Recent Major Work Completed
 1. Project initialization with Django - 2026-01-17
 2. Core and accounts apps created - 2026-01-17
 3. Database setup (user, dev/prod databases) - 2026-01-17
-4. **Guide app with domain models** - 2026-01-18
-5. **PDF analysis complete (40 pages split and reviewed)** - 2026-01-18
-6. **CMS app structure started (paused)** - 2026-01-18
+4. Guide app with domain models - 2026-01-18
+5. PDF analysis complete (40 pages split and reviewed) - 2026-01-18
+6. **Phase 1: All content seeded (501 venues, 16 bases, etc.)** - 2026-01-18
+7. **Phase 1: Base template with Bootstrap 5 + modern fonts** - 2026-01-18
+8. **Phase 1: All 9 page templates + views + routing** - 2026-01-18
 
 ---
 
@@ -37,53 +40,70 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 
 ```
 abouthr/
-├── abouthr/      # Project settings
-├── accounts/     # User auth, profiles, multi-tenancy
-├── core/         # Base models, shared utilities
-├── guide/        # Domain models (City, Venue, etc.) - NEW
-├── cms/          # Content management (paused) - NEW
-└── templates/    # Global templates
+├── abouthr/           # Project settings
+├── accounts/          # User auth, profiles, multi-tenancy
+├── core/              # Base models, shared utilities
+├── guide/             # Domain models + views + URLs
+│   ├── management/commands/seed_data.py  # Data seeding
+│   ├── models.py      # City, Venue, MilitaryBase, etc.
+│   ├── views.py       # All page views
+│   └── urls.py        # URL routing
+├── cms/               # Content management (paused)
+├── templates/
+│   ├── base.html      # Main template
+│   └── guide/         # All page templates
+└── static/
+    └── css/style.css  # Custom styles
 ```
 
 ---
 
 ## Key Models (guide/models.py)
 
-| Model | Purpose |
-|-------|---------|
-| `Region` | Peninsula vs Southside geographic division |
-| `City` | 9 Hampton Roads cities with descriptions, images |
-| `Venue` | Unified: restaurants, cafes, attractions, events, beaches |
-| `MilitaryBase` | Military installations by branch |
-| `Tunnel` | 6 tunnel/bridge systems |
-| `VacationDestination` | Nearby getaway destinations |
-| `VendorUtility` | Per-city utility contacts |
-| `Testimonial` | Client quotes |
-| `TeamMember` | Company team members |
+| Model | Purpose | Count |
+|-------|---------|-------|
+| `Region` | Peninsula vs Southside geographic division | 2 |
+| `City` | 9 Hampton Roads cities with descriptions, images | 9 |
+| `Venue` | Unified: restaurants, cafes, attractions, events, beaches | 501 |
+| `MilitaryBase` | Military installations by branch | 16 |
+| `Tunnel` | 6 tunnel/bridge systems | 6 |
+| `VacationDestination` | Nearby getaway destinations | 13 |
+| `VendorUtility` | Per-city utility contacts | 47 |
+| `Testimonial` | Client quotes | 7 |
+| `TeamMember` | Company team members | 2 |
 
 **Note:** All guide models use `BaseModel` (timestamps only), NOT `AccountScopedModel` - this is single-tenant shared content.
 
 ---
 
+## Page Views (guide/views.py)
+
+| View | URL | Template |
+|------|-----|----------|
+| HomeView | `/` | home.html |
+| CityDetailView | `/city/<slug>/` | city_detail.html |
+| MilitaryView | `/military/` | military.html |
+| TunnelsView | `/tunnels/` | tunnels.html |
+| VacationView | `/vacation/` | vacation.html |
+| UtilitiesView | `/utilities/` | utilities.html |
+| TestimonialsView | `/testimonials/` | testimonials.html |
+| AboutView | `/about/` | about.html |
+| ContactView | `/contact/` | contact.html |
+
+---
+
 ## Next Planned Work
 
-### IMMEDIATE (Before Coding)
-1. Set up .gitignore
-2. Git init, commit, push
-3. Extract images from PDF
-4. Research mobile-first fonts/responsive patterns
-
-### HIGH PRIORITY (Public Website)
-1. Design mobile-first template architecture
-2. Create base template with navigation
-3. Build city page templates (9 cities, 2-page pattern each)
-4. Create data seeding script
-5. Build military, tunnels, testimonials pages
+### HIGH PRIORITY (Phase 2)
+1. Add city images to city cards and detail pages
+2. Add hero background images
+3. Review mobile responsiveness
+4. Polish UI details
 
 ### MEDIUM PRIORITY
-6. Add search functionality
-7. Implement contact forms
-8. Google Maps integration
+5. Add search functionality
+6. Google Maps integration for contact page
+7. SEO enhancements
 
 ### FUTURE / BACKLOG
 - AI-generated events/happenings content
@@ -96,8 +116,10 @@ abouthr/
 
 ### Design Decisions
 1. **Single Venue Model:** Using `venue_type` discriminator instead of 5 separate models
-2. **Mobile-First:** Site must be perfect on phone, great on tablet, good on desktop
+2. **Mobile-First:** Site designed for phone first, scales up to desktop
 3. **PDF as Source:** All content seeded from the 40-page PDF
+4. **Tabs/Accordions:** Desktop uses tabs for venue types, mobile uses accordions
+5. **Premium Fonts:** Montserrat (headers) + Inter (body) for modern look
 
 ### Content Structure
 - **9 Cities:** Virginia Beach, Chesapeake, Norfolk, Portsmouth, Suffolk, Smithfield, Hampton, Newport News, Williamsburg/Yorktown
@@ -114,13 +136,15 @@ abouthr/
 ### Technical Debt
 - [ ] CMS app partially built but paused - may need cleanup
 - [ ] Images need extraction from PDF (placeholders until originals available)
+- [ ] Hero section needs real background image
 
 ---
 
 ## Testing Status
+- All pages return 200 status
+- Static files loading correctly
 - Unit tests: Not implemented
 - Integration tests: Not implemented
-- Last test run: N/A
 
 ---
 
@@ -138,13 +162,17 @@ abouthr/
 ### Important Files
 - `abouthr/settings.py` - Django configuration
 - `guide/models.py` - All domain models
-- `guide/admin.py` - Admin registration
+- `guide/views.py` - All page views
+- `guide/urls.py` - URL routing
+- `templates/base.html` - Main template
+- `static/css/style.css` - Custom styles
+- `guide/management/commands/seed_data.py` - Data seeding
 - `claude/specs/abouthr.pdf` - Source content (40 pages)
-- `claude/specs/pages/` - Split PDF pages
 
 ### Common Commands
 ```bash
 python manage.py runserver
+python manage.py seed_data  # Seed database from PDF content
 python manage.py test
 python manage.py migrate
 python manage.py makemigrations guide

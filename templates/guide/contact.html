@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block meta_description %}Contact Trustworthy Agents Group for your Hampton Roads relocation. Office in Chesapeake, serving all of Hampton Roads.{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1><i class="bi bi-envelope me-2"></i>Contact Us</h1>
+        <p>We're here to help with your Hampton Roads relocation</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Contact Info -->
+        <div class="col-lg-6">
+            <h2 class="mb-4">Get In Touch</h2>
+            <p class="lead mb-4">
+                Whether you're PCS'ing to the area, relocating for work, or just ready to call Hampton Roads home, we're here to help.
+            </p>
+
+            <div class="info-card mb-4">
+                <h4><i class="bi bi-building me-2"></i>Office Location</h4>
+                <p class="mb-0">
+                    1100 Volvo Parkway, Suite #200<br>
+                    Chesapeake, VA 23320
+                </p>
+            </div>
+
+            <div class="info-card mb-4">
+                <h4><i class="bi bi-telephone me-2"></i>Phone</h4>
+                <ul>
+                    <li>
+                        <strong>Direct:</strong>
+                        <a href="tel:757-500-2404">757-500-2404</a>
+                    </li>
+                    <li>
+                        <strong>Office:</strong>
+                        <a href="tel:757-361-0106">757-361-0106</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info-card mb-4">
+                <h4><i class="bi bi-envelope me-2"></i>Email</h4>
+                <p class="mb-0">
+                    <a href="mailto:info@trustworthyagents.com">info@trustworthyagents.com</a>
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h4><i class="bi bi-globe me-2"></i>Online</h4>
+                <ul>
+                    <li>
+                        <strong>Website:</strong>
+                        <a href="https://www.trustworthyagents.com" target="_blank">www.trustworthyagents.com</a>
+                    </li>
+                    <li>
+                        <strong>Search Homes:</strong>
+                        <a href="https://explorevirginiahomes.com" target="_blank">explorevirginiahomes.com</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-6">
+            <h2 class="mb-4">How Can We Help?</h2>
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <a href="https://explorevirginiahomes.com" target="_blank" class="text-decoration-none">
+                        <div class="info-card d-flex align-items-center">
+                            <i class="bi bi-search fs-1 text-primary me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Search for Homes</h5>
+                                <p class="text-muted mb-0 small">Browse available properties in Hampton Roads</p>
+                            </div>
+                            <i class="bi bi-arrow-right ms-auto fs-4 text-primary"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12">
+                    <a href="mailto:info@trustworthyagents.com?subject=Hampton%20Roads%20Relocation%20Inquiry" class="text-decoration-none">
+                        <div class="info-card d-flex align-items-center">
+                            <i class="bi bi-envelope-paper fs-1 text-primary me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Email Us</h5>
+                                <p class="text-muted mb-0 small">Send us a message about your relocation</p>
+                            </div>
+                            <i class="bi bi-arrow-right ms-auto fs-4 text-primary"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12">
+                    <a href="tel:757-500-2404" class="text-decoration-none">
+                        <div class="info-card d-flex align-items-center">
+                            <i class="bi bi-telephone fs-1 text-primary me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Call Us</h5>
+                                <p class="text-muted mb-0 small">Speak directly with our team</p>
+                            </div>
+                            <i class="bi bi-arrow-right ms-auto fs-4 text-primary"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12">
+                    <a href="{% url 'guide:military' %}" class="text-decoration-none">
+                        <div class="info-card d-flex align-items-center">
+                            <i class="bi bi-shield fs-1 text-primary me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Military PCS?</h5>
+                                <p class="text-muted mb-0 small">View our military relocation resources</p>
+                            </div>
+                            <i class="bi bi-arrow-right ms-auto fs-4 text-primary"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Office Hours -->
+            <div class="mt-4 p-4 bg-light rounded">
+                <h5><i class="bi bi-clock me-2"></i>Office Hours</h5>
+                <p class="mb-0 text-muted">
+                    We're available to help when it works for you. Contact us anytime and we'll get back to you promptly.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Map Section (Placeholder) -->
+<section class="bg-light-custom py-5">
+    <div class="container">
+        <div class="text-center">
+            <h3 class="mb-3">Serving All of Hampton Roads</h3>
+            <p class="text-muted mb-4">
+                Virginia Beach | Chesapeake | Norfolk | Portsmouth | Suffolk | Smithfield | Hampton | Newport News | Williamsburg
+            </p>
+            <a href="https://www.google.com/maps/place/1100+Volvo+Pkwy+%23200,+Chesapeake,+VA+23320" target="_blank" class="btn btn-outline-primary">
+                <i class="bi bi-geo-alt me-2"></i>Get Directions to Our Office
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
