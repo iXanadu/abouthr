@@ -1,0 +1,73 @@
+<div class="cms-card">
+    <div class="cms-card-header">
+        <h5 class="mb-0">
+            {% if venue_type == 'restaurant' %}Restaurants
+            {% elif venue_type == 'cafe_brewery' %}Cafes & Breweries
+            {% elif venue_type == 'attraction' %}Attractions
+            {% elif venue_type == 'event' %}Events
+            {% elif venue_type == 'beach' %}Beaches
+            {% endif %}
+        </h5>
+        <a href="{% url 'cms:venue_create' city_slug=city.slug venue_type=venue_type %}" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add
+        </a>
+    </div>
+    <div class="cms-card-body p-0">
+        <table class="cms-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Name</th>
+                    {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
+                    <th>Cuisine</th>
+                    {% endif %}
+                    <th>Featured</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venue in venues_list %}
+                <tr>
+                    <td class="text-muted">{{ venue.order }}</td>
+                    <td>
+                        <strong>{{ venue.name }}</strong>
+                        {% if venue.address %}<br><small class="text-muted">{{ venue.address|truncatechars:50 }}</small>{% endif %}
+                    </td>
+                    {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
+                    <td>{{ venue.get_cuisine_type_display|default:"-" }}</td>
+                    {% endif %}
+                    <td>
+                        {% if venue.is_featured %}
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-muted"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% url 'cms:venue_toggle_publish' pk=venue.pk as venue_toggle_url %}
+                        {% include 'cms/components/publish_toggle.html' with obj=venue toggle_url=venue_toggle_url %}
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'cms:venue_edit' pk=venue.pk %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'cms:venue_delete' pk=venue.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="{% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}6{% else %}5{% endif %}" class="text-center text-muted py-4">
+                        No items yet.
+                        <a href="{% url 'cms:venue_create' city_slug=city.slug venue_type=venue_type %}">Add one</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

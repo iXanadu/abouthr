@@ -1,0 +1,215 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}CMS Dashboard{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-start">
+    <div>
+        <h1>Dashboard</h1>
+        <p class="text-muted mb-0">Welcome back! Here's an overview of your content.</p>
+    </div>
+    <a href="{% url 'cms:help' %}" class="btn btn-outline-primary">
+        <i class="bi bi-question-circle me-1"></i> Help & Guidelines
+    </a>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">{{ stats.cities }}</div>
+                    <div class="stat-label">Cities</div>
+                </div>
+                <i class="bi bi-building stat-icon"></i>
+            </div>
+            <a href="{% url 'cms:city_list' %}" class="btn btn-sm btn-outline-primary mt-3">Manage</a>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">{{ stats.venues }}</div>
+                    <div class="stat-label">Venues</div>
+                </div>
+                <i class="bi bi-shop stat-icon"></i>
+            </div>
+            <small class="text-muted">{{ stats.venues_published }} published</small>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">{{ stats.military_bases }}</div>
+                    <div class="stat-label">Military Bases</div>
+                </div>
+                <i class="bi bi-shield-fill stat-icon"></i>
+            </div>
+            <a href="{% url 'cms:military_list' %}" class="btn btn-sm btn-outline-primary mt-3">Manage</a>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">{{ stats.testimonials }}</div>
+                    <div class="stat-label">Testimonials</div>
+                </div>
+                <i class="bi bi-chat-quote stat-icon"></i>
+            </div>
+            <a href="{% url 'cms:testimonial_list' %}" class="btn btn-sm btn-outline-primary mt-3">Manage</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Venue Breakdown -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">Venues by Type</h5>
+            </div>
+            <div class="cms-card-body">
+                <div class="row g-3">
+                    {% for vc in venue_counts %}
+                    <div class="col-6 col-md-4">
+                        <div class="text-center p-3 bg-light rounded">
+                            <div class="fw-bold fs-4">{{ vc.count }}</div>
+                            <small class="text-muted text-capitalize">{{ vc.venue_type|cut:"_" }}</small>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted mb-0">No venues yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">Content Overview</h5>
+            </div>
+            <div class="cms-card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span><i class="bi bi-signpost-split me-2"></i> Tunnels</span>
+                        <span class="badge bg-primary rounded-pill">{{ stats.tunnels }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span><i class="bi bi-sun me-2"></i> Vacation Destinations</span>
+                        <span class="badge bg-primary rounded-pill">{{ stats.destinations }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span><i class="bi bi-people me-2"></i> Team Members</span>
+                        <span class="badge bg-primary rounded-pill">{{ stats.team_members }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <!-- Recent Venues -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">Recently Updated Venues</h5>
+                <a href="{% url 'cms:city_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="cms-card-body p-0">
+                <table class="cms-table">
+                    <tbody>
+                        {% for venue in recent_venues %}
+                        <tr>
+                            <td>
+                                <strong>{{ venue.name }}</strong>
+                                <br><small class="text-muted">{{ venue.city.name }} - {{ venue.get_venue_type_display }}</small>
+                            </td>
+                            <td class="text-end">
+                                {% if venue.is_published %}
+                                <span class="badge badge-published">Published</span>
+                                {% else %}
+                                <span class="badge badge-draft">Draft</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-muted text-center py-4">No venues yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cities Summary -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">Cities Overview</h5>
+                <a href="{% url 'cms:city_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="cms-card-body p-0">
+                <table class="cms-table">
+                    <tbody>
+                        {% for city in cities_summary %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'cms:city_detail' slug=city.slug %}" class="text-decoration-none">
+                                    <strong>{{ city.name }}</strong>
+                                </a>
+                                <br><small class="text-muted">{{ city.region.name }}</small>
+                            </td>
+                            <td class="text-end">
+                                <span class="badge bg-secondary">{{ city.venue_count }} venues</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-muted text-center py-4">No cities yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="cms-card mt-4">
+    <div class="cms-card-header">
+        <h5 class="mb-0">Quick Actions</h5>
+    </div>
+    <div class="cms-card-body">
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'cms:military_create' %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Military Base
+            </a>
+            <a href="{% url 'cms:tunnel_create' %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Tunnel
+            </a>
+            <a href="{% url 'cms:destination_create' %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Vacation Spot
+            </a>
+            <a href="{% url 'cms:testimonial_create' %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Testimonial
+            </a>
+            <a href="{% url 'cms:team_create' %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Team Member
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

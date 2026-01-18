@@ -1,0 +1,79 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Military Bases - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Military Bases</h1>
+        <p class="text-muted mb-0">Manage military installations in Hampton Roads.</p>
+    </div>
+    <a href="{% url 'cms:military_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Base
+    </a>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body p-0">
+        <table class="cms-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Name</th>
+                    <th>Branch</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for base in bases %}
+                <tr>
+                    <td class="text-muted">{{ base.order }}</td>
+                    <td>
+                        <strong>{{ base.name }}</strong>
+                        {% if base.website %}<br><small><a href="{{ base.website }}" target="_blank">{{ base.website|truncatechars:40 }}</a></small>{% endif %}
+                    </td>
+                    <td>
+                        <span class="badge
+                            {% if base.branch == 'navy' %}bg-primary
+                            {% elif base.branch == 'army' %}bg-success
+                            {% elif base.branch == 'air_force' %}bg-info
+                            {% elif base.branch == 'coast_guard' %}bg-warning text-dark
+                            {% elif base.branch == 'marines' %}bg-danger
+                            {% else %}bg-secondary{% endif %}">
+                            {{ base.get_branch_display }}
+                        </span>
+                    </td>
+                    <td>{{ base.city.name|default:"-" }}</td>
+                    <td>
+                        {% if base.is_published %}
+                        <span class="badge badge-published">Published</span>
+                        {% else %}
+                        <span class="badge badge-draft">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'cms:military_edit' slug=base.slug %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'cms:military_delete' slug=base.slug %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No military bases yet.
+                        <a href="{% url 'cms:military_create' %}">Add one</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

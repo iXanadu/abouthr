@@ -1,0 +1,342 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}CMS Help & Guidelines{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header">
+    <h1>CMS Help & Content Guidelines</h1>
+    <p class="text-muted mb-0">Learn how to manage content for the About Hampton Roads website.</p>
+</div>
+
+<!-- Quick Navigation -->
+<div class="cms-card mb-4">
+    <div class="cms-card-header">
+        <h5 class="mb-0"><i class="bi bi-signpost-2 me-2"></i>Quick Navigation</h5>
+    </div>
+    <div class="cms-card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="#cities" class="text-decoration-none"><i class="bi bi-building me-2"></i>Cities</a></li>
+                    <li class="mb-2"><a href="#venues" class="text-decoration-none"><i class="bi bi-shop me-2"></i>Venues</a></li>
+                    <li class="mb-2"><a href="#military" class="text-decoration-none"><i class="bi bi-shield-fill me-2"></i>Military Bases</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="#tunnels" class="text-decoration-none"><i class="bi bi-signpost-split me-2"></i>Tunnels</a></li>
+                    <li class="mb-2"><a href="#vacation" class="text-decoration-none"><i class="bi bi-sun me-2"></i>Vacation Destinations</a></li>
+                    <li class="mb-2"><a href="#vendors" class="text-decoration-none"><i class="bi bi-plug me-2"></i>Vendors & Utilities</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><a href="#testimonials" class="text-decoration-none"><i class="bi bi-chat-quote me-2"></i>Testimonials</a></li>
+                    <li class="mb-2"><a href="#team" class="text-decoration-none"><i class="bi bi-people me-2"></i>Team Members</a></li>
+                    <li class="mb-2"><a href="#images" class="text-decoration-none"><i class="bi bi-image me-2"></i>Image Guidelines</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cities -->
+<div class="cms-card mb-4" id="cities">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-building me-2"></i>Cities</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Cities are the core geographic regions of Hampton Roads. Each city has its own detail page on the public site with restaurants, attractions, events, and local information.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Cities appear in the main navigation dropdown, on the homepage as clickable cards, and each has a dedicated page showing all venues and local information.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>City name</td><td>Use official city name (e.g., "Virginia Beach" not "VB")</td></tr>
+                <tr><td><strong>Slug</strong></td><td>URL-friendly version</td><td>Auto-generated from name. Use lowercase with hyphens (e.g., "virginia-beach")</td></tr>
+                <tr><td><strong>Region</strong></td><td>Peninsula or Southside</td><td>Geographic classification for organization</td></tr>
+                <tr><td><strong>Description</strong></td><td>Overview of the city</td><td>2-3 paragraphs covering character, highlights, and why people live there</td></tr>
+                <tr><td><strong>Image</strong></td><td>Banner/hero image</td><td>Landscape photo representing the city. See <a href="#images">Image Guidelines</a></td></tr>
+                <tr><td><strong>School URL</strong></td><td>Link to school district</td><td>Official school district website for relocating families</td></tr>
+                <tr><td><strong>Has Beaches</strong></td><td>Beach access indicator</td><td>Check if the city has public beach access</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished cities won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Lower numbers appear first within their region</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Venues -->
+<div class="cms-card mb-4" id="venues">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-shop me-2"></i>Venues</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Venues are places of interest within each city: restaurants, cafes/breweries, attractions, events, and beaches. They help relocating families discover what each city has to offer.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Venues appear on their city's detail page, organized by type in tabs. Featured venues may appear in highlight sections.</p>
+
+        <h6 class="text-primary">Venue Types</h6>
+        <ul>
+            <li><strong>Restaurant</strong> - Dining establishments (use Cuisine Type to categorize)</li>
+            <li><strong>Cafe/Brewery</strong> - Coffee shops, breweries, casual spots</li>
+            <li><strong>Attraction</strong> - Museums, parks, entertainment venues</li>
+            <li><strong>Event</strong> - Annual festivals, recurring events</li>
+            <li><strong>Beach</strong> - Public beach access points</li>
+        </ul>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>Venue name</td><td>Official business name</td></tr>
+                <tr><td><strong>Venue Type</strong></td><td>Category</td><td>Select the most appropriate type</td></tr>
+                <tr><td><strong>Description</strong></td><td>What makes it special</td><td>1-2 sentences highlighting what visitors should know</td></tr>
+                <tr><td><strong>Cuisine Type</strong></td><td>Food category</td><td>Only for restaurants/cafes - helps with filtering</td></tr>
+                <tr><td><strong>Address</strong></td><td>Street address</td><td>Full address for directions</td></tr>
+                <tr><td><strong>Website</strong></td><td>Official website URL</td><td>Include https://</td></tr>
+                <tr><td><strong>Phone</strong></td><td>Contact number</td><td>Format: 757-555-1234</td></tr>
+                <tr><td><strong>Image</strong></td><td>Venue photo</td><td>Exterior or signature dish/feature. See <a href="#images">Image Guidelines</a></td></tr>
+                <tr><td><strong>Featured</strong></td><td>Highlight flag</td><td>Featured venues get prominent placement</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished venues won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Lower numbers appear first in lists</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Military Bases -->
+<div class="cms-card mb-4" id="military">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-shield-fill me-2"></i>Military Bases</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Military installations in the Hampton Roads area. This is crucial content since many relocations are military-related (PCS moves).</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Military bases appear on the dedicated Military page, organized by branch. Each base shows its location, description, and link to official resources.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>Installation name</td><td>Official name (e.g., "Naval Station Norfolk")</td></tr>
+                <tr><td><strong>Slug</strong></td><td>URL-friendly version</td><td>Auto-generated from name</td></tr>
+                <tr><td><strong>Branch</strong></td><td>Military branch</td><td>Navy, Army, Air Force, Coast Guard, Marines, or Joint</td></tr>
+                <tr><td><strong>Description</strong></td><td>Base overview</td><td>Mission, size, significance, and what personnel should know</td></tr>
+                <tr><td><strong>City</strong></td><td>Location</td><td>Which Hampton Roads city the base is in</td></tr>
+                <tr><td><strong>Website</strong></td><td>Official base website</td><td>Link to official .mil site</td></tr>
+                <tr><td><strong>Image</strong></td><td>Base photo</td><td>Gate, aerial view, or iconic building</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished bases won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Consider ordering by size/importance</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Tunnels -->
+<div class="cms-card mb-4" id="tunnels">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-signpost-split me-2"></i>Tunnels</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Hampton Roads is unique with multiple tunnel systems connecting different areas. Understanding tunnels is essential for new residents navigating the region.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Tunnels appear on a dedicated Tunnels page showing connections, toll information, and tips for navigating the region.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>Tunnel name</td><td>Official name (e.g., "Hampton Roads Bridge-Tunnel")</td></tr>
+                <tr><td><strong>Slug</strong></td><td>URL-friendly version</td><td>Auto-generated from name</td></tr>
+                <tr><td><strong>Description</strong></td><td>Overview and tips</td><td>Include traffic patterns, best times to travel, and local tips</td></tr>
+                <tr><td><strong>Connects From</strong></td><td>Starting point</td><td>City or area name</td></tr>
+                <tr><td><strong>Connects To</strong></td><td>Ending point</td><td>City or area name</td></tr>
+                <tr><td><strong>Length Info</strong></td><td>Distance/time</td><td>e.g., "3.5 miles" or "10-15 minutes"</td></tr>
+                <tr><td><strong>Toll Info</strong></td><td>Pricing details</td><td>Current toll rates and E-ZPass info</td></tr>
+                <tr><td><strong>Image</strong></td><td>Tunnel photo</td><td>Entrance or aerial view</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished tunnels won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Order by usage frequency or geographic logic</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Vacation Destinations -->
+<div class="cms-card mb-4" id="vacation">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-sun me-2"></i>Vacation Destinations</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Nearby getaway destinations accessible from Hampton Roads. Helps new residents discover weekend trip opportunities.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Vacation destinations appear on the Vacation page as cards showing distance, highlights, and links to learn more.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>Destination name</td><td>e.g., "Outer Banks" or "Washington D.C."</td></tr>
+                <tr><td><strong>Slug</strong></td><td>URL-friendly version</td><td>Auto-generated from name</td></tr>
+                <tr><td><strong>Description</strong></td><td>What to expect</td><td>Brief overview of the destination</td></tr>
+                <tr><td><strong>Distance Description</strong></td><td>How far away</td><td>e.g., "2 hours south" or "3.5 hours north"</td></tr>
+                <tr><td><strong>Highlights</strong></td><td>Key attractions</td><td>Bullet points of main things to do/see</td></tr>
+                <tr><td><strong>Website</strong></td><td>Tourism site</td><td>Official tourism or visitor bureau link</td></tr>
+                <tr><td><strong>Image</strong></td><td>Destination photo</td><td>Iconic scene representing the destination</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished destinations won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Consider ordering by popularity or distance</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Vendors & Utilities -->
+<div class="cms-card mb-4" id="vendors">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-plug me-2"></i>Vendors & Utilities</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Essential utility contacts for each city - electric, water, internet, etc. Critical information for people setting up a new home.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Vendors appear on the Utilities page, organized by city. Helps new residents know who to contact when moving in.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>City</strong></td><td>Which city</td><td>Select the city this vendor serves</td></tr>
+                <tr><td><strong>Category</strong></td><td>Utility type</td><td>Electric, Gas, Water, Trash, Internet, Cable, Phone, Other</td></tr>
+                <tr><td><strong>Name</strong></td><td>Company name</td><td>e.g., "Dominion Energy" or "Cox Communications"</td></tr>
+                <tr><td><strong>Phone</strong></td><td>Contact number</td><td>Customer service number for new accounts</td></tr>
+                <tr><td><strong>Website</strong></td><td>Company website</td><td>Link to account setup or service page</td></tr>
+                <tr><td><strong>Notes</strong></td><td>Additional info</td><td>Service areas, special requirements, tips</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished vendors won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Order by importance (electric first, then water, etc.)</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Testimonials -->
+<div class="cms-card mb-4" id="testimonials">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-chat-quote me-2"></i>Testimonials</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Client quotes and reviews from people who have used your relocation services. Builds trust and credibility.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Testimonials appear on the Testimonials page and featured ones may appear on the homepage or About page.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Client Name</strong></td><td>Person's name</td><td>First name and last initial is fine for privacy (e.g., "John S.")</td></tr>
+                <tr><td><strong>Quote</strong></td><td>Their testimonial</td><td>Keep authentic - minor editing for clarity is OK</td></tr>
+                <tr><td><strong>Client Location</strong></td><td>Context</td><td>e.g., "Relocated from California" or "PCS from San Diego"</td></tr>
+                <tr><td><strong>Photo</strong></td><td>Client photo</td><td>Optional - headshot if available and permitted</td></tr>
+                <tr><td><strong>Featured</strong></td><td>Highlight flag</td><td>Featured testimonials get prominent placement</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished testimonials won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Best testimonials should have lower numbers</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Team Members -->
+<div class="cms-card mb-4" id="team">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Team Members</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">What is it?</h6>
+        <p>Company team members displayed on the About page. Puts faces to the business and builds personal connection.</p>
+
+        <h6 class="text-primary">How it appears on the site</h6>
+        <p>Team members appear on the About page with photos, titles, and contact information.</p>
+
+        <h6 class="text-primary">Field Guide</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Field</th><th>Description</th><th>Tips</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Name</strong></td><td>Full name</td><td>As they want to be known professionally</td></tr>
+                <tr><td><strong>Title</strong></td><td>Job title</td><td>e.g., "Lead Agent" or "Relocation Specialist"</td></tr>
+                <tr><td><strong>Bio</strong></td><td>About them</td><td>2-3 sentences about experience, specialty, and personality</td></tr>
+                <tr><td><strong>Photo</strong></td><td>Headshot</td><td>Professional photo, consistent style across team</td></tr>
+                <tr><td><strong>Email</strong></td><td>Contact email</td><td>Professional email address</td></tr>
+                <tr><td><strong>Phone</strong></td><td>Contact phone</td><td>Direct line or cell if appropriate</td></tr>
+                <tr><td><strong>LinkedIn URL</strong></td><td>Profile link</td><td>Full LinkedIn profile URL</td></tr>
+                <tr><td><strong>Published</strong></td><td>Visibility toggle</td><td>Unpublished members won't appear on the public site</td></tr>
+                <tr><td><strong>Order</strong></td><td>Display order</td><td>Typically by seniority or alphabetical</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Image Guidelines -->
+<div class="cms-card mb-4" id="images">
+    <div class="cms-card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-image me-2"></i>Image Guidelines</h5>
+        <a href="#top" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> Top</a>
+    </div>
+    <div class="cms-card-body">
+        <h6 class="text-primary">General Guidelines</h6>
+        <ul>
+            <li><strong>Format:</strong> JPEG for photos, PNG for graphics with transparency</li>
+            <li><strong>Quality:</strong> High resolution but web-optimized (under 500KB ideal)</li>
+            <li><strong>Rights:</strong> Only use images you have rights to (owned, licensed, or royalty-free)</li>
+        </ul>
+
+        <h6 class="text-primary">Recommended Dimensions</h6>
+        <table class="table table-sm">
+            <thead><tr><th>Image Type</th><th>Dimensions</th><th>Aspect Ratio</th></tr></thead>
+            <tbody>
+                <tr><td>City banners</td><td>1920 x 600 px</td><td>16:5 (wide landscape)</td></tr>
+                <tr><td>Venue photos</td><td>800 x 600 px</td><td>4:3 (standard landscape)</td></tr>
+                <tr><td>Team headshots</td><td>400 x 400 px</td><td>1:1 (square)</td></tr>
+                <tr><td>Testimonial photos</td><td>200 x 200 px</td><td>1:1 (square)</td></tr>
+                <tr><td>Destination cards</td><td>800 x 500 px</td><td>8:5 (landscape)</td></tr>
+            </tbody>
+        </table>
+
+        <h6 class="text-primary">Content Tips</h6>
+        <ul>
+            <li><strong>Cities:</strong> Iconic landmarks, skylines, or lifestyle scenes</li>
+            <li><strong>Venues:</strong> Exterior shots, signature dishes, or atmosphere photos</li>
+            <li><strong>Military:</strong> Base gates, aerial views (check public affairs guidelines)</li>
+            <li><strong>Team:</strong> Professional headshots with consistent backgrounds</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Back to Dashboard -->
+<div class="text-center mt-4 mb-4">
+    <a href="{% url 'cms:dashboard' %}" class="btn btn-primary">
+        <i class="bi bi-speedometer2 me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

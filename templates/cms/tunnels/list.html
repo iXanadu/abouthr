@@ -1,0 +1,69 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Tunnels - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Tunnels</h1>
+        <p class="text-muted mb-0">Manage tunnels and bridges in Hampton Roads.</p>
+    </div>
+    <a href="{% url 'cms:tunnel_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Tunnel
+    </a>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body p-0">
+        <table class="cms-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Name</th>
+                    <th>Connects</th>
+                    <th>Toll Info</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tunnel in tunnels %}
+                <tr>
+                    <td class="text-muted">{{ tunnel.order }}</td>
+                    <td>
+                        <strong>{{ tunnel.name }}</strong>
+                        {% if tunnel.length_info %}<br><small class="text-muted">{{ tunnel.length_info }}</small>{% endif %}
+                    </td>
+                    <td>{{ tunnel.connects_from }} &rarr; {{ tunnel.connects_to }}</td>
+                    <td>{{ tunnel.toll_info|default:"-"|truncatechars:30 }}</td>
+                    <td>
+                        {% if tunnel.is_published %}
+                        <span class="badge badge-published">Published</span>
+                        {% else %}
+                        <span class="badge badge-draft">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'cms:tunnel_edit' slug=tunnel.slug %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'cms:tunnel_delete' slug=tunnel.slug %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No tunnels yet.
+                        <a href="{% url 'cms:tunnel_create' %}">Add one</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

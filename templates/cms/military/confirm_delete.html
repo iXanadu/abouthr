@@ -1,0 +1,49 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Delete {{ object.name }} - CMS{% endblock %}
+
+{% block cms_content %}
+<!-- Breadcrumb -->
+<nav class="cms-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'cms:military_list' %}">Military Bases</a></li>
+        <li class="breadcrumb-item active">Delete</li>
+    </ol>
+</nav>
+
+<div class="cms-header">
+    <h1>Delete Military Base</h1>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body">
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Warning:</strong> This action cannot be undone.
+        </div>
+
+        <p class="mb-4">Are you sure you want to delete <strong>{{ object.name }}</strong>?</p>
+
+        <dl class="row mb-4">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">{{ object.name }}</dd>
+
+            <dt class="col-sm-3">Branch</dt>
+            <dd class="col-sm-9">{{ object.get_branch_display }}</dd>
+
+            <dt class="col-sm-3">City</dt>
+            <dd class="col-sm-9">{{ object.city.name|default:"N/A" }}</dd>
+        </dl>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash me-1"></i> Yes, Delete
+            </button>
+            <a href="{% url 'cms:military_list' %}" class="btn btn-secondary ms-2">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

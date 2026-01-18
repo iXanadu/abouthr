@@ -1,0 +1,91 @@
+"""
+CMS URL Configuration
+
+All CMS routes for content management.
+"""
+
+from django.urls import path
+
+from cms.views import (
+    # Dashboard
+    DashboardView, HelpView,
+    # Cities
+    CityListView, CityDetailView, CityUpdateView,
+    # Venues
+    VenueCreateView, VenueUpdateView, VenueDeleteView,
+    VenueTogglePublishView, VenueReorderView,
+    # Military
+    MilitaryListView, MilitaryBaseCreateView,
+    MilitaryBaseUpdateView, MilitaryBaseDeleteView,
+    # Tunnels
+    TunnelListView, TunnelCreateView, TunnelUpdateView, TunnelDeleteView,
+    # Vacation Destinations
+    DestinationListView, DestinationCreateView,
+    DestinationUpdateView, DestinationDeleteView,
+    # Testimonials
+    TestimonialListView, TestimonialCreateView,
+    TestimonialUpdateView, TestimonialDeleteView,
+    # Team Members
+    TeamMemberListView, TeamMemberCreateView,
+    TeamMemberUpdateView, TeamMemberDeleteView,
+)
+from cms.views.content import (
+    VendorListView, VendorCreateView, VendorUpdateView, VendorDeleteView,
+)
+
+app_name = 'cms'
+
+urlpatterns = [
+    # Dashboard
+    path('', DashboardView.as_view(), name='dashboard'),
+    path('help/', HelpView.as_view(), name='help'),
+
+    # Cities
+    path('cities/', CityListView.as_view(), name='city_list'),
+    path('cities/<slug:slug>/', CityDetailView.as_view(), name='city_detail'),
+    path('cities/<slug:slug>/edit/', CityUpdateView.as_view(), name='city_edit'),
+
+    # Venues (nested under cities for create)
+    path('cities/<slug:city_slug>/venues/add/<str:venue_type>/',
+         VenueCreateView.as_view(), name='venue_create'),
+    path('venues/<int:pk>/edit/', VenueUpdateView.as_view(), name='venue_edit'),
+    path('venues/<int:pk>/delete/', VenueDeleteView.as_view(), name='venue_delete'),
+    path('venues/<int:pk>/toggle/', VenueTogglePublishView.as_view(), name='venue_toggle_publish'),
+    path('venues/reorder/', VenueReorderView.as_view(), name='venue_reorder'),
+
+    # Military Bases
+    path('military/', MilitaryListView.as_view(), name='military_list'),
+    path('military/add/', MilitaryBaseCreateView.as_view(), name='military_create'),
+    path('military/<slug:slug>/edit/', MilitaryBaseUpdateView.as_view(), name='military_edit'),
+    path('military/<slug:slug>/delete/', MilitaryBaseDeleteView.as_view(), name='military_delete'),
+
+    # Tunnels
+    path('tunnels/', TunnelListView.as_view(), name='tunnel_list'),
+    path('tunnels/add/', TunnelCreateView.as_view(), name='tunnel_create'),
+    path('tunnels/<slug:slug>/edit/', TunnelUpdateView.as_view(), name='tunnel_edit'),
+    path('tunnels/<slug:slug>/delete/', TunnelDeleteView.as_view(), name='tunnel_delete'),
+
+    # Vacation Destinations
+    path('vacation/', DestinationListView.as_view(), name='destination_list'),
+    path('vacation/add/', DestinationCreateView.as_view(), name='destination_create'),
+    path('vacation/<slug:slug>/edit/', DestinationUpdateView.as_view(), name='destination_edit'),
+    path('vacation/<slug:slug>/delete/', DestinationDeleteView.as_view(), name='destination_delete'),
+
+    # Vendors/Utilities
+    path('vendors/', VendorListView.as_view(), name='vendor_list'),
+    path('vendors/add/', VendorCreateView.as_view(), name='vendor_create'),
+    path('vendors/<int:pk>/edit/', VendorUpdateView.as_view(), name='vendor_edit'),
+    path('vendors/<int:pk>/delete/', VendorDeleteView.as_view(), name='vendor_delete'),
+
+    # Testimonials
+    path('testimonials/', TestimonialListView.as_view(), name='testimonial_list'),
+    path('testimonials/add/', TestimonialCreateView.as_view(), name='testimonial_create'),
+    path('testimonials/<int:pk>/edit/', TestimonialUpdateView.as_view(), name='testimonial_edit'),
+    path('testimonials/<int:pk>/delete/', TestimonialDeleteView.as_view(), name='testimonial_delete'),
+
+    # Team Members
+    path('team/', TeamMemberListView.as_view(), name='team_list'),
+    path('team/add/', TeamMemberCreateView.as_view(), name='team_create'),
+    path('team/<int:pk>/edit/', TeamMemberUpdateView.as_view(), name='team_edit'),
+    path('team/<int:pk>/delete/', TeamMemberDeleteView.as_view(), name='team_delete'),
+]

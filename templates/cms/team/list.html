@@ -1,0 +1,73 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Team Members - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Team Members</h1>
+        <p class="text-muted mb-0">Manage team members shown on the About page.</p>
+    </div>
+    <a href="{% url 'cms:team_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Team Member
+    </a>
+</div>
+
+<div class="row g-4">
+    {% for member in team_members %}
+    <div class="col-md-6 col-lg-4">
+        <div class="content-card h-100">
+            <div class="content-card-body text-center">
+                {% if member.photo %}
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}"
+                     class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width: 100px; height: 100px;">
+                    <i class="bi bi-person" style="font-size: 2.5rem; color: #94a3b8;"></i>
+                </div>
+                {% endif %}
+
+                <h5 class="content-card-title mb-1">{{ member.name }}</h5>
+                <p class="text-muted mb-2">{{ member.title }}</p>
+
+                {% if member.email or member.phone %}
+                <div class="small text-muted mb-3">
+                    {% if member.email %}<i class="bi bi-envelope me-1"></i> {{ member.email }}<br>{% endif %}
+                    {% if member.phone %}<i class="bi bi-telephone me-1"></i> {{ member.phone }}{% endif %}
+                </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if member.is_published %}
+                    <span class="badge badge-published">Published</span>
+                    {% else %}
+                    <span class="badge badge-draft">Draft</span>
+                    {% endif %}
+
+                    <div class="btn-group">
+                        <a href="{% url 'cms:team_edit' pk=member.pk %}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'cms:team_delete' pk=member.pk %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="cms-card">
+            <div class="cms-card-body text-center py-5">
+                <p class="text-muted mb-3">No team members yet.</p>
+                <a href="{% url 'cms:team_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Add Team Member
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

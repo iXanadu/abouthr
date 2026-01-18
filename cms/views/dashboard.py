@@ -51,3 +51,10 @@ class DashboardView(CMSAccessMixin, TemplateView):
         ).order_by('region__order', 'order')[:5]
 
         return context
+
+
+class HelpView(CMSAccessMixin, TemplateView):
+    """
+    CMS Help page with content guidelines for managers.
+    """
+    template_name = 'cms/help.html'

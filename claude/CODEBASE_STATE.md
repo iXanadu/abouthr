@@ -11,8 +11,9 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 - **Framework:** Django 5.2
 - **Database:** PostgreSQL (abouthr_dev / abouthr_prod on postgres.o6.org)
 - **Python:** 3.12+
-- **Frontend:** Bootstrap 5, Google Fonts (Montserrat + Inter)
+- **Frontend:** Bootstrap 5, Google Fonts (Montserrat + Inter), HTMX
 - **CSS:** Custom mobile-first stylesheet with CSS variables
+- **Forms:** crispy_forms + crispy_bootstrap5
 - **SEO:** OpenGraph, Twitter Cards, sitemap.xml, robots.txt
 
 ---
@@ -20,9 +21,9 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 ## Current State Summary
 
 ### Phase / Milestone
-- **Current Phase:** Phase 3 Complete - Ready for Deployment
-- **Progress:** 75%
-- **Status:** Ready for Production Deploy
+- **Current Phase:** Phase 4 Complete - CMS Fully Operational
+- **Progress:** 85%
+- **Status:** Dev deployed, CMS operational, ready for content management
 
 ### Recent Major Work Completed
 1. Project initialization with Django - 2026-01-17
@@ -38,6 +39,10 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 11. **Phase 3: OpenGraph and Twitter Card meta tags** - 2026-01-18
 12. **Phase 3: Dynamic sitemap.xml and robots.txt** - 2026-01-18
 13. **Phase 3: Lazy loading for all images** - 2026-01-18
+14. **Phase 4: CMS infrastructure (urls, forms, views)** - 2026-01-18
+15. **Phase 4: CMS templates for all 8 content types** - 2026-01-18
+16. **Phase 4: CMS help page with content guidelines** - 2026-01-18
+17. **Phase 4: Superuser created, CMS operational** - 2026-01-18
 
 ---
 
@@ -48,20 +53,43 @@ abouthr/
 ├── abouthr/           # Project settings
 ├── accounts/          # User auth, profiles, multi-tenancy
 ├── core/              # Base models, shared utilities
-├── guide/             # Domain models + views + URLs
+├── guide/             # Domain models + public views + URLs
 │   ├── management/commands/seed_data.py  # Data seeding
 │   ├── models.py      # City, Venue, MilitaryBase, etc.
 │   ├── views.py       # All page views + sitemap + robots
 │   └── urls.py        # URL routing
-├── cms/               # Content management (paused)
+├── cms/               # Content Management System
+│   ├── forms.py       # ModelForms with crispy_forms
+│   ├── urls.py        # 33 URL patterns
+│   └── views/         # Dashboard, CRUD for all models
+│       ├── __init__.py
+│       ├── mixins.py      # CMSAccessMixin
+│       ├── dashboard.py   # Dashboard + Help views
+│       ├── cities.py      # City CRUD
+│       ├── venues.py      # Venue CRUD + HTMX toggle
+│       ├── military.py    # Military CRUD
+│       └── content.py     # Tunnels, Vacation, Vendors, Testimonials, Team
 ├── templates/
-│   ├── base.html      # Main template with SEO meta tags
-│   └── guide/         # All page templates
+│   ├── base.html          # Main template with SEO meta tags
+│   ├── guide/             # Public page templates (9 files)
+│   ├── cms/               # CMS templates
+│   │   ├── base.html      # CMS base with sidebar
+│   │   ├── dashboard.html
+│   │   ├── help.html      # Content guidelines
+│   │   ├── components/    # sidebar, publish_toggle
+│   │   ├── cities/        # list, detail, edit
+│   │   ├── venues/        # form, confirm_delete
+│   │   ├── military/      # list, form, confirm_delete
+│   │   ├── tunnels/       # list, form, confirm_delete
+│   │   ├── vacation/      # list, form, confirm_delete
+│   │   ├── vendors/       # list, form, confirm_delete
+│   │   ├── testimonials/  # list, form, confirm_delete
+│   │   └── team/          # list, form, confirm_delete
+│   └── registration/
+│       └── login.html     # CMS login page
 └── static/
     ├── css/style.css  # Custom styles with animations
     └── images/        # Hero and city images
-        ├── hero/pier-sunset.jpg
-        └── cities/*.jpg (9 city images)
 ```
 
 ---
@@ -84,8 +112,9 @@ abouthr/
 
 ---
 
-## Page Views (guide/views.py)
+## URLs
 
+### Public Site (guide/urls.py)
 | View | URL | Template |
 |------|-----|----------|
 | HomeView | `/` | home.html |
@@ -100,24 +129,67 @@ abouthr/
 | sitemap_xml | `/sitemap.xml` | (dynamic XML) |
 | robots_txt | `/robots.txt` | (dynamic text) |
 
+### CMS (cms/urls.py) - 33 patterns
+| Section | URLs |
+|---------|------|
+| Dashboard | `/cms/`, `/cms/help/` |
+| Cities | `/cms/cities/`, `/cms/cities/<slug>/`, `/cms/cities/<slug>/edit/` |
+| Venues | `/cms/cities/<slug>/venues/add/<type>/`, `/cms/venues/<pk>/edit/`, `/cms/venues/<pk>/delete/`, `/cms/venues/<pk>/toggle/` |
+| Military | `/cms/military/`, `/cms/military/add/`, `/cms/military/<slug>/edit/`, `/cms/military/<slug>/delete/` |
+| Tunnels | `/cms/tunnels/`, `/cms/tunnels/add/`, etc. |
+| Vacation | `/cms/vacation/`, `/cms/vacation/add/`, etc. |
+| Vendors | `/cms/vendors/`, `/cms/vendors/add/`, etc. |
+| Testimonials | `/cms/testimonials/`, `/cms/testimonials/add/`, etc. |
+| Team | `/cms/team/`, `/cms/team/add/`, etc. |
+
+### Auth (django.contrib.auth.urls)
+| URL | Purpose |
+|-----|---------|
+| `/accounts/login/` | CMS login |
+| `/accounts/logout/` | Logout |
+
 ---
 
 ## Next Planned Work
 
-### DEPLOYMENT (User Action Required)
-1. Deploy to development server
-2. Test on real mobile devices
-3. Configure DNS for abouthamptonroads.com
-4. Deploy to production
-5. SSL certificate setup
-6. Image optimization on server
+### IMMEDIATE (Before Production)
+- [ ] Test on real mobile devices
+- [ ] Optimize images (large files, up to 1.1MB)
+- [ ] Add city images via CMS (currently showing "No image")
 
-### FUTURE / BACKLOG (Phase 4)
-- AI-generated events/happenings content
-- CMS interface for content management
-- Search functionality
-- Google Maps integration
-- Contact form with email
+### PRODUCTION DEPLOYMENT
+- [ ] Configure DNS for abouthamptonroads.com
+- [ ] Deploy to production environment
+- [ ] SSL certificate setup
+- [ ] Performance optimization
+- [ ] Backup strategy
+
+### FUTURE / BACKLOG (Phase 5)
+- [ ] AI-generated events/happenings content
+- [ ] CMS drag-and-drop reordering
+- [ ] Search functionality
+- [ ] Google Maps integration
+- [ ] Contact form with email
+
+---
+
+## Environment Status
+| Environment | Status | URL | Last Deploy |
+|-------------|--------|-----|-------------|
+| Development | **Running** | dev.abouthamptonroads.com | 2026-01-18 |
+| Production | Not deployed | abouthamptonroads.com | - |
+
+### Server Commands
+```bash
+# Restart development server (after Python changes)
+sudo systemctl restart gunicorn_abouthamptonroads_dev
+
+# Check status
+systemctl status gunicorn_abouthamptonroads_dev
+
+# View logs
+journalctl -u gunicorn_abouthamptonroads_dev -n 50
+```
 
 ---
 
@@ -129,45 +201,40 @@ abouthr/
 3. **PDF as Source:** All content seeded from the 40-page PDF
 4. **Tabs/Accordions:** Desktop uses tabs for venue types, mobile uses accordions
 5. **Premium Fonts:** Montserrat (headers) + Inter (body) for modern look
-6. **Static Images:** City images stored as static files, not database ImageFields
+6. **CMS-Managed Images:** City images stored via ImageField, editable in CMS
 7. **Dynamic Sitemap:** Generated via view to auto-include new content
+8. **HTMX for CMS:** Publish toggles use HTMX for no-reload updates
 
-### Content Structure
-- **9 Cities:** Virginia Beach, Chesapeake, Norfolk, Portsmouth, Suffolk, Smithfield, Hampton, Newport News, Williamsburg/Yorktown
-- **Per City:** Description, restaurants, cafes/breweries, attractions, events, beaches (where applicable)
-- **Special Sections:** Military, tunnels, vacation destinations, vendors, testimonials
+### CMS Access Control
+Users can access CMS if any of these are true:
+- `user.is_superuser`
+- `user.profile.is_admin`
+- `user.profile.system_role in ['account_owner', 'admin']`
 
 ---
 
 ## Known Issues / Technical Debt
 
 ### Issues
+- [ ] City images not uploaded yet (showing "No image" in CMS)
 - [ ] Image sizes large (up to 1.1MB) - optimize during deployment
 
 ### Technical Debt
-- [ ] CMS app partially built but paused - may need cleanup
-- [ ] OpenGraph image URLs are relative - may need absolute for some platforms
+- [ ] OpenGraph image URLs may need absolute paths for some platforms
+- [ ] No unit/integration tests implemented
 
 ---
 
 ## Testing Status
-- All 17 pages return 200 status
-- All 10 images loading correctly
+- All public pages return 200 status
+- All CMS pages return 200 status (when authenticated)
 - sitemap.xml generates valid XML
 - robots.txt generates valid format
 - OpenGraph tags present in HTML
 - Lazy loading attributes added
+- CMS CRUD operations functional
 - Unit tests: Not implemented
 - Integration tests: Not implemented
-
----
-
-## Environment Status
-| Environment | Status | Last Deploy |
-|-------------|--------|-------------|
-| Local | Working | 2026-01-18 |
-| Development | Not deployed | - |
-| Production | Not deployed | - |
 
 ---
 
@@ -176,27 +243,26 @@ abouthr/
 ### Important Files
 - `abouthr/settings.py` - Django configuration
 - `guide/models.py` - All domain models
-- `guide/views.py` - All page views + SEO views
-- `guide/urls.py` - URL routing
-- `templates/base.html` - Main template with SEO tags
-- `static/css/style.css` - Custom styles with animations
-- `static/images/` - Hero and city images
-- `guide/management/commands/seed_data.py` - Data seeding
-- `claude/specs/abouthr.pdf` - Source content (40 pages)
+- `guide/views.py` - Public page views
+- `cms/views/` - CMS views
+- `cms/forms.py` - All CMS forms
+- `cms/urls.py` - CMS URL routing
+- `templates/base.html` - Main public template
+- `templates/cms/base.html` - CMS base template
+- `templates/cms/help.html` - CMS content guidelines
+- `static/css/style.css` - Custom styles
+- `claude/SERVER_COMMANDS.md` - Gunicorn restart commands
 
 ### Common Commands
 ```bash
-python manage.py runserver
-python manage.py seed_data  # Seed database from PDF content
-python manage.py test
-python manage.py migrate
-python manage.py makemigrations guide
+python manage.py runserver          # Local dev server
+python manage.py seed_data          # Seed database from PDF content
+python manage.py createsuperuser    # Create admin user
+python manage.py collectstatic      # Collect static files
+python manage.py migrate            # Run migrations
 ```
 
-### SEO URLs
-- `/sitemap.xml` - Dynamic XML sitemap (17 URLs)
-- `/robots.txt` - Search engine instructions
-
-### Reference Projects
-- `../tagApp` - Infrastructure patterns
-- `../trustworthyagents.com/prod` - Website patterns
+### CMS URLs
+- Dashboard: `/cms/`
+- Help: `/cms/help/`
+- Login: `/accounts/login/`

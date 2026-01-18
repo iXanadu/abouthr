@@ -1,0 +1,67 @@
+<aside class="cms-sidebar">
+    <div class="cms-sidebar-header">
+        <a href="{% url 'cms:dashboard' %}" class="text-white text-decoration-none">
+            <h5 class="mb-0 fw-bold">CMS</h5>
+            <small class="text-muted">Content Manager</small>
+        </a>
+    </div>
+
+    <nav class="cms-sidebar-section">
+        <div class="cms-sidebar-section-title">Overview</div>
+        <a href="{% url 'cms:dashboard' %}" class="nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+    </nav>
+
+    <nav class="cms-sidebar-section">
+        <div class="cms-sidebar-section-title">Content</div>
+        <a href="{% url 'cms:city_list' %}" class="nav-link{% if 'city' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-building"></i> Cities
+        </a>
+        <a href="{% url 'cms:military_list' %}" class="nav-link{% if 'military' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-shield-fill"></i> Military Bases
+        </a>
+        <a href="{% url 'cms:tunnel_list' %}" class="nav-link{% if 'tunnel' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-signpost-split"></i> Tunnels
+        </a>
+        <a href="{% url 'cms:destination_list' %}" class="nav-link{% if 'destination' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-sun"></i> Vacation
+        </a>
+        <a href="{% url 'cms:vendor_list' %}" class="nav-link{% if 'vendor' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-plug"></i> Vendors
+        </a>
+    </nav>
+
+    <nav class="cms-sidebar-section">
+        <div class="cms-sidebar-section-title">About Page</div>
+        <a href="{% url 'cms:testimonial_list' %}" class="nav-link{% if 'testimonial' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-chat-quote"></i> Testimonials
+        </a>
+        <a href="{% url 'cms:team_list' %}" class="nav-link{% if 'team' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-people"></i> Team Members
+        </a>
+    </nav>
+
+    <nav class="cms-sidebar-section">
+        <div class="cms-sidebar-section-title">External</div>
+        <a href="{% url 'admin:index' %}" class="nav-link" target="_blank">
+            <i class="bi bi-gear"></i> Django Admin
+        </a>
+        <a href="{% url 'guide:home' %}" class="nav-link" target="_blank">
+            <i class="bi bi-box-arrow-up-right"></i> View Site
+        </a>
+    </nav>
+
+    <nav class="cms-sidebar-section">
+        <div class="cms-sidebar-section-title">Support</div>
+        <a href="{% url 'cms:help' %}" class="nav-link{% if request.resolver_match.url_name == 'help' %} active{% endif %}">
+            <i class="bi bi-question-circle"></i> Help & Guidelines
+        </a>
+    </nav>
+
+    <nav class="cms-sidebar-section mt-auto">
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+    </nav>
+</aside>

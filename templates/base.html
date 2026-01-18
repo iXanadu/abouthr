@@ -9,8 +9,8 @@
     <!-- OpenGraph Meta Tags -->
     <meta property="og:title" content="{% block og_title %}About Hampton Roads - Relocation Guide{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Your comprehensive guide to relocating to Hampton Roads, Virginia. Explore Virginia Beach, Norfolk, Chesapeake, and all 9 cities.{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
-    <meta property="og:url" content="{% block og_url %}https://abouthamptonroads.com{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="About Hampton Roads">
 
@@ -18,7 +18,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}About Hampton Roads - Relocation Guide{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Your comprehensive guide to relocating to Hampton Roads, Virginia.{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
 
     <title>{% block title %}About Hampton Roads{% endblock %} | Hampton Roads Relocation Guide</title>
 

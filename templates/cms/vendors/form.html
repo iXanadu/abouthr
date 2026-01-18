@@ -1,0 +1,27 @@
+{% extends 'cms/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if is_create %}Add{% else %}Edit{% endif %} Vendor - CMS{% endblock %}
+
+{% block cms_content %}
+<!-- Breadcrumb -->
+<nav class="cms-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'cms:vendor_list' %}">Vendors</a></li>
+        <li class="breadcrumb-item active">{% if is_create %}Add{% else %}Edit{% endif %}</li>
+    </ol>
+</nav>
+
+<div class="cms-header">
+    <h1>{% if is_create %}Add New{% else %}Edit{% endif %} Vendor</h1>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body">
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+</div>
+{% endblock %}

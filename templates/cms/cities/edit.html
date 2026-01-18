@@ -1,0 +1,28 @@
+{% extends 'cms/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit {{ city.name }} - CMS{% endblock %}
+
+{% block cms_content %}
+<!-- Breadcrumb -->
+<nav class="cms-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'cms:city_list' %}">Cities</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'cms:city_detail' slug=city.slug %}">{{ city.name }}</a></li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+</nav>
+
+<div class="cms-header">
+    <h1>Edit {{ city.name }}</h1>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+</div>
+{% endblock %}

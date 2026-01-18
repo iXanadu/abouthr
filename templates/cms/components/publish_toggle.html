@@ -1,0 +1,15 @@
+<div class="publish-toggle form-check form-switch"
+     hx-post="{{ toggle_url }}"
+     hx-trigger="change"
+     hx-swap="outerHTML">
+    <input class="form-check-input" type="checkbox" role="switch"
+           id="publish_{{ obj.pk }}"
+           {% if obj.is_published %}checked{% endif %}>
+    <label class="form-check-label" for="publish_{{ obj.pk }}">
+        {% if obj.is_published %}
+        <span class="badge badge-published">Published</span>
+        {% else %}
+        <span class="badge badge-draft">Draft</span>
+        {% endif %}
+    </label>
+</div>

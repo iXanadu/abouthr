@@ -1,0 +1,62 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Vacation Destinations - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Vacation Destinations</h1>
+        <p class="text-muted mb-0">Manage nearby vacation spots and getaways.</p>
+    </div>
+    <a href="{% url 'cms:destination_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Destination
+    </a>
+</div>
+
+<div class="row g-4">
+    {% for dest in destinations %}
+    <div class="col-md-6 col-lg-4">
+        <div class="content-card h-100">
+            <div class="content-card-img"
+                 {% if dest.image %}style="background-image: url('{{ dest.image.url }}')"{% endif %}>
+            </div>
+            <div class="content-card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="content-card-title mb-0">{{ dest.name }}</h5>
+                    {% if dest.is_published %}
+                    <span class="badge badge-published">Published</span>
+                    {% else %}
+                    <span class="badge badge-draft">Draft</span>
+                    {% endif %}
+                </div>
+                <p class="content-card-meta mb-2">
+                    <i class="bi bi-geo-alt me-1"></i> {{ dest.distance_description }}
+                </p>
+                {% if dest.description %}
+                <p class="small text-muted mb-2">{{ dest.description|truncatechars:80 }}</p>
+                {% endif %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'cms:destination_edit' slug=dest.slug %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'cms:destination_delete' slug=dest.slug %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="cms-card">
+            <div class="cms-card-body text-center py-5">
+                <p class="text-muted mb-3">No vacation destinations yet.</p>
+                <a href="{% url 'cms:destination_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Add Destination
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

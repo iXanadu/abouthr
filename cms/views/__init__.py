@@ -5,7 +5,7 @@ Import all views for URL routing.
 """
 
 from .mixins import CMSAccessMixin
-from .dashboard import DashboardView
+from .dashboard import DashboardView, HelpView
 from .cities import CityListView, CityDetailView, CityUpdateView
 from .venues import (
     VenueCreateView, VenueUpdateView, VenueDeleteView,

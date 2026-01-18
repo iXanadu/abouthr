@@ -1,0 +1,36 @@
+{% extends 'cms/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if is_create %}Add{% else %}Edit{% endif %} Venue - CMS{% endblock %}
+
+{% block cms_content %}
+<!-- Breadcrumb -->
+<nav class="cms-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'cms:city_list' %}">Cities</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'cms:city_detail' slug=city.slug %}">{{ city.name }}</a></li>
+        <li class="breadcrumb-item active">{% if is_create %}Add{% else %}Edit{% endif %} Venue</li>
+    </ol>
+</nav>
+
+<div class="cms-header">
+    <h1>{% if is_create %}Add New{% else %}Edit{% endif %} Venue</h1>
+    <p class="text-muted mb-0">
+        {% if venue_type == 'restaurant' %}Restaurant{% endif %}
+        {% if venue_type == 'cafe_brewery' %}Cafe/Brewery{% endif %}
+        {% if venue_type == 'attraction' %}Attraction{% endif %}
+        {% if venue_type == 'event' %}Event{% endif %}
+        {% if venue_type == 'beach' %}Beach{% endif %}
+        in {{ city.name }}
+    </p>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    </div>
+</div>
+{% endblock %}
