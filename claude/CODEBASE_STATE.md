@@ -13,16 +13,16 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 - **Python:** 3.12+
 - **Frontend:** Bootstrap 5, Google Fonts (Montserrat + Inter)
 - **CSS:** Custom mobile-first stylesheet with CSS variables
-- **API:** Django REST Framework
+- **SEO:** OpenGraph, Twitter Cards, sitemap.xml, robots.txt
 
 ---
 
 ## Current State Summary
 
 ### Phase / Milestone
-- **Current Phase:** Phase 1 Complete - Public Website MVP
-- **Progress:** 50%
-- **Status:** Active
+- **Current Phase:** Phase 3 Complete - Ready for Deployment
+- **Progress:** 75%
+- **Status:** Ready for Production Deploy
 
 ### Recent Major Work Completed
 1. Project initialization with Django - 2026-01-17
@@ -33,6 +33,11 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 6. **Phase 1: All content seeded (501 venues, 16 bases, etc.)** - 2026-01-18
 7. **Phase 1: Base template with Bootstrap 5 + modern fonts** - 2026-01-18
 8. **Phase 1: All 9 page templates + views + routing** - 2026-01-18
+9. **Phase 2: City images added to all cards and detail pages** - 2026-01-18
+10. **Phase 2: CSS polish with animations and transitions** - 2026-01-18
+11. **Phase 3: OpenGraph and Twitter Card meta tags** - 2026-01-18
+12. **Phase 3: Dynamic sitemap.xml and robots.txt** - 2026-01-18
+13. **Phase 3: Lazy loading for all images** - 2026-01-18
 
 ---
 
@@ -46,14 +51,17 @@ abouthr/
 ├── guide/             # Domain models + views + URLs
 │   ├── management/commands/seed_data.py  # Data seeding
 │   ├── models.py      # City, Venue, MilitaryBase, etc.
-│   ├── views.py       # All page views
+│   ├── views.py       # All page views + sitemap + robots
 │   └── urls.py        # URL routing
 ├── cms/               # Content management (paused)
 ├── templates/
-│   ├── base.html      # Main template
+│   ├── base.html      # Main template with SEO meta tags
 │   └── guide/         # All page templates
 └── static/
-    └── css/style.css  # Custom styles
+    ├── css/style.css  # Custom styles with animations
+    └── images/        # Hero and city images
+        ├── hero/pier-sunset.jpg
+        └── cities/*.jpg (9 city images)
 ```
 
 ---
@@ -89,26 +97,27 @@ abouthr/
 | TestimonialsView | `/testimonials/` | testimonials.html |
 | AboutView | `/about/` | about.html |
 | ContactView | `/contact/` | contact.html |
+| sitemap_xml | `/sitemap.xml` | (dynamic XML) |
+| robots_txt | `/robots.txt` | (dynamic text) |
 
 ---
 
 ## Next Planned Work
 
-### HIGH PRIORITY (Phase 2)
-1. Add city images to city cards and detail pages
-2. Add hero background images
-3. Review mobile responsiveness
-4. Polish UI details
+### DEPLOYMENT (User Action Required)
+1. Deploy to development server
+2. Test on real mobile devices
+3. Configure DNS for abouthamptonroads.com
+4. Deploy to production
+5. SSL certificate setup
+6. Image optimization on server
 
-### MEDIUM PRIORITY
-5. Add search functionality
-6. Google Maps integration for contact page
-7. SEO enhancements
-
-### FUTURE / BACKLOG
+### FUTURE / BACKLOG (Phase 4)
 - AI-generated events/happenings content
 - CMS interface for content management
-- User accounts for personalized features
+- Search functionality
+- Google Maps integration
+- Contact form with email
 
 ---
 
@@ -120,6 +129,8 @@ abouthr/
 3. **PDF as Source:** All content seeded from the 40-page PDF
 4. **Tabs/Accordions:** Desktop uses tabs for venue types, mobile uses accordions
 5. **Premium Fonts:** Montserrat (headers) + Inter (body) for modern look
+6. **Static Images:** City images stored as static files, not database ImageFields
+7. **Dynamic Sitemap:** Generated via view to auto-include new content
 
 ### Content Structure
 - **9 Cities:** Virginia Beach, Chesapeake, Norfolk, Portsmouth, Suffolk, Smithfield, Hampton, Newport News, Williamsburg/Yorktown
@@ -131,18 +142,21 @@ abouthr/
 ## Known Issues / Technical Debt
 
 ### Issues
-- [ ] None currently
+- [ ] Image sizes large (up to 1.1MB) - optimize during deployment
 
 ### Technical Debt
 - [ ] CMS app partially built but paused - may need cleanup
-- [ ] Images need extraction from PDF (placeholders until originals available)
-- [ ] Hero section needs real background image
+- [ ] OpenGraph image URLs are relative - may need absolute for some platforms
 
 ---
 
 ## Testing Status
-- All pages return 200 status
-- Static files loading correctly
+- All 17 pages return 200 status
+- All 10 images loading correctly
+- sitemap.xml generates valid XML
+- robots.txt generates valid format
+- OpenGraph tags present in HTML
+- Lazy loading attributes added
 - Unit tests: Not implemented
 - Integration tests: Not implemented
 
@@ -162,10 +176,11 @@ abouthr/
 ### Important Files
 - `abouthr/settings.py` - Django configuration
 - `guide/models.py` - All domain models
-- `guide/views.py` - All page views
+- `guide/views.py` - All page views + SEO views
 - `guide/urls.py` - URL routing
-- `templates/base.html` - Main template
-- `static/css/style.css` - Custom styles
+- `templates/base.html` - Main template with SEO tags
+- `static/css/style.css` - Custom styles with animations
+- `static/images/` - Hero and city images
 - `guide/management/commands/seed_data.py` - Data seeding
 - `claude/specs/abouthr.pdf` - Source content (40 pages)
 
@@ -177,6 +192,10 @@ python manage.py test
 python manage.py migrate
 python manage.py makemigrations guide
 ```
+
+### SEO URLs
+- `/sitemap.xml` - Dynamic XML sitemap (17 URLs)
+- `/robots.txt` - Search engine instructions
 
 ### Reference Projects
 - `../tagApp` - Infrastructure patterns
