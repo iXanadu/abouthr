@@ -1,0 +1,104 @@
+# [Project Name] - Codebase State
+
+**Last Updated:** YYYY-MM-DD
+
+## Project Overview
+Brief description of the project's purpose and current phase.
+
+---
+
+## Technical Stack
+- **Framework:** Django 5.2
+- **Database:** PostgreSQL
+- **Python:** 3.12+
+- **Frontend:** Bootstrap 5 / HTMX / etc.
+
+---
+
+## Current State Summary
+
+### Phase / Milestone
+- **Current Phase:** [Phase name]
+- **Progress:** [X]%
+- **Status:** [Active/Maintenance/Paused]
+
+### Recent Major Work Completed
+1. [Recent feature/fix] - Date
+2. [Recent feature/fix] - Date
+3. [Recent feature/fix] - Date
+
+---
+
+## Next Planned Work
+
+### HIGH PRIORITY
+1. [Task description]
+2. [Task description]
+
+### MEDIUM PRIORITY
+3. [Task description]
+4. [Task description]
+
+### BACKLOG
+- [Future task]
+- [Future task]
+
+---
+
+## Architecture Notes
+
+### App Structure
+```
+projectname/
+├── accounts/     # User auth, profiles, multi-tenancy
+├── core/         # Base models, shared utilities
+├── [app]/        # Business domain apps
+└── templates/    # Global templates
+```
+
+### Key Models
+- **Account:** Multi-tenant organization entity
+- **UserProfile:** Extended user with account membership
+- [Additional key models]
+
+---
+
+## Known Issues / Technical Debt
+
+### Issues
+- [ ] [Issue description]
+
+### Technical Debt
+- [ ] [Debt description]
+
+---
+
+## Testing Status
+- Unit tests: [Passing/Failing/Not implemented]
+- Integration tests: [Passing/Failing/Not implemented]
+- Last test run: YYYY-MM-DD
+
+---
+
+## Environment Status
+| Environment | Status | Last Deploy |
+|-------------|--------|-------------|
+| Local | Working | N/A |
+| Development | [Status] | YYYY-MM-DD |
+| Production | [Status] | YYYY-MM-DD |
+
+---
+
+## Quick Reference
+
+### Important Files
+- `projectname/settings.py` - Django configuration
+- `accounts/models.py` - User and Account models
+- `core/models.py` - Base model classes
+
+### Common Commands
+```bash
+python manage.py runserver
+python manage.py test
+python manage.py migrate
+```

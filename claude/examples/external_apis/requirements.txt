@@ -1,0 +1,69 @@
+# External APIs Django Project Requirements
+# Dependencies for projects with extensive third-party integrations
+
+# Django framework
+Django==5.2.4
+django-environ==0.12.0
+
+# Database
+psycopg2-binary==2.9.10
+
+# Image processing
+pillow==10.4.0
+
+# Forms
+django-crispy-forms==2.3
+crispy-bootstrap5==2024.10
+
+# Production server
+gunicorn==23.0.0
+
+# REST API
+djangorestframework==3.15.2
+django-cors-headers==4.6.0
+
+# Google Workspace Integration
+google-api-python-client==2.151.0
+google-auth-httplib2==0.2.0
+google-auth-oauthlib==1.2.1
+
+# HTTP requests
+requests==2.32.3
+
+# AI Services (optional - uncomment as needed)
+# openai==1.100.2
+# anthropic==0.75.0
+
+# PDF Processing (optional)
+# PyMuPDF==1.26.3
+# PyPDF2==3.0.1
+
+# Background tasks (optional)
+# celery==5.4.0
+# redis==5.2.0
+# django-redis==5.4.0
+
+# Email services (optional)
+# django-sendgrid-v5==1.2.3
+
+# SMS services (optional)
+# twilio==9.4.0
+
+# Payment processing (optional)
+# stripe==11.3.0
+
+# Cloud storage (optional)
+# boto3==1.35.0
+# django-storages==1.14.4
+
+# Rich text editor (optional)
+# django-ckeditor-5==0.2.13
+
+# Monitoring (optional)
+# sentry-sdk==2.19.0
+
+# API documentation (optional)
+# drf-spectacular==0.28.0
+
+# Rate limiting (optional)
+# django-ratelimit==4.1.0

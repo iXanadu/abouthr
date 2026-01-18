@@ -1,0 +1,45 @@
+# Dev Server Handoff Notes
+
+**Last Updated:** {{DATE}}
+
+When you pull this to the dev server, here's what needs to happen beyond `git pull`:
+
+---
+
+## Current Handoff ({{DATE}})
+
+### Required Steps After Pull:
+```bash
+# 1. Install dependencies (if new packages added)
+pip install -r requirements.txt
+
+# 2. Run migrations (if new models)
+python manage.py migrate
+
+# 3. Collect static files (if new templates/static)
+python manage.py collectstatic --noinput
+
+# 4. Restart the service
+sudo systemctl restart {{PROJECT_NAME}}_dev  # or however it's named
+```
+
+### New Environment Variables:
+None required - uses existing .env/.keys setup
+
+### Notes:
+- Initial project setup
+- Creates all database tables from migrations
+- Service needs to be configured (systemd, nginx) on first deploy
+
+---
+
+## Handoff History
+
+### {{DATE}} - Initial Setup
+- First deployment of this project
+- Requires: requirements.txt install, migrations, collectstatic
+- New service needs to be set up (systemd, nginx)
+
+---
+
+*This file is updated by Claude when pushing changes that need server-side action.*

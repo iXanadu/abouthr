@@ -1,0 +1,74 @@
+# [Project Name] - Context Memory
+
+**Last Updated:** YYYY-MM-DD
+
+## Current Status
+Brief summary of where the project currently stands.
+
+---
+
+## Working Context
+
+### Active Focus Area
+What feature/module/area is currently being worked on.
+
+### Recent Decisions
+- [Decision made] - Reason
+- [Decision made] - Reason
+
+### Patterns Being Used
+- [Pattern name]: [Brief description of how it's used]
+- [Pattern name]: [Brief description of how it's used]
+
+---
+
+## Session Priorities
+
+### This Session
+1. [Priority task]
+2. [Priority task]
+
+### Next Session
+1. [Upcoming task]
+2. [Upcoming task]
+
+---
+
+## Important Context
+
+### Business Rules
+- [Important rule/requirement]
+- [Important rule/requirement]
+
+### Technical Constraints
+- [Constraint/limitation]
+- [Constraint/limitation]
+
+### Integration Notes
+- [External service]: [Key details]
+- [External service]: [Key details]
+
+---
+
+## Known Issues Being Tracked
+
+### Active Issues
+- [ ] [Issue]: [Status/notes]
+
+### Recently Resolved
+- [x] [Issue]: [How resolved]
+
+---
+
+## Reference Information
+
+### Key Stakeholders
+- [Role]: [Name/contact]
+
+### External Documentation
+- [Service name]: [URL/notes]
+
+---
+
+## Notes for Future Sessions
+Things to remember that don't fit elsewhere.

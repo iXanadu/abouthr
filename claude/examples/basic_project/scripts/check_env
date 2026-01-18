@@ -1,0 +1,80 @@
+#!/bin/bash
+# Environment Verification Script
+# Run this to verify your Django environment is configured correctly
+
+echo "=== Django Environment Check ==="
+echo ""
+
+# Check if .env exists
+if [ -f ".env" ]; then
+    echo "[OK] .env file exists"
+
+    # Check ENVIRONMENT variable
+    ENV=$(grep "^ENVIRONMENT=" .env | cut -d'=' -f2)
+    echo "     Current environment: $ENV"
+else
+    echo "[ERROR] .env file not found!"
+    echo "        Copy .env.example to .env and configure it"
+fi
+
+echo ""
+
+# Check if .keys exists
+if [ -f ".keys" ]; then
+    echo "[OK] .keys file exists"
+
+    # Check permissions (should be 600)
+    PERMS=$(stat -f "%Lp" .keys 2>/dev/null || stat -c "%a" .keys 2>/dev/null)
+    if [ "$PERMS" = "600" ]; then
+        echo "     Permissions: $PERMS (correct)"
+    else
+        echo "[WARN] .keys permissions: $PERMS (should be 600)"
+        echo "        Run: chmod 600 .keys"
+    fi
+else
+    echo "[ERROR] .keys file not found!"
+    echo "        Copy .keys.example to .keys and add your secrets"
+fi
+
+echo ""
+
+# Check Python environment
+echo "=== Python Environment ==="
+if command -v python &> /dev/null; then
+    PYTHON_VERSION=$(python --version 2>&1)
+    echo "[OK] Python: $PYTHON_VERSION"
+else
+    echo "[ERROR] Python not found in PATH"
+fi
+
+echo ""
+
+# Check Django
+echo "=== Django Check ==="
+if python -c "import django" 2>/dev/null; then
+    DJANGO_VERSION=$(python -c "import django; print(django.get_version())")
+    echo "[OK] Django: $DJANGO_VERSION"
+
+    # Run Django system check
+    echo ""
+    echo "Running Django system check..."
+    python manage.py check 2>&1
+else
+    echo "[ERROR] Django not installed"
+    echo "        Run: pip install -r requirements.txt"
+fi
+
+echo ""
+
+# Check database connection
+echo "=== Database Check ==="
+python manage.py dbshell <<< "\q" 2>/dev/null
+if [ $? -eq 0 ]; then
+    echo "[OK] Database connection successful"
+else
+    echo "[WARN] Could not connect to database"
+    echo "        Check your database URL and password"
+fi
+
+echo ""
+echo "=== Check Complete ==="
