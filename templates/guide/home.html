@@ -7,7 +7,7 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero">
+<section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('{% static 'images/hero/pier-sunset.jpg' %}');">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">
@@ -89,13 +89,7 @@
                 <div class="col-md-6 col-lg-4">
                     <a href="{% url 'guide:city_detail' slug=city.slug %}" class="text-decoration-none">
                         <div class="card city-card shadow-soft">
-                            {% if city.image %}
-                            <img src="{{ city.image.url }}" class="card-img-top" alt="{{ city.name }}">
-                            {% else %}
-                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 180px;">
-                                <i class="bi bi-building text-white" style="font-size: 3rem;"></i>
-                            </div>
-                            {% endif %}
+                            <img src="{% static 'images/cities/' %}{{ city.slug }}.jpg" class="card-img-top" alt="{{ city.name }}" style="height: 180px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ city.name }}</h5>
                                 <p class="card-text">{{ city.description|truncatewords:25 }}</p>

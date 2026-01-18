@@ -7,7 +7,7 @@
 
 {% block content %}
 <!-- City Hero -->
-<section class="city-hero" {% if city.image %}style="background-image: url('{{ city.image.url }}');"{% else %}style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);"{% endif %}>
+<section class="city-hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('{% static 'images/cities/' %}{{ city.slug }}.jpg');">
     <div class="container">
         <span class="region-badge {% if city.region.slug == 'southside' %}southside{% else %}peninsula{% endif %} mb-3">
             {{ city.region.name }}
