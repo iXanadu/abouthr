@@ -4,6 +4,8 @@ Views for the About Hampton Roads public website.
 
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
+from django.http import HttpResponse
+from django.urls import reverse
 from .models import (
     Region, City, Venue, MilitaryBase, Tunnel,
     VacationDestination, VendorUtility, Testimonial, TeamMember
@@ -124,3 +126,52 @@ class AboutView(TemplateView):
 class ContactView(TemplateView):
     """Contact page."""
     template_name = 'guide/contact.html'
+
+
+def sitemap_xml(request):
+    """Generate sitemap.xml dynamically."""
+    base_url = 'https://abouthamptonroads.com'
+
+    urls = [
+        {'loc': base_url + '/', 'priority': '1.0', 'changefreq': 'weekly'},
+        {'loc': base_url + '/military/', 'priority': '0.8', 'changefreq': 'monthly'},
+        {'loc': base_url + '/tunnels/', 'priority': '0.7', 'changefreq': 'monthly'},
+        {'loc': base_url + '/vacation/', 'priority': '0.7', 'changefreq': 'monthly'},
+        {'loc': base_url + '/utilities/', 'priority': '0.7', 'changefreq': 'monthly'},
+        {'loc': base_url + '/testimonials/', 'priority': '0.6', 'changefreq': 'monthly'},
+        {'loc': base_url + '/about/', 'priority': '0.6', 'changefreq': 'monthly'},
+        {'loc': base_url + '/contact/', 'priority': '0.8', 'changefreq': 'monthly'},
+    ]
+
+    # Add city pages
+    cities = City.objects.filter(is_published=True)
+    for city in cities:
+        urls.append({
+            'loc': base_url + f'/city/{city.slug}/',
+            'priority': '0.9',
+            'changefreq': 'weekly'
+        })
+
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+
+    for url in urls:
+        xml_content += '  <url>\n'
+        xml_content += f'    <loc>{url["loc"]}</loc>\n'
+        xml_content += f'    <changefreq>{url["changefreq"]}</changefreq>\n'
+        xml_content += f'    <priority>{url["priority"]}</priority>\n'
+        xml_content += '  </url>\n'
+
+    xml_content += '</urlset>'
+
+    return HttpResponse(xml_content, content_type='application/xml')
+
+
+def robots_txt(request):
+    """Generate robots.txt."""
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://abouthamptonroads.com/sitemap.xml
+"""
+    return HttpResponse(content, content_type='text/plain')

@@ -17,4 +17,7 @@ urlpatterns = [
     path('testimonials/', views.TestimonialsView.as_view(), name='testimonials'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('contact/', views.ContactView.as_view(), name='contact'),
+    # SEO
+    path('sitemap.xml', views.sitemap_xml, name='sitemap'),
+    path('robots.txt', views.robots_txt, name='robots'),
 ]
