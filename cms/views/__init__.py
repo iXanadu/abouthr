@@ -18,3 +18,7 @@ from .content import (
     TestimonialListView, TestimonialCreateView, TestimonialUpdateView, TestimonialDeleteView,
     TeamMemberListView, TeamMemberCreateView, TeamMemberUpdateView, TeamMemberDeleteView
 )
+from .settings import (
+    SettingsView, ToggleAPIView, UpdateAPISettingsView,
+    SyncVenuesView, RefreshVenueView, SyncCityVenuesView
+)

@@ -1,0 +1,56 @@
+{% comment %}
+Venue List Partial - Reusable component for displaying venue lists with enrichment data.
+
+Usage:
+{% include 'guide/includes/venue_list.html' with venues=restaurants venue_type='restaurant' %}
+
+Context variables:
+- venues: QuerySet of Venue objects
+- venue_type: Type string for styling (restaurant, cafe_brewery, attraction, event, beach)
+- show_enrichment: Boolean to show/hide enrichment data (default: true)
+{% endcomment %}
+
+{% for venue in venues %}
+<div class="col-md-6 col-lg-4 mb-3">
+    <div class="venue-card d-flex align-items-start">
+        <i class="bi bi-dot text-primary fs-4"></i>
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+                <strong class="venue-name">{{ venue.name }}</strong>
+                {% if venue.rating and show_enrichment|default:True %}
+                <span class="venue-rating text-warning ms-2" title="{{ venue.rating_count }} reviews">
+                    <i class="bi bi-star-fill small"></i>
+                    <span class="small">{{ venue.rating }}</span>
+                </span>
+                {% endif %}
+            </div>
+
+            {% if venue.address %}
+            <small class="text-muted d-block">{{ venue.address|truncatechars:40 }}</small>
+            {% endif %}
+
+            {% if show_enrichment|default:True %}
+            <div class="venue-meta mt-1">
+                {% if venue.price_level_display %}
+                <span class="venue-price text-success small me-2" title="Price level">{{ venue.price_level_display }}</span>
+                {% endif %}
+
+                {% if venue.cuisine_type %}
+                <span class="venue-cuisine badge bg-light text-secondary small">{{ venue.get_cuisine_type_display }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if venue.website %}
+            <a href="{{ venue.website }}" target="_blank" class="small text-decoration-none d-block mt-1">
+                <i class="bi bi-link-45deg"></i> Website
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-12">
+    <p class="text-muted">No venues found.</p>
+</div>
+{% endfor %}

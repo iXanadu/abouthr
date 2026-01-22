@@ -254,6 +254,328 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: none;
 }
 
+/* ===== Rich Venue Cards ===== */
+.venue-card-rich {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.venue-card-rich:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.venue-card-image {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: var(--bg-light);
+}
+
+.venue-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.venue-card-rich:hover .venue-card-image img {
+    transform: scale(1.05);
+}
+
+.venue-rating-overlay {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.venue-card-rich.has-photo .venue-card-header {
+    padding-top: 0.75rem;
+}
+
+.venue-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 1rem 0.5rem;
+    gap: 0.5rem;
+}
+
+.venue-card-header .venue-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--text-dark);
+}
+
+.venue-rating-badge {
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: white;
+    min-width: 2.5rem;
+    text-align: center;
+}
+
+.venue-rating-badge-sm {
+    flex-shrink: 0;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.35rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.venue-card-body {
+    padding: 0 1rem 1rem;
+    flex-grow: 1;
+}
+
+.venue-stars {
+    font-size: 0.85rem;
+}
+
+.venue-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.venue-price {
+    font-weight: 700;
+    color: #38a169;
+}
+
+.venue-cuisine {
+    color: var(--text-muted);
+}
+
+.venue-open {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.venue-card-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-light);
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Simple venue cards (attractions, events, beaches) */
+.venue-card-simple {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    height: 100%;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.venue-card-simple:hover {
+    border-color: var(--secondary-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.venue-card-simple h5 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.venue-card-beach {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border-color: #80deea;
+}
+
+/* Mobile venue cards - Rich */
+.venue-card-mobile {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.venue-card-mobile:last-child {
+    margin-bottom: 0;
+}
+
+.venue-mobile-image {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #e2e8f0 100%);
+}
+
+.venue-mobile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.venue-open-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.venue-mobile-content {
+    padding: 0.875rem;
+}
+
+.venue-mobile-name {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-dark);
+}
+
+.venue-mobile-meta {
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+.venue-price-mobile {
+    font-weight: 700;
+    color: #38a169;
+    margin-left: 0.25rem;
+}
+
+.venue-mobile-address {
+    margin-bottom: 0.5rem;
+}
+
+.venue-mobile-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.venue-mobile-actions .btn {
+    flex: 1;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+}
+
+/* Mobile venue cards - Simple (attractions, events, beaches) */
+.venue-card-mobile-simple {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.venue-card-mobile-simple:last-child {
+    margin-bottom: 0;
+}
+
+.venue-card-mobile-simple h6 {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.venue-mobile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    color: white;
+}
+
+.venue-mobile-icon i {
+    font-size: 1rem;
+}
+
+.venue-card-mobile-beach {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border-color: #80deea;
+}
+
+/* Keep old styles for backwards compatibility */
+.venue-list-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.venue-list-item:last-child {
+    border-bottom: none;
+}
+
+.venue-meta-mobile {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.venue-meta-mobile span {
+    margin-right: 0.5rem;
+}
+
+/* Accordion styling for venues */
+.accordion-venue .accordion-button {
+    font-weight: 600;
+}
+
+.accordion-venue .accordion-body {
+    padding: 0;
+}
+
+/* Tab styling for venues */
+.nav-tabs-venue {
+    border-bottom: 2px solid var(--border-color);
+}
+
+.nav-tabs-venue .nav-link {
+    border: none;
+    color: var(--text-muted);
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+}
+
+.nav-tabs-venue .nav-link.active {
+    color: var(--secondary-color);
+    border-bottom: 3px solid var(--secondary-color);
+    margin-bottom: -2px;
+}
+
+.nav-tabs-venue .nav-link:hover:not(.active) {
+    color: var(--text-dark);
+    border: none;
+}
+
 /* ===== Tabs (for city detail) ===== */
 .nav-tabs .nav-link {
     font-family: var(--font-heading);

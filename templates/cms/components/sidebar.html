@@ -43,7 +43,10 @@
     </nav>
 
     <nav class="cms-sidebar-section">
-        <div class="cms-sidebar-section-title">External</div>
+        <div class="cms-sidebar-section-title">Configuration</div>
+        <a href="{% url 'cms:settings' %}" class="nav-link{% if request.resolver_match.url_name == 'settings' %} active{% endif %}">
+            <i class="bi bi-sliders"></i> API Settings
+        </a>
         <a href="{% url 'admin:index' %}" class="nav-link" target="_blank">
             <i class="bi bi-gear"></i> Django Admin
         </a>

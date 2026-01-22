@@ -1,0 +1,27 @@
+[Unit]
+Description=About Hampton Roads Venue Data Refresh
+After=network.target postgresql.service
+
+[Service]
+Type=oneshot
+User=abouthr_user
+Group=abouthr_user
+WorkingDirectory=/var/www/abouthamptonroads.com/dev
+Environment="PATH=/var/www/abouthamptonroads.com/dev/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+EnvironmentFile=/var/www/abouthamptonroads.com/dev/.env
+EnvironmentFile=/var/www/abouthamptonroads.com/dev/.keys
+
+# Refresh venues not updated in 7+ days
+ExecStart=/var/www/abouthamptonroads.com/dev/venv/bin/python manage.py refresh_venues --days=7
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=venue-refresh
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-18 (End of Day)
+**Last Updated:** 2026-01-21 (End of Day)
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -21,9 +21,9 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 ## Current State Summary
 
 ### Phase / Milestone
-- **Current Phase:** Phase 4 Complete - CMS Fully Operational
-- **Progress:** 85%
-- **Status:** Dev deployed, CMS operational, ready for content management
+- **Current Phase:** Phase 6 Complete - Venue Enrichment System Operational
+- **Progress:** 95%
+- **Status:** Dev deployed, Google Places integration complete, rich mobile display
 
 ### Recent Major Work Completed
 1. Project initialization with Django - 2026-01-17
@@ -45,6 +45,10 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 17. **Phase 4: CMS templates for all 8 content types** - 2026-01-18
 18. **Phase 4: CMS help page with content guidelines** - 2026-01-18
 19. **Phase 4: Superuser created, CMS operational** - 2026-01-18
+20. **Phase 5: Venue Enrichment System - Google Places API integration** - 2026-01-21
+21. **Phase 5: CMS Settings page with API controls** - 2026-01-21
+22. **Phase 6: Rich venue display with photos, ratings, hours** - 2026-01-21
+23. **Phase 6: Mobile-optimized venue cards (90% of traffic)** - 2026-01-21
 
 ---
 
@@ -154,10 +158,10 @@ abouthr/
 
 ## Next Planned Work
 
-### IMMEDIATE (Before Production)
+### IMMEDIATE
+- [ ] Set up systemd timer for weekly venue refresh (optional)
 - [ ] Test on real mobile devices
 - [ ] Optimize images (large files, up to 1.1MB)
-- [ ] Add city images via CMS (currently showing "No image")
 
 ### PRODUCTION DEPLOYMENT
 - [ ] Configure DNS for abouthamptonroads.com
@@ -166,11 +170,12 @@ abouthr/
 - [ ] Performance optimization
 - [ ] Backup strategy
 
-### FUTURE / BACKLOG (Phase 5)
+### FUTURE / BACKLOG
+- [ ] Yelp integration (stub ready in yelp_service.py)
 - [ ] AI-generated events/happenings content
 - [ ] CMS drag-and-drop reordering
 - [ ] Search functionality
-- [ ] Google Maps integration
+- [ ] Google Maps integration with venue coordinates
 - [ ] Contact form with email
 
 ---

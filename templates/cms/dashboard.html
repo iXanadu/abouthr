@@ -187,6 +187,45 @@
     </div>
 </div>
 
+<!-- Venue Enrichment Stats -->
+{% if enrichment_stats %}
+<div class="cms-card mt-4">
+    <div class="cms-card-header">
+        <h5 class="mb-0">Venue Enrichment</h5>
+        <a href="{% url 'cms:settings' %}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-gear me-1"></i> Settings
+        </a>
+    </div>
+    <div class="cms-card-body">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <span class="fs-3 fw-bold text-success">{{ enrichment_stats.enriched }}</span>
+                        <span class="text-muted">/ {{ enrichment_stats.total }}</span>
+                    </div>
+                    <small class="text-muted">Enriched</small>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-success" role="progressbar"
+                         style="width: {{ enrichment_stats.enrichment_rate }}%"></div>
+                </div>
+                <small class="text-muted">{{ enrichment_stats.enrichment_rate }}% enriched</small>
+            </div>
+            <div class="col-md-4 text-md-end">
+                {% if enrichment_stats.last_sync %}
+                <small class="text-muted">Last sync: {{ enrichment_stats.last_sync|timesince }} ago</small>
+                {% else %}
+                <small class="text-muted">No sync performed yet</small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Quick Actions -->
 <div class="cms-card mt-4">
     <div class="cms-card-header">
@@ -208,6 +247,9 @@
             </a>
             <a href="{% url 'cms:team_create' %}" class="btn btn-outline-primary">
                 <i class="bi bi-plus-lg me-1"></i> Add Team Member
+            </a>
+            <a href="{% url 'cms:settings' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-gear me-1"></i> API Settings
             </a>
         </div>
     </div>

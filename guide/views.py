@@ -2,14 +2,21 @@
 Views for the About Hampton Roads public website.
 """
 
+import requests
+import logging
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from .models import (
     Region, City, Venue, MilitaryBase, Tunnel,
-    VacationDestination, VendorUtility, Testimonial, TeamMember
+    VacationDestination, VendorUtility, Testimonial, TeamMember,
+    VenueAPIConfig
 )
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(TemplateView):
@@ -37,12 +44,23 @@ class CityDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         city = self.object
 
-        # Get venues by type
-        context['restaurants'] = city.venues.filter(venue_type='restaurant', is_published=True)
-        context['cafes'] = city.venues.filter(venue_type='cafe_brewery', is_published=True)
-        context['attractions'] = city.venues.filter(venue_type='attraction', is_published=True)
-        context['events'] = city.venues.filter(venue_type='event', is_published=True)
-        context['beaches'] = city.venues.filter(venue_type='beach', is_published=True)
+        # Get venues by type, sorted by rating (highest first), then by name
+        from django.db.models import F
+        from django.db.models.functions import Coalesce
+
+        def get_sorted_venues(venue_type):
+            return city.venues.filter(
+                venue_type=venue_type, is_published=True
+            ).order_by(
+                F('rating').desc(nulls_last=True),
+                'name'
+            )
+
+        context['restaurants'] = get_sorted_venues('restaurant')
+        context['cafes'] = get_sorted_venues('cafe_brewery')
+        context['attractions'] = city.venues.filter(venue_type='attraction', is_published=True).order_by('order', 'name')
+        context['events'] = city.venues.filter(venue_type='event', is_published=True).order_by('order', 'name')
+        context['beaches'] = city.venues.filter(venue_type='beach', is_published=True).order_by('order', 'name')
 
         # Get other cities for navigation
         context['other_cities'] = City.objects.select_related('region').filter(
@@ -175,3 +193,68 @@ Allow: /
 Sitemap: https://abouthamptonroads.com/sitemap.xml
 """
     return HttpResponse(content, content_type='text/plain')
+
+
+def venue_photo(request, venue_id, photo_index=0):
+    """
+    Proxy view to serve venue photos from Google Places.
+    Caches photos for 24 hours to minimize API calls.
+    """
+    import os
+
+    # Check cache first
+    cache_key = f'venue_photo_{venue_id}_{photo_index}'
+    cached_photo = cache.get(cache_key)
+    if cached_photo:
+        return HttpResponse(cached_photo['data'], content_type=cached_photo['content_type'])
+
+    # Get venue
+    try:
+        venue = Venue.objects.get(pk=venue_id)
+    except Venue.DoesNotExist:
+        raise Http404("Venue not found")
+
+    # Check for photos
+    if not venue.photos_json or photo_index >= len(venue.photos_json):
+        raise Http404("Photo not found")
+
+    photo_ref = venue.photos_json[photo_index]
+    photo_name = photo_ref.get('name')
+    if not photo_name:
+        raise Http404("Photo reference not found")
+
+    # Get API key
+    config = VenueAPIConfig.objects.filter(provider='google', is_enabled=True).first()
+    if not config:
+        raise Http404("API not configured")
+
+    api_key = os.environ.get(config.api_key_name, '')
+    if not api_key:
+        raise Http404("API key not configured")
+
+    # Fetch photo from Google
+    max_width = request.GET.get('w', 400)
+    try:
+        max_width = min(int(max_width), 800)  # Cap at 800px
+    except (ValueError, TypeError):
+        max_width = 400
+
+    photo_url = f"https://places.googleapis.com/v1/{photo_name}/media?maxWidthPx={max_width}&key={api_key}"
+
+    try:
+        response = requests.get(photo_url, timeout=10)
+        response.raise_for_status()
+
+        content_type = response.headers.get('Content-Type', 'image/jpeg')
+
+        # Cache for 24 hours
+        cache.set(cache_key, {
+            'data': response.content,
+            'content_type': content_type
+        }, 60 * 60 * 24)
+
+        return HttpResponse(response.content, content_type=content_type)
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error fetching venue photo: {e}")
+        raise Http404("Could not fetch photo")

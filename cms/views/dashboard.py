@@ -11,6 +11,7 @@ from guide.models import (
     Region, City, Venue, MilitaryBase, Tunnel,
     VacationDestination, VendorUtility, Testimonial, TeamMember
 )
+from guide.services import VenueEnrichmentService
 from .mixins import CMSAccessMixin
 
 
@@ -49,6 +50,13 @@ class DashboardView(CMSAccessMixin, TemplateView):
         context['cities_summary'] = City.objects.annotate(
             venue_count=Count('venues')
         ).order_by('region__order', 'order')[:5]
+
+        # Venue enrichment stats
+        try:
+            service = VenueEnrichmentService(provider='google')
+            context['enrichment_stats'] = service.get_enrichment_stats()
+        except Exception:
+            context['enrichment_stats'] = None
 
         return context
 

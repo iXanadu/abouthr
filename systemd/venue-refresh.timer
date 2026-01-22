@@ -1,0 +1,19 @@
+[Unit]
+Description=Weekly venue data refresh timer
+Documentation=file:///var/www/abouthamptonroads.com/dev/claude/AI_SERVICES_IMPLEMENTATION_PLAN.md
+
+[Timer]
+# Run every Sunday at 3:00 AM Eastern
+OnCalendar=Sun 03:00:00 America/New_York
+
+# Persist timer across reboots - run if missed
+Persistent=true
+
+# Add random delay up to 5 minutes to avoid thundering herd
+RandomizedDelaySec=300
+
+# Accuracy - don't need high precision
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

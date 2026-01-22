@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load venue_tags %}
 
-{% block title %}{{ city.name }}{% endblock %}
+{% block title %}{{ city.name }} - Restaurants, Attractions & Things to Do{% endblock %}
 
-{% block meta_description %}Explore {{ city.name }}, Virginia - restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
+{% block meta_description %}Discover the best of {{ city.name }}, Virginia - top-rated restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
 
 {% block content %}
 <!-- City Hero -->
@@ -45,12 +46,12 @@
     </div>
 </section>
 
-<!-- Venues Tabs (Desktop) / Accordion (Mobile) -->
+<!-- Venues Section -->
 <section class="pb-5">
     <div class="container">
         <!-- Desktop Tabs -->
         <div class="d-none d-md-block">
-            <ul class="nav nav-tabs" id="venuesTabs" role="tablist">
+            <ul class="nav nav-tabs nav-tabs-venue" id="venuesTabs" role="tablist">
                 {% if restaurants %}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="restaurants-tab" data-bs-toggle="tab" data-bs-target="#restaurants" type="button" role="tab">
@@ -92,76 +93,254 @@
                 </li>
                 {% endif %}
             </ul>
+
             <div class="tab-content pt-4" id="venuesTabsContent">
+                <!-- Restaurants Tab -->
                 {% if restaurants %}
                 <div class="tab-pane fade show active" id="restaurants" role="tabpanel">
-                    <div class="row">
-                        {% for restaurant in restaurants %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-dot text-primary fs-4"></i>
-                                <span>{{ restaurant.name }}</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                {% if cafes %}
-                <div class="tab-pane fade {% if not restaurants %}show active{% endif %}" id="cafes" role="tabpanel">
-                    <div class="row">
-                        {% for cafe in cafes %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-dot text-primary fs-4"></i>
-                                <span>{{ cafe.name }}</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                {% if attractions %}
-                <div class="tab-pane fade" id="attractions" role="tabpanel">
-                    <div class="row">
-                        {% for attraction in attractions %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-dot text-primary fs-4"></i>
-                                <span>{{ attraction.name }}</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                {% if events %}
-                <div class="tab-pane fade" id="events" role="tabpanel">
-                    <div class="row">
-                        {% for event in events %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-dot text-primary fs-4"></i>
-                                <span>{{ event.name }}</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                {% if beaches %}
-                <div class="tab-pane fade" id="beaches" role="tabpanel">
-                    <div class="row">
-                        {% for beach in beaches %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="d-flex align-items-start">
-                                <i class="bi bi-dot text-primary fs-4"></i>
-                                <div>
-                                    <strong>{{ beach.name }}</strong>
-                                    {% if beach.address %}
-                                    <br><small class="text-muted">{{ beach.address }}</small>
+                    <p class="text-muted mb-4">
+                        <i class="bi bi-sort-down me-1"></i>Sorted by rating &middot; {{ restaurants.count }} restaurants
+                    </p>
+                    <div class="row g-3">
+                        {% for venue in restaurants %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="venue-card-rich {% if venue|has_photo %}has-photo{% endif %}">
+                                {% if venue|has_photo %}
+                                <div class="venue-card-image">
+                                    <img src="{% url 'guide:venue_photo' venue_id=venue.pk %}?w=400"
+                                         alt="{{ venue.name }}"
+                                         loading="lazy">
+                                    {% if venue.rating %}
+                                    <div class="venue-rating-overlay {% venue_badge_class venue %}">
+                                        {{ venue.rating }}
+                                    </div>
                                     {% endif %}
                                 </div>
+                                {% endif %}
+                                <div class="venue-card-header">
+                                    <h5 class="venue-name">{{ venue.name }}</h5>
+                                    {% if not venue|has_photo and venue.rating %}
+                                    <div class="venue-rating-badge {% venue_badge_class venue %}">
+                                        {{ venue.rating }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="venue-card-body">
+                                    {% if venue.rating_count %}
+                                    <div class="venue-stars mb-2">
+                                        {{ venue.rating|star_display|safe }}
+                                        <span class="text-muted small ms-1">({{ venue.rating_count|format_review_count }} reviews)</span>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="venue-meta">
+                                        {% if venue.price_level_display %}
+                                        <span class="venue-price" title="Price level">{{ venue.price_level_display }}</span>
+                                        {% endif %}
+                                        {% if venue.cuisine_type %}
+                                        <span class="venue-cuisine">{{ venue.get_cuisine_type_display }}</span>
+                                        {% endif %}
+                                        {% with is_open=venue|is_open_now %}
+                                        {% if is_open == True %}
+                                        <span class="venue-open text-success"><i class="bi bi-clock me-1"></i>Open</span>
+                                        {% elif is_open == False %}
+                                        <span class="venue-open text-danger"><i class="bi bi-clock me-1"></i>Closed</span>
+                                        {% endif %}
+                                        {% endwith %}
+                                    </div>
+
+                                    {% if venue.address %}
+                                    <p class="venue-address text-muted small mb-2">
+                                        <i class="bi bi-geo-alt me-1"></i>{{ venue.address|truncatechars:50 }}
+                                    </p>
+                                    {% endif %}
+
+                                    {% with hours=venue|todays_hours %}
+                                    {% if hours %}
+                                    <p class="venue-hours text-muted small mb-0">
+                                        <i class="bi bi-clock me-1"></i>Today: {{ hours }}
+                                    </p>
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+
+                                {% if venue.website or venue.phone %}
+                                <div class="venue-card-footer">
+                                    {% if venue.website %}
+                                    <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-globe me-1"></i>Website
+                                    </a>
+                                    {% endif %}
+                                    {% if venue.phone %}
+                                    <a href="tel:{{ venue.phone }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-telephone me-1"></i>Call
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Cafes Tab -->
+                {% if cafes %}
+                <div class="tab-pane fade {% if not restaurants %}show active{% endif %}" id="cafes" role="tabpanel">
+                    <p class="text-muted mb-4">
+                        <i class="bi bi-sort-down me-1"></i>Sorted by rating &middot; {{ cafes.count }} cafes & breweries
+                    </p>
+                    <div class="row g-3">
+                        {% for venue in cafes %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="venue-card-rich {% if venue|has_photo %}has-photo{% endif %}">
+                                {% if venue|has_photo %}
+                                <div class="venue-card-image">
+                                    <img src="{% url 'guide:venue_photo' venue_id=venue.pk %}?w=400"
+                                         alt="{{ venue.name }}"
+                                         loading="lazy">
+                                    {% if venue.rating %}
+                                    <div class="venue-rating-overlay {% venue_badge_class venue %}">
+                                        {{ venue.rating }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                <div class="venue-card-header">
+                                    <h5 class="venue-name">{{ venue.name }}</h5>
+                                    {% if not venue|has_photo and venue.rating %}
+                                    <div class="venue-rating-badge {% venue_badge_class venue %}">
+                                        {{ venue.rating }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="venue-card-body">
+                                    {% if venue.rating_count %}
+                                    <div class="venue-stars mb-2">
+                                        {{ venue.rating|star_display|safe }}
+                                        <span class="text-muted small ms-1">({{ venue.rating_count|format_review_count }} reviews)</span>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="venue-meta">
+                                        {% if venue.price_level_display %}
+                                        <span class="venue-price" title="Price level">{{ venue.price_level_display }}</span>
+                                        {% endif %}
+                                        {% if venue.cuisine_type %}
+                                        <span class="venue-cuisine">{{ venue.get_cuisine_type_display }}</span>
+                                        {% endif %}
+                                        {% with is_open=venue|is_open_now %}
+                                        {% if is_open == True %}
+                                        <span class="venue-open text-success"><i class="bi bi-clock me-1"></i>Open</span>
+                                        {% elif is_open == False %}
+                                        <span class="venue-open text-danger"><i class="bi bi-clock me-1"></i>Closed</span>
+                                        {% endif %}
+                                        {% endwith %}
+                                    </div>
+
+                                    {% if venue.address %}
+                                    <p class="venue-address text-muted small mb-2">
+                                        <i class="bi bi-geo-alt me-1"></i>{{ venue.address|truncatechars:50 }}
+                                    </p>
+                                    {% endif %}
+
+                                    {% with hours=venue|todays_hours %}
+                                    {% if hours %}
+                                    <p class="venue-hours text-muted small mb-0">
+                                        <i class="bi bi-clock me-1"></i>Today: {{ hours }}
+                                    </p>
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+
+                                {% if venue.website or venue.phone %}
+                                <div class="venue-card-footer">
+                                    {% if venue.website %}
+                                    <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-globe me-1"></i>Website
+                                    </a>
+                                    {% endif %}
+                                    {% if venue.phone %}
+                                    <a href="tel:{{ venue.phone }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-telephone me-1"></i>Call
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Attractions Tab -->
+                {% if attractions %}
+                <div class="tab-pane fade" id="attractions" role="tabpanel">
+                    <p class="text-muted mb-4">{{ attractions.count }} attractions to explore</p>
+                    <div class="row g-3">
+                        {% for venue in attractions %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="venue-card-simple">
+                                <h5><i class="bi bi-geo-alt text-primary me-2"></i>{{ venue.name }}</h5>
+                                {% if venue.description %}
+                                <p class="text-muted small mb-2">{{ venue.description|truncatechars:100 }}</p>
+                                {% endif %}
+                                {% if venue.address %}
+                                <p class="small text-muted mb-0">{{ venue.address }}</p>
+                                {% endif %}
+                                {% if venue.website %}
+                                <a href="{{ venue.website }}" target="_blank" class="small">Learn more</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Events Tab -->
+                {% if events %}
+                <div class="tab-pane fade" id="events" role="tabpanel">
+                    <p class="text-muted mb-4">{{ events.count }} annual events & festivals</p>
+                    <div class="row g-3">
+                        {% for venue in events %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="venue-card-simple">
+                                <h5><i class="bi bi-calendar-event text-primary me-2"></i>{{ venue.name }}</h5>
+                                {% if venue.description %}
+                                <p class="text-muted small mb-2">{{ venue.description|truncatechars:100 }}</p>
+                                {% endif %}
+                                {% if venue.website %}
+                                <a href="{{ venue.website }}" target="_blank" class="small">Event info</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Beaches Tab -->
+                {% if beaches %}
+                <div class="tab-pane fade" id="beaches" role="tabpanel">
+                    <p class="text-muted mb-4">{{ beaches.count }} beaches to visit</p>
+                    <div class="row g-3">
+                        {% for venue in beaches %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="venue-card-simple venue-card-beach">
+                                <h5><i class="bi bi-umbrella text-info me-2"></i>{{ venue.name }}</h5>
+                                {% if venue.description %}
+                                <p class="text-muted small mb-2">{{ venue.description|truncatechars:100 }}</p>
+                                {% endif %}
+                                {% if venue.address %}
+                                <p class="small text-muted mb-0">
+                                    <i class="bi bi-geo-alt me-1"></i>{{ venue.address }}
+                                </p>
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
@@ -171,9 +350,9 @@
             </div>
         </div>
 
-        <!-- Mobile Accordion -->
+        <!-- Mobile Cards -->
         <div class="d-md-none">
-            <div class="accordion" id="venuesAccordion">
+            <div class="accordion accordion-venue" id="venuesAccordion">
                 {% if restaurants %}
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -183,16 +362,87 @@
                         </button>
                     </h2>
                     <div id="collapseRestaurants" class="accordion-collapse collapse show" data-bs-parent="#venuesAccordion">
-                        <div class="accordion-body">
-                            <ul class="venue-list">
-                                {% for restaurant in restaurants %}
-                                <li>{{ restaurant.name }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="accordion-body p-2">
+                            {% for venue in restaurants %}
+                            <div class="venue-card-mobile">
+                                {% if venue|has_photo %}
+                                <div class="venue-mobile-image">
+                                    <img src="{% url 'guide:venue_photo' venue_id=venue.pk %}?w=300"
+                                         alt="{{ venue.name }}"
+                                         loading="lazy">
+                                    {% if venue.rating %}
+                                    <div class="venue-rating-overlay {% venue_badge_class venue %}">
+                                        <i class="bi bi-star-fill me-1"></i>{{ venue.rating }}
+                                    </div>
+                                    {% endif %}
+                                    {% with is_open=venue|is_open_now %}
+                                    {% if is_open == True %}
+                                    <div class="venue-open-badge bg-success">Open</div>
+                                    {% elif is_open == False %}
+                                    <div class="venue-open-badge bg-danger">Closed</div>
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+                                {% endif %}
+                                <div class="venue-mobile-content">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="venue-mobile-name mb-0">{{ venue.name }}</h6>
+                                        {% if not venue|has_photo and venue.rating %}
+                                        <span class="venue-rating-badge-sm {% venue_badge_class venue %}">
+                                            {{ venue.rating }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="venue-mobile-meta mb-2">
+                                        {% if venue.rating_count %}
+                                        <span class="text-warning small">
+                                            {{ venue.rating|star_display|safe }}
+                                        </span>
+                                        <span class="text-muted small">({{ venue.rating_count|format_review_count }})</span>
+                                        {% endif %}
+                                        {% if venue.price_level_display %}
+                                        <span class="venue-price-mobile">{{ venue.price_level_display }}</span>
+                                        {% endif %}
+                                        {% if venue.cuisine_type %}
+                                        <span class="text-muted">&middot; {{ venue.get_cuisine_type_display }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if venue.address %}
+                                    <p class="venue-mobile-address text-muted small mb-2">
+                                        <i class="bi bi-geo-alt"></i> {{ venue.address|truncatechars:45 }}
+                                    </p>
+                                    {% endif %}
+
+                                    {% with hours=venue|todays_hours %}
+                                    {% if hours %}
+                                    <p class="text-muted small mb-2">
+                                        <i class="bi bi-clock"></i> {{ hours }}
+                                    </p>
+                                    {% endif %}
+                                    {% endwith %}
+
+                                    <div class="venue-mobile-actions">
+                                        {% if venue.website %}
+                                        <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-globe"></i> Website
+                                        </a>
+                                        {% endif %}
+                                        {% if venue.phone %}
+                                        <a href="tel:{{ venue.phone }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-telephone"></i> Call
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 {% endif %}
+
                 {% if cafes %}
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -202,16 +452,79 @@
                         </button>
                     </h2>
                     <div id="collapseCafes" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
-                        <div class="accordion-body">
-                            <ul class="venue-list">
-                                {% for cafe in cafes %}
-                                <li>{{ cafe.name }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="accordion-body p-2">
+                            {% for venue in cafes %}
+                            <div class="venue-card-mobile">
+                                {% if venue|has_photo %}
+                                <div class="venue-mobile-image">
+                                    <img src="{% url 'guide:venue_photo' venue_id=venue.pk %}?w=300"
+                                         alt="{{ venue.name }}"
+                                         loading="lazy">
+                                    {% if venue.rating %}
+                                    <div class="venue-rating-overlay {% venue_badge_class venue %}">
+                                        <i class="bi bi-star-fill me-1"></i>{{ venue.rating }}
+                                    </div>
+                                    {% endif %}
+                                    {% with is_open=venue|is_open_now %}
+                                    {% if is_open == True %}
+                                    <div class="venue-open-badge bg-success">Open</div>
+                                    {% elif is_open == False %}
+                                    <div class="venue-open-badge bg-danger">Closed</div>
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+                                {% endif %}
+                                <div class="venue-mobile-content">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="venue-mobile-name mb-0">{{ venue.name }}</h6>
+                                        {% if not venue|has_photo and venue.rating %}
+                                        <span class="venue-rating-badge-sm {% venue_badge_class venue %}">
+                                            {{ venue.rating }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="venue-mobile-meta mb-2">
+                                        {% if venue.rating_count %}
+                                        <span class="text-warning small">
+                                            {{ venue.rating|star_display|safe }}
+                                        </span>
+                                        <span class="text-muted small">({{ venue.rating_count|format_review_count }})</span>
+                                        {% endif %}
+                                        {% if venue.price_level_display %}
+                                        <span class="venue-price-mobile">{{ venue.price_level_display }}</span>
+                                        {% endif %}
+                                        {% if venue.cuisine_type %}
+                                        <span class="text-muted">&middot; {{ venue.get_cuisine_type_display }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if venue.address %}
+                                    <p class="venue-mobile-address text-muted small mb-2">
+                                        <i class="bi bi-geo-alt"></i> {{ venue.address|truncatechars:45 }}
+                                    </p>
+                                    {% endif %}
+
+                                    <div class="venue-mobile-actions">
+                                        {% if venue.website %}
+                                        <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-globe"></i> Website
+                                        </a>
+                                        {% endif %}
+                                        {% if venue.phone %}
+                                        <a href="tel:{{ venue.phone }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-telephone"></i> Call
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 {% endif %}
+
                 {% if attractions %}
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -221,35 +534,66 @@
                         </button>
                     </h2>
                     <div id="collapseAttractions" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
-                        <div class="accordion-body">
-                            <ul class="venue-list">
-                                {% for attraction in attractions %}
-                                <li>{{ attraction.name }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="accordion-body p-2">
+                            {% for venue in attractions %}
+                            <div class="venue-card-mobile-simple">
+                                <div class="d-flex align-items-start">
+                                    <div class="venue-mobile-icon bg-primary">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ venue.name }}</h6>
+                                        {% if venue.description %}
+                                        <p class="text-muted small mb-1">{{ venue.description|truncatechars:80 }}</p>
+                                        {% endif %}
+                                        {% if venue.address %}
+                                        <p class="text-muted small mb-0"><i class="bi bi-geo-alt"></i> {{ venue.address|truncatechars:40 }}</p>
+                                        {% endif %}
+                                        {% if venue.website %}
+                                        <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-link p-0 mt-1">Learn more</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 {% endif %}
+
                 {% if events %}
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEvents">
-                            <i class="bi bi-calendar-event me-2"></i>Events & Festivals
+                            <i class="bi bi-calendar-event me-2"></i>Events
                             <span class="badge bg-secondary ms-2">{{ events.count }}</span>
                         </button>
                     </h2>
                     <div id="collapseEvents" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
-                        <div class="accordion-body">
-                            <ul class="venue-list">
-                                {% for event in events %}
-                                <li>{{ event.name }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="accordion-body p-2">
+                            {% for venue in events %}
+                            <div class="venue-card-mobile-simple">
+                                <div class="d-flex align-items-start">
+                                    <div class="venue-mobile-icon bg-warning">
+                                        <i class="bi bi-calendar-event-fill"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ venue.name }}</h6>
+                                        {% if venue.description %}
+                                        <p class="text-muted small mb-1">{{ venue.description|truncatechars:100 }}</p>
+                                        {% endif %}
+                                        {% if venue.website %}
+                                        <a href="{{ venue.website }}" target="_blank" class="btn btn-sm btn-link p-0">Event info</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 {% endif %}
+
                 {% if beaches %}
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -259,17 +603,25 @@
                         </button>
                     </h2>
                     <div id="collapseBeaches" class="accordion-collapse collapse" data-bs-parent="#venuesAccordion">
-                        <div class="accordion-body">
-                            <ul class="venue-list">
-                                {% for beach in beaches %}
-                                <li>
-                                    <strong>{{ beach.name }}</strong>
-                                    {% if beach.address %}
-                                    <br><small class="text-muted">{{ beach.address }}</small>
-                                    {% endif %}
-                                </li>
-                                {% endfor %}
-                            </ul>
+                        <div class="accordion-body p-2">
+                            {% for venue in beaches %}
+                            <div class="venue-card-mobile-simple venue-card-mobile-beach">
+                                <div class="d-flex align-items-start">
+                                    <div class="venue-mobile-icon bg-info">
+                                        <i class="bi bi-umbrella-fill"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ venue.name }}</h6>
+                                        {% if venue.description %}
+                                        <p class="text-muted small mb-1">{{ venue.description|truncatechars:80 }}</p>
+                                        {% endif %}
+                                        {% if venue.address %}
+                                        <p class="text-muted small mb-0"><i class="bi bi-geo-alt"></i> {{ venue.address }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

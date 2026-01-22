@@ -28,6 +28,9 @@ from cms.views import (
     # Team Members
     TeamMemberListView, TeamMemberCreateView,
     TeamMemberUpdateView, TeamMemberDeleteView,
+    # Settings
+    SettingsView, ToggleAPIView, UpdateAPISettingsView,
+    SyncVenuesView, RefreshVenueView, SyncCityVenuesView,
 )
 from cms.views.content import (
     VendorListView, VendorCreateView, VendorUpdateView, VendorDeleteView,
@@ -39,6 +42,16 @@ urlpatterns = [
     # Dashboard
     path('', DashboardView.as_view(), name='dashboard'),
     path('help/', HelpView.as_view(), name='help'),
+    path('settings/', SettingsView.as_view(), name='settings'),
+
+    # API Settings
+    path('settings/api/<str:provider>/toggle/', ToggleAPIView.as_view(), name='api_toggle'),
+    path('settings/api/<str:provider>/update/', UpdateAPISettingsView.as_view(), name='api_settings'),
+    path('settings/sync/', SyncVenuesView.as_view(), name='sync_venues'),
+
+    # Venue Enrichment
+    path('venues/<int:pk>/refresh/', RefreshVenueView.as_view(), name='venue_refresh'),
+    path('cities/<slug:slug>/sync/<str:venue_type>/', SyncCityVenuesView.as_view(), name='city_sync_venues'),
 
     # Cities
     path('cities/', CityListView.as_view(), name='city_list'),

@@ -104,6 +104,20 @@ class Venue(BaseModel):
         ('other', 'Other'),
     ]
 
+    DATA_SOURCE_CHOICES = [
+        ('manual', 'Manual Entry'),
+        ('google', 'Google Places'),
+        ('yelp', 'Yelp Fusion'),
+    ]
+
+    ENRICHMENT_STATUS_CHOICES = [
+        ('none', 'Not Enriched'),
+        ('pending', 'Pending'),
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+        ('manual_review', 'Needs Review'),
+    ]
+
     city = models.ForeignKey(
         City,
         on_delete=models.CASCADE,
@@ -130,6 +144,14 @@ class Venue(BaseModel):
     website = models.URLField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
 
+    # Geo-coordinates for future maps
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, null=True, blank=True
+    )
+
     # Media
     image = models.ImageField(
         upload_to='guide/venues/',
@@ -142,6 +164,45 @@ class Venue(BaseModel):
     is_published = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 
+    # API Integration IDs
+    google_place_id = models.CharField(max_length=255, blank=True, db_index=True)
+    yelp_business_id = models.CharField(max_length=255, blank=True, db_index=True)
+
+    # Enrichment data from APIs
+    rating = models.DecimalField(
+        max_digits=2, decimal_places=1, null=True, blank=True,
+        help_text="Average rating (e.g., 4.5)"
+    )
+    rating_count = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Number of reviews/ratings"
+    )
+    price_level = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        help_text="Price level 1-4 ($ to $$$$)"
+    )
+    hours_json = models.JSONField(
+        null=True, blank=True,
+        help_text="Opening hours from API"
+    )
+    photos_json = models.JSONField(
+        null=True, blank=True,
+        help_text="Photo references from API"
+    )
+
+    # Data source tracking
+    data_source = models.CharField(
+        max_length=20,
+        choices=DATA_SOURCE_CHOICES,
+        default='manual'
+    )
+    last_enriched_at = models.DateTimeField(null=True, blank=True)
+    enrichment_status = models.CharField(
+        max_length=20,
+        choices=ENRICHMENT_STATUS_CHOICES,
+        default='none'
+    )
+
     class Meta:
         ordering = ['order', 'name']
         indexes = [
@@ -150,6 +211,27 @@ class Venue(BaseModel):
 
     def __str__(self):
         return f"{self.name} ({self.get_venue_type_display()})"
+
+    @property
+    def price_level_display(self):
+        """Return price level as dollar signs."""
+        if self.price_level:
+            return '$' * self.price_level
+        return None
+
+    @property
+    def is_enriched(self):
+        """Check if venue has been enriched with API data."""
+        return self.enrichment_status == 'success'
+
+    @property
+    def needs_refresh(self):
+        """Check if venue data is stale (older than 7 days)."""
+        if not self.last_enriched_at:
+            return True
+        from django.utils import timezone
+        from datetime import timedelta
+        return timezone.now() - self.last_enriched_at > timedelta(days=7)
 
 
 class MilitaryBase(BaseModel):
@@ -365,3 +447,85 @@ class TeamMember(BaseModel):
 
     def __str__(self):
         return f"{self.name} - {self.title}"
+
+
+class VenueAPIConfig(BaseModel):
+    """
+    Configuration for venue enrichment APIs (Google Places, Yelp, etc.).
+
+    Stores API settings, rate limiting info, and sync preferences.
+    """
+    PROVIDER_CHOICES = [
+        ('google', 'Google Places'),
+        ('yelp', 'Yelp Fusion'),
+    ]
+
+    provider = models.CharField(
+        max_length=20,
+        choices=PROVIDER_CHOICES,
+        unique=True
+    )
+    is_enabled = models.BooleanField(
+        default=False,
+        help_text="Enable this API provider"
+    )
+    api_key_name = models.CharField(
+        max_length=100,
+        help_text="Key name in .keys file (e.g., GOOGLE_PLACES_API_KEY)"
+    )
+
+    # Rate limiting
+    daily_quota = models.PositiveIntegerField(
+        default=10000,
+        help_text="Maximum API calls per day"
+    )
+    requests_today = models.PositiveIntegerField(
+        default=0,
+        help_text="API calls made today"
+    )
+    quota_reset_date = models.DateField(
+        auto_now_add=True,
+        help_text="Date when requests_today resets"
+    )
+
+    # Sync settings
+    last_full_sync = models.DateTimeField(
+        null=True, blank=True,
+        help_text="Last time a full sync was performed"
+    )
+    venues_per_city = models.PositiveIntegerField(
+        default=20,
+        help_text="Top N venues to fetch per city during discovery"
+    )
+
+    class Meta:
+        verbose_name = "Venue API Configuration"
+        verbose_name_plural = "Venue API Configurations"
+
+    def __str__(self):
+        status = "enabled" if self.is_enabled else "disabled"
+        return f"{self.get_provider_display()} ({status})"
+
+    def increment_requests(self):
+        """Increment the daily request counter, resetting if needed."""
+        from django.utils import timezone
+        today = timezone.now().date()
+        if self.quota_reset_date != today:
+            self.requests_today = 0
+            self.quota_reset_date = today
+        self.requests_today += 1
+        self.save(update_fields=['requests_today', 'quota_reset_date'])
+
+    @property
+    def quota_remaining(self):
+        """Return remaining API calls for today."""
+        from django.utils import timezone
+        today = timezone.now().date()
+        if self.quota_reset_date != today:
+            return self.daily_quota
+        return max(0, self.daily_quota - self.requests_today)
+
+    @property
+    def has_quota(self):
+        """Check if there's remaining quota for today."""
+        return self.quota_remaining > 0

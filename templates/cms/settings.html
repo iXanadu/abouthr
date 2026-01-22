@@ -1,0 +1,256 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Settings - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header">
+    <h1>Settings</h1>
+    <p class="text-muted mb-0">Configure API integrations for venue enrichment.</p>
+</div>
+
+<div class="row g-4">
+    <!-- Google Places API -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-google me-2"></i>Google Places API
+                </h5>
+                {% if google_config.is_enabled %}
+                <span class="badge bg-success">Enabled</span>
+                {% else %}
+                <span class="badge bg-secondary">Disabled</span>
+                {% endif %}
+            </div>
+            <div class="cms-card-body">
+                <!-- API Key Status -->
+                <div class="mb-3">
+                    <label class="form-label">API Key Status</label>
+                    <div>
+                        {% if google_config.key_configured %}
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle me-1"></i>Configured
+                        </span>
+                        <small class="text-muted ms-2">({{ google_config.api_key_name }})</small>
+                        {% else %}
+                        <span class="badge bg-danger">
+                            <i class="bi bi-x-circle me-1"></i>Not Configured
+                        </span>
+                        <small class="text-muted d-block mt-1">
+                            Add {{ google_config.api_key_name }} to your .keys file
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Toggle Enable/Disable -->
+                <form method="post" action="{% url 'cms:api_toggle' provider='google' %}" class="mb-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn {% if google_config.is_enabled %}btn-outline-danger{% else %}btn-primary{% endif %}">
+                        {% if google_config.is_enabled %}
+                        <i class="bi bi-pause-circle me-1"></i>Disable API
+                        {% else %}
+                        <i class="bi bi-play-circle me-1"></i>Enable API
+                        {% endif %}
+                    </button>
+                </form>
+
+                <hr>
+
+                <!-- Quota Info -->
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="form-label text-muted small">Today's Usage</label>
+                        <div class="fs-5 fw-bold">
+                            {{ google_config.requests_today }} / {{ google_config.daily_quota }}
+                        </div>
+                        <div class="progress mt-1" style="height: 5px;">
+                            {% widthratio google_config.requests_today google_config.daily_quota 100 as usage_pct %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ usage_pct }}%"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label text-muted small">Last Full Sync</label>
+                        <div>
+                            {% if google_config.last_full_sync %}
+                            {{ google_config.last_full_sync|timesince }} ago
+                            {% else %}
+                            <span class="text-muted">Never</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Form -->
+                <form method="post" action="{% url 'cms:api_settings' provider='google' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label">Daily Quota</label>
+                            <input type="number" name="daily_quota" class="form-control form-control-sm"
+                                   value="{{ google_config.daily_quota }}" min="100" max="100000">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Venues per City</label>
+                            <input type="number" name="venues_per_city" class="form-control form-control-sm"
+                                   value="{{ google_config.venues_per_city }}" min="5" max="100">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-outline-primary mt-3">
+                        <i class="bi bi-check me-1"></i>Save Settings
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrichment Stats -->
+    <div class="col-lg-6">
+        <div class="cms-card">
+            <div class="cms-card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-bar-chart me-2"></i>Enrichment Statistics
+                </h5>
+            </div>
+            <div class="cms-card-body">
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <div class="fs-4 fw-bold">{{ enrichment_stats.total }}</div>
+                            <small class="text-muted">Total Venues</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <div class="fs-4 fw-bold text-success">{{ enrichment_stats.enriched }}</div>
+                            <small class="text-muted">Enriched</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <div class="fs-4 fw-bold text-warning">{{ enrichment_stats.pending }}</div>
+                            <small class="text-muted">Pending</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <div class="fs-4 fw-bold text-info">{{ enrichment_stats.manual_review }}</div>
+                            <small class="text-muted">Needs Review</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Enrichment Rate</label>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: {{ enrichment_stats.enrichment_rate }}%">
+                            {{ enrichment_stats.enrichment_rate }}%
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="mt-4">By Data Source</h6>
+                <ul class="list-group list-group-flush">
+                    {% for source, count in enrichment_stats.by_source.items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span class="text-capitalize">{{ source }}</span>
+                        <span class="badge bg-secondary rounded-pill">{{ count }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item px-0 text-muted">No data yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sync Actions -->
+<div class="cms-card mt-4">
+    <div class="cms-card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-arrow-repeat me-2"></i>Sync Venues
+        </h5>
+    </div>
+    <div class="cms-card-body">
+        <form method="post" action="{% url 'cms:sync_venues' %}" class="row g-3 align-items-end">
+            {% csrf_token %}
+            <input type="hidden" name="provider" value="google">
+
+            <div class="col-md-4">
+                <label class="form-label">City <span class="text-danger">*</span></label>
+                <select name="city" class="form-select" required>
+                    <option value="">-- Select a city --</option>
+                    {% for city in cities %}
+                    <option value="{{ city.slug }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">For all cities, use CLI: <code>python manage.py enrich_venues --all</code></small>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="discover" class="form-check-input" id="discoverNew">
+                    <label class="form-check-label" for="discoverNew">
+                        Also discover new top-rated venues
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary"
+                        {% if not google_config.is_enabled %}disabled{% endif %}>
+                    <i class="bi bi-cloud-download me-1"></i>Start Sync
+                </button>
+            </div>
+        </form>
+
+        {% if not google_config.is_enabled %}
+        <div class="alert alert-warning mt-3 mb-0">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Enable the Google Places API above to sync venues.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Help Section -->
+<div class="cms-card mt-4">
+    <div class="cms-card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-question-circle me-2"></i>How It Works
+        </h5>
+    </div>
+    <div class="cms-card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h6><i class="bi bi-1-circle me-2 text-primary"></i>Match</h6>
+                <p class="text-muted small">
+                    Existing manual venues are matched to Google Places by name and location.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="bi bi-2-circle me-2 text-primary"></i>Enrich</h6>
+                <p class="text-muted small">
+                    Matched venues are enriched with ratings, hours, photos, and price levels.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="bi bi-3-circle me-2 text-primary"></i>Discover</h6>
+                <p class="text-muted small">
+                    Optionally discover new top-rated venues not in your database.
+                </p>
+            </div>
+        </div>
+
+        <hr>
+
+        <h6>Venue Types</h6>
+        <p class="text-muted small mb-0">
+            <strong>Enrichable:</strong> Restaurants, Cafes/Breweries<br>
+            <strong>Manual only:</strong> Attractions, Events, Beaches
+        </p>
+    </div>
+</div>
+{% endblock %}

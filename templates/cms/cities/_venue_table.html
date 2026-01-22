@@ -8,9 +8,19 @@
             {% elif venue_type == 'beach' %}Beaches
             {% endif %}
         </h5>
-        <a href="{% url 'cms:venue_create' city_slug=city.slug venue_type=venue_type %}" class="btn btn-sm btn-primary">
-            <i class="bi bi-plus-lg me-1"></i> Add
-        </a>
+        <div class="d-flex gap-2">
+            {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
+            <form method="post" action="{% url 'cms:city_sync_venues' slug=city.slug venue_type=venue_type %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-secondary" title="Sync from Google Places">
+                    <i class="bi bi-cloud-download me-1"></i> Sync
+                </button>
+            </form>
+            {% endif %}
+            <a href="{% url 'cms:venue_create' city_slug=city.slug venue_type=venue_type %}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add
+            </a>
+        </div>
     </div>
     <div class="cms-card-body p-0">
         <table class="cms-table">
@@ -19,7 +29,8 @@
                     <th style="width: 40px;">#</th>
                     <th>Name</th>
                     {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
-                    <th>Cuisine</th>
+                    <th>Rating</th>
+                    <th>Source</th>
                     {% endif %}
                     <th>Featured</th>
                     <th>Status</th>
@@ -35,7 +46,40 @@
                         {% if venue.address %}<br><small class="text-muted">{{ venue.address|truncatechars:50 }}</small>{% endif %}
                     </td>
                     {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
-                    <td>{{ venue.get_cuisine_type_display|default:"-" }}</td>
+                    <td>
+                        {% if venue.rating %}
+                        <span class="text-warning">
+                            <i class="bi bi-star-fill"></i> {{ venue.rating }}
+                        </span>
+                        {% if venue.rating_count %}
+                        <small class="text-muted">({{ venue.rating_count }})</small>
+                        {% endif %}
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if venue.data_source == 'google' %}
+                        <span class="badge bg-info" title="Data from Google Places">
+                            <i class="bi bi-google"></i> Google
+                        </span>
+                        {% elif venue.data_source == 'yelp' %}
+                        <span class="badge bg-danger" title="Data from Yelp">
+                            Yelp
+                        </span>
+                        {% else %}
+                        <span class="badge bg-secondary" title="Manually entered">
+                            Manual
+                        </span>
+                        {% endif %}
+                        {% if venue.enrichment_status == 'success' and venue.last_enriched_at %}
+                        <br><small class="text-muted" title="{{ venue.last_enriched_at }}">
+                            {{ venue.last_enriched_at|timesince }} ago
+                        </small>
+                        {% elif venue.enrichment_status == 'manual_review' %}
+                        <br><small class="text-warning">Needs review</small>
+                        {% endif %}
+                    </td>
                     {% endif %}
                     <td>
                         {% if venue.is_featured %}
@@ -50,6 +94,14 @@
                     </td>
                     <td>
                         <div class="btn-group">
+                            {% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}
+                            <form method="post" action="{% url 'cms:venue_refresh' pk=venue.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-info" title="Refresh from API">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </button>
+                            </form>
+                            {% endif %}
                             <a href="{% url 'cms:venue_edit' pk=venue.pk %}" class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-pencil"></i>
                             </a>
@@ -61,7 +113,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="{% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}6{% else %}5{% endif %}" class="text-center text-muted py-4">
+                    <td colspan="{% if venue_type == 'restaurant' or venue_type == 'cafe_brewery' %}8{% else %}5{% endif %}" class="text-center text-muted py-4">
                         No items yet.
                         <a href="{% url 'cms:venue_create' city_slug=city.slug venue_type=venue_type %}">Add one</a>
                     </td>
