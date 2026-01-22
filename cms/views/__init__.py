@@ -22,3 +22,7 @@ from .settings import (
     SettingsView, ToggleAPIView, UpdateAPISettingsView,
     SyncVenuesView, RefreshVenueView, SyncCityVenuesView
 )
+from .drive_destinations import (
+    DriveDestinationListView, DriveDestinationCreateView,
+    DriveDestinationUpdateView, DriveDestinationDeleteView
+)

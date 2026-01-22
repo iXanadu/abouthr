@@ -10,7 +10,8 @@ from crispy_forms.layout import Layout, Fieldset, Row, Column, Submit, HTML, Div
 
 from guide.models import (
     City, Venue, MilitaryBase, Tunnel,
-    VacationDestination, VendorUtility, Testimonial, TeamMember
+    VacationDestination, VendorUtility, Testimonial, TeamMember,
+    DriveDestination
 )
 
 
@@ -401,6 +402,53 @@ class TeamMemberForm(forms.ModelForm):
             Div(
                 Submit('submit', 'Save Team Member', css_class='btn-primary'),
                 HTML('<a href="{% url \'cms:team_list\' %}" class="btn btn-secondary ms-2">Cancel</a>'),
+                css_class='mt-4'
+            )
+        )
+
+
+class DriveDestinationForm(forms.ModelForm):
+    """Form for creating/editing drive time calculator destinations."""
+
+    class Meta:
+        model = DriveDestination
+        fields = [
+            'name', 'slug', 'category', 'address',
+            'latitude', 'longitude', 'is_published', 'order'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Fieldset(
+                'Destination Information',
+                Row(
+                    Column('name', css_class='col-md-6'),
+                    Column('slug', css_class='col-md-6'),
+                ),
+                'category',
+                'address',
+            ),
+            Fieldset(
+                'Coordinates',
+                Row(
+                    Column('latitude', css_class='col-md-6'),
+                    Column('longitude', css_class='col-md-6'),
+                ),
+                HTML('<small class="text-muted">Tip: Find coordinates on <a href="https://www.google.com/maps" target="_blank">Google Maps</a> by right-clicking a location.</small>'),
+            ),
+            Fieldset(
+                'Settings',
+                Row(
+                    Column('is_published', css_class='col-md-6'),
+                    Column('order', css_class='col-md-6'),
+                ),
+            ),
+            Div(
+                Submit('submit', 'Save Destination', css_class='btn-primary'),
+                HTML('<a href="{% url \'cms:drive_destination_list\' %}" class="btn btn-secondary ms-2">Cancel</a>'),
                 css_class='mt-4'
             )
         )

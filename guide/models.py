@@ -531,6 +531,42 @@ class VenueAPIConfig(BaseModel):
         return self.quota_remaining > 0
 
 
+class DriveDestination(BaseModel):
+    """
+    Preset destinations for the Drive Time Calculator.
+    Includes military bases, beaches, airports, hospitals, and universities.
+    """
+    CATEGORY_CHOICES = [
+        ('military', 'Military Base'),
+        ('beach', 'Beach'),
+        ('airport', 'Airport'),
+        ('hospital', 'Hospital'),
+        ('university', 'University'),
+    ]
+
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, db_index=True)
+    address = models.CharField(max_length=500)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    is_published = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['category', 'order', 'name']
+        verbose_name = "Drive Destination"
+        verbose_name_plural = "Drive Destinations"
+
+    def __str__(self):
+        return f"{self.name} ({self.get_category_display()})"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
 class PulseContent(models.Model):
     """
     Cached pulse content - trends and headlines for Hampton Roads Pulse.

@@ -32,6 +32,9 @@ ENVIRONMENT = env('ENVIRONMENT')
 # Database password from .keys file
 DB_PASSWORD = env('DB_PASSWORD')
 
+# Google Maps API Key (for Drive Time Calculator)
+GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default='')
+
 # Application URL (used in emails, links, etc.)
 APP_URL = "http://localhost:8000"
 if ENVIRONMENT == 'development':

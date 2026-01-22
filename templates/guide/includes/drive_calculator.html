@@ -1,0 +1,544 @@
+{% if google_maps_api_key and drive_destinations %}
+<div class="drive-calculator" id="driveCalculator">
+    <div class="drive-calc-header">
+        <h4><i class="bi bi-car-front me-2"></i>Drive Time Calculator</h4>
+        <p class="text-white-50 mb-0">Calculate drive times to bases, beaches, airports & more</p>
+    </div>
+
+    <div class="drive-calc-form">
+        <!-- From Address -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">From</label>
+            <div class="btn-group w-100 mb-2" role="group">
+                <input type="radio" class="btn-check" name="fromType" id="fromTypeCustom" value="custom" checked>
+                <label class="btn btn-outline-secondary btn-sm" for="fromTypeCustom">Custom Address</label>
+                <input type="radio" class="btn-check" name="fromType" id="fromTypePreset" value="preset">
+                <label class="btn btn-outline-secondary btn-sm" for="fromTypePreset">Preset Location</label>
+            </div>
+
+            <!-- Custom Address Input (shown by default) -->
+            <div class="autocomplete-wrapper" id="fromAutocompleteWrapper">
+                <input type="text"
+                       class="form-control"
+                       id="driveFromAddress"
+                       placeholder="Enter your starting address..."
+                       value="{{ drive_from }}"
+                       autocomplete="off">
+            </div>
+
+            <!-- Preset From Select (hidden by default) -->
+            <select class="form-select d-none" id="driveFromDestination">
+                <option value="">Select a location...</option>
+                {% regroup drive_destinations by get_category_display as destinations_by_category %}
+                {% for category in destinations_by_category %}
+                <optgroup label="{{ category.grouper }}">
+                    {% for dest in category.list %}
+                    <option value="{{ dest.slug }}"
+                            data-address="{{ dest.address }}"
+                            data-lat="{{ dest.latitude }}"
+                            data-lng="{{ dest.longitude }}">
+                        {{ dest.name }}
+                    </option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- To Destination -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">To</label>
+            <div class="btn-group w-100 mb-2" role="group">
+                <input type="radio" class="btn-check" name="destType" id="destTypePreset" value="preset" checked>
+                <label class="btn btn-outline-secondary btn-sm" for="destTypePreset">Preset Destination</label>
+                <input type="radio" class="btn-check" name="destType" id="destTypeCustom" value="custom">
+                <label class="btn btn-outline-secondary btn-sm" for="destTypeCustom">Custom Address</label>
+            </div>
+
+            <!-- Preset Destination Select -->
+            <select class="form-select" id="driveToDestination">
+                <option value="">Select a destination...</option>
+                {% regroup drive_destinations by get_category_display as destinations_by_category %}
+                {% for category in destinations_by_category %}
+                <optgroup label="{{ category.grouper }}">
+                    {% for dest in category.list %}
+                    <option value="{{ dest.slug }}"
+                            data-address="{{ dest.address }}"
+                            data-lat="{{ dest.latitude }}"
+                            data-lng="{{ dest.longitude }}"
+                            {% if drive_to == dest.slug %}selected{% endif %}>
+                        {{ dest.name }}
+                    </option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
+
+            <!-- Custom Address Input (hidden by default) -->
+            <div class="autocomplete-wrapper d-none" id="toAutocompleteWrapper">
+                <input type="text"
+                       class="form-control"
+                       id="driveToCustom"
+                       placeholder="Enter destination address..."
+                       autocomplete="off">
+            </div>
+        </div>
+
+        <!-- Time Toggle -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">When</label>
+            <div class="drive-time-toggle">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="driveTime" id="timeNow" value="now" {% if drive_time == 'now' or not drive_time %}checked{% endif %}>
+                    <label class="form-check-label" for="timeNow">Now</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="driveTime" id="timeMorning" value="morning" {% if drive_time == 'morning' %}checked{% endif %}>
+                    <label class="form-check-label" for="timeMorning">Morning Rush (7:30 AM)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="driveTime" id="timeEvening" value="evening" {% if drive_time == 'evening' %}checked{% endif %}>
+                    <label class="form-check-label" for="timeEvening">Evening Rush (5:00 PM)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculate Button -->
+        <button type="button" class="btn btn-primary w-100 text-white" id="calculateDriveBtn">
+            <i class="bi bi-calculator me-2"></i>Calculate Drive Time
+        </button>
+    </div>
+
+    <!-- Results Section -->
+    <div class="drive-calc-results d-none" id="driveResults">
+        <div class="drive-results-header">
+            <h5 class="mb-1">Route Options</h5>
+            <small class="text-muted" id="routeSummary"></small>
+        </div>
+
+        <div id="routesList"></div>
+
+        <div class="drive-results-actions mt-3">
+            <a href="#" class="btn btn-outline-primary btn-sm" id="openMapsBtn" target="_blank">
+                <i class="bi bi-map me-1"></i>Open in Google Maps
+            </a>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="shareLinkBtn">
+                <i class="bi bi-share me-1"></i>Share Link
+            </button>
+        </div>
+
+        <!-- Share Toast -->
+        <div class="drive-share-toast d-none" id="shareToast">
+            <i class="bi bi-check-circle text-success me-2"></i>Link copied to clipboard!
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="drive-calc-loading d-none" id="driveLoading">
+        <div class="spinner-border text-primary spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        Calculating routes...
+    </div>
+
+    <!-- Error State -->
+    <div class="drive-calc-error d-none" id="driveError">
+        <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+        <span id="driveErrorMsg"></span>
+    </div>
+</div>
+
+<script>
+(function() {
+    let directionsService = null;
+    let fromPlaceSelected = null;
+    let toPlaceSelected = null;
+
+    // Initialize when API is ready
+    async function initDriveCalculator() {
+        try {
+            // Load the required libraries
+            const { DirectionsService } = await google.maps.importLibrary("routes");
+            const { Place, Autocomplete } = await google.maps.importLibrary("places");
+
+            directionsService = new DirectionsService();
+
+            // Set up autocomplete for From field
+            setupAutocomplete('driveFromAddress', (place) => {
+                fromPlaceSelected = place;
+            });
+
+            // Set up autocomplete for To custom field
+            setupAutocomplete('driveToCustom', (place) => {
+                toPlaceSelected = place;
+            });
+
+            // Handle From type toggle
+            document.querySelectorAll('input[name="fromType"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const presetSelect = document.getElementById('driveFromDestination');
+                    const customWrapper = document.getElementById('fromAutocompleteWrapper');
+
+                    if (this.value === 'preset') {
+                        presetSelect.classList.remove('d-none');
+                        customWrapper.classList.add('d-none');
+                    } else {
+                        presetSelect.classList.add('d-none');
+                        customWrapper.classList.remove('d-none');
+                    }
+                });
+            });
+
+            // Handle To destination type toggle
+            document.querySelectorAll('input[name="destType"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const presetSelect = document.getElementById('driveToDestination');
+                    const customWrapper = document.getElementById('toAutocompleteWrapper');
+
+                    if (this.value === 'preset') {
+                        presetSelect.classList.remove('d-none');
+                        customWrapper.classList.add('d-none');
+                    } else {
+                        presetSelect.classList.add('d-none');
+                        customWrapper.classList.remove('d-none');
+                    }
+                });
+            });
+
+            // Calculate button handler
+            document.getElementById('calculateDriveBtn').addEventListener('click', calculateRoute);
+
+            // Share button handler
+            document.getElementById('shareLinkBtn').addEventListener('click', shareLink);
+
+            // Check for pre-filled values and auto-calculate
+            {% if drive_from and drive_to %}
+            setTimeout(function() {
+                calculateRoute();
+            }, 500);
+            {% endif %}
+        } catch (error) {
+            console.error('Error initializing Drive Calculator:', error);
+            showError('Could not initialize the calculator. Please refresh the page.');
+        }
+    }
+
+    function setupAutocomplete(inputId, onPlaceSelect) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        // Create a simple autocomplete using the Places API
+        let autocomplete = null;
+        let sessionToken = new google.maps.places.AutocompleteSessionToken();
+
+        // We'll use a datalist approach for suggestions
+        const suggestionsList = document.createElement('div');
+        suggestionsList.className = 'autocomplete-suggestions';
+        suggestionsList.style.cssText = 'position:absolute;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:4px;max-height:200px;overflow-y:auto;width:100%;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);';
+        input.parentNode.style.position = 'relative';
+        input.parentNode.appendChild(suggestionsList);
+
+        let debounceTimer;
+
+        input.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+
+            if (query.length < 3) {
+                suggestionsList.style.display = 'none';
+                return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const { AutocompleteSuggestion } = await google.maps.importLibrary("places");
+
+                    const request = {
+                        input: query,
+                        sessionToken: sessionToken,
+                        includedPrimaryTypes: ['street_address', 'premise', 'subpremise', 'point_of_interest', 'establishment'],
+                        includedRegionCodes: ['us'],
+                    };
+
+                    const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+
+                    suggestionsList.innerHTML = '';
+
+                    if (suggestions && suggestions.length > 0) {
+                        suggestions.forEach(suggestion => {
+                            const placePrediction = suggestion.placePrediction;
+                            if (placePrediction) {
+                                const div = document.createElement('div');
+                                div.className = 'autocomplete-item';
+                                div.style.cssText = 'padding:10px 12px;cursor:pointer;border-bottom:1px solid #eee;font-size:0.9rem;';
+                                div.innerHTML = `<strong>${placePrediction.mainText?.text || ''}</strong><br><small class="text-muted">${placePrediction.secondaryText?.text || ''}</small>`;
+
+                                div.addEventListener('mouseenter', () => div.style.background = '#f5f5f5');
+                                div.addEventListener('mouseleave', () => div.style.background = '#fff');
+
+                                div.addEventListener('click', async () => {
+                                    input.value = placePrediction.text?.text || placePrediction.mainText?.text || '';
+                                    suggestionsList.style.display = 'none';
+
+                                    // Fetch place details
+                                    try {
+                                        const place = placePrediction.toPlace();
+                                        await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'location'] });
+                                        onPlaceSelect({
+                                            address: place.formattedAddress,
+                                            location: place.location
+                                        });
+                                    } catch (e) {
+                                        // Fall back to using the text
+                                        onPlaceSelect({
+                                            address: input.value,
+                                            location: null
+                                        });
+                                    }
+
+                                    // Reset session token after place selection
+                                    sessionToken = new google.maps.places.AutocompleteSessionToken();
+                                });
+
+                                suggestionsList.appendChild(div);
+                            }
+                        });
+                        suggestionsList.style.display = 'block';
+                    } else {
+                        suggestionsList.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Autocomplete error:', error);
+                    suggestionsList.style.display = 'none';
+                }
+            }, 300);
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !suggestionsList.contains(e.target)) {
+                suggestionsList.style.display = 'none';
+            }
+        });
+
+        // Hide on escape
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                suggestionsList.style.display = 'none';
+            }
+        });
+    }
+
+    function calculateRoute() {
+        const fromType = document.querySelector('input[name="fromType"]:checked').value;
+        const destType = document.querySelector('input[name="destType"]:checked').value;
+        const timeOption = document.querySelector('input[name="driveTime"]:checked').value;
+
+        let fromAddress = '';
+        let fromSlug = '';
+
+        // Get From address
+        if (fromType === 'preset') {
+            const select = document.getElementById('driveFromDestination');
+            const option = select.options[select.selectedIndex];
+            if (!option || !option.value) {
+                showError('Please select a starting location');
+                return;
+            }
+            fromAddress = option.dataset.address;
+            fromSlug = option.value;
+        } else {
+            fromAddress = document.getElementById('driveFromAddress').value;
+            fromSlug = 'custom';
+        }
+
+        let toAddress = '';
+        let toSlug = '';
+
+        // Get To address
+        if (destType === 'preset') {
+            const select = document.getElementById('driveToDestination');
+            const option = select.options[select.selectedIndex];
+            if (!option || !option.value) {
+                showError('Please select a destination');
+                return;
+            }
+            toAddress = option.dataset.address;
+            toSlug = option.value;
+        } else {
+            toAddress = document.getElementById('driveToCustom').value;
+            toSlug = 'custom';
+        }
+
+        if (!fromAddress) {
+            showError('Please enter a starting address');
+            return;
+        }
+
+        if (!toAddress) {
+            showError('Please enter or select a destination');
+            return;
+        }
+
+        // Show loading
+        document.getElementById('driveResults').classList.add('d-none');
+        document.getElementById('driveError').classList.add('d-none');
+        document.getElementById('driveLoading').classList.remove('d-none');
+
+        // Calculate departure time based on selection
+        let departureTime = new Date();
+        if (timeOption === 'morning') {
+            departureTime = getNextWeekdayTime(7, 30);
+        } else if (timeOption === 'evening') {
+            departureTime = getNextWeekdayTime(17, 0);
+        }
+
+        // Request directions with alternatives
+        const request = {
+            origin: fromAddress,
+            destination: toAddress,
+            travelMode: google.maps.TravelMode.DRIVING,
+            provideRouteAlternatives: true,
+            drivingOptions: {
+                departureTime: departureTime,
+                trafficModel: google.maps.TrafficModel.BEST_GUESS
+            }
+        };
+
+        directionsService.route(request, function(result, status) {
+            document.getElementById('driveLoading').classList.add('d-none');
+
+            if (status === google.maps.DirectionsStatus.OK) {
+                displayRoutes(result, fromAddress, fromSlug, toAddress, toSlug, timeOption);
+            } else {
+                let errorMsg = 'Could not calculate route. ';
+                switch (status) {
+                    case google.maps.DirectionsStatus.NOT_FOUND:
+                        errorMsg += 'One or more addresses could not be found.';
+                        break;
+                    case google.maps.DirectionsStatus.ZERO_RESULTS:
+                        errorMsg += 'No route could be found between the two addresses.';
+                        break;
+                    default:
+                        errorMsg += 'Please check your addresses and try again.';
+                }
+                showError(errorMsg);
+            }
+        });
+    }
+
+    function getNextWeekdayTime(hour, minute) {
+        const now = new Date();
+        const target = new Date(now);
+        target.setHours(hour, minute, 0, 0);
+
+        if (target <= now) {
+            target.setDate(target.getDate() + 1);
+        }
+
+        while (target.getDay() === 0 || target.getDay() === 6) {
+            target.setDate(target.getDate() + 1);
+        }
+
+        return target;
+    }
+
+    function displayRoutes(result, fromAddress, fromSlug, toAddress, toSlug, timeOption) {
+        const routes = result.routes;
+        const resultsDiv = document.getElementById('driveResults');
+        const routesList = document.getElementById('routesList');
+        const routeSummary = document.getElementById('routeSummary');
+
+        routes.sort((a, b) => {
+            const durationA = a.legs[0].duration_in_traffic ?
+                a.legs[0].duration_in_traffic.value : a.legs[0].duration.value;
+            const durationB = b.legs[0].duration_in_traffic ?
+                b.legs[0].duration_in_traffic.value : b.legs[0].duration.value;
+            return durationA - durationB;
+        });
+
+        let html = '';
+        routes.forEach((route, index) => {
+            const leg = route.legs[0];
+            const duration = leg.duration_in_traffic ? leg.duration_in_traffic : leg.duration;
+            const distance = leg.distance;
+
+            const isFastest = index === 0;
+            const routeName = route.summary || `Route ${index + 1}`;
+
+            html += `
+                <div class="drive-route ${isFastest ? 'drive-route-fastest' : ''}">
+                    <div class="drive-route-header">
+                        ${isFastest ? '<span class="badge bg-success me-2"><i class="bi bi-lightning-fill"></i> Fastest</span>' : '<span class="badge bg-secondary me-2"><i class="bi bi-arrow-repeat"></i> Alt</span>'}
+                        <span class="drive-route-time">${duration.text}</span>
+                        <span class="drive-route-distance text-muted">(${distance.text})</span>
+                    </div>
+                    <div class="drive-route-via text-muted">
+                        <i class="bi bi-signpost-split me-1"></i>via ${routeName}
+                    </div>
+                </div>
+            `;
+        });
+
+        routesList.innerHTML = html;
+
+        const timeLabel = {
+            'now': 'leaving now',
+            'morning': 'leaving 7:30 AM',
+            'evening': 'leaving 5:00 PM'
+        };
+        routeSummary.textContent = `${routes.length} route${routes.length > 1 ? 's' : ''} found, ${timeLabel[timeOption]}`;
+
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(fromAddress)}&destination=${encodeURIComponent(toAddress)}&travelmode=driving`;
+        document.getElementById('openMapsBtn').href = mapsUrl;
+
+        resultsDiv.dataset.from = fromAddress;
+        resultsDiv.dataset.fromSlug = fromSlug;
+        resultsDiv.dataset.to = toSlug;
+        resultsDiv.dataset.time = timeOption;
+
+        resultsDiv.classList.remove('d-none');
+    }
+
+    function showError(message) {
+        const errorDiv = document.getElementById('driveError');
+        document.getElementById('driveErrorMsg').textContent = message;
+        errorDiv.classList.remove('d-none');
+    }
+
+    function shareLink() {
+        const resultsDiv = document.getElementById('driveResults');
+        const fromSlug = resultsDiv.dataset.fromSlug;
+        const fromAddress = resultsDiv.dataset.from;
+        const toSlug = resultsDiv.dataset.to;
+        const timeOption = resultsDiv.dataset.time;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('from', fromSlug === 'custom' ? fromAddress : fromSlug);
+        url.searchParams.set('to', toSlug);
+        url.searchParams.set('time', timeOption);
+
+        navigator.clipboard.writeText(url.toString()).then(function() {
+            const toast = document.getElementById('shareToast');
+            toast.classList.remove('d-none');
+            setTimeout(function() {
+                toast.classList.add('d-none');
+            }, 3000);
+        }).catch(function() {
+            prompt('Copy this link:', url.toString());
+        });
+
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDriveCalculator);
+    } else {
+        initDriveCalculator();
+    }
+})();
+</script>
+{% else %}
+<!-- Drive Calculator not available - missing API key or destinations -->
+{% endif %}

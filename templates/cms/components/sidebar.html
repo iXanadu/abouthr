@@ -30,6 +30,9 @@
         <a href="{% url 'cms:vendor_list' %}" class="nav-link{% if 'vendor' in request.resolver_match.url_name %} active{% endif %}">
             <i class="bi bi-plug"></i> Vendors
         </a>
+        <a href="{% url 'cms:drive_destination_list' %}" class="nav-link{% if 'drive_destination' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-car-front"></i> Drive Destinations
+        </a>
     </nav>
 
     <nav class="cms-sidebar-section">

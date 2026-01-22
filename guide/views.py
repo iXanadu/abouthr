@@ -76,6 +76,19 @@ class CityDetailView(DetailView):
         from guide.services import weather_service
         context['weather'] = weather_service.get_weather(city.slug)
 
+        # Drive Time Calculator
+        from guide.models import DriveDestination
+        from django.conf import settings
+        context['drive_destinations'] = DriveDestination.objects.filter(
+            is_published=True
+        ).order_by('category', 'order', 'name')
+        context['google_maps_api_key'] = settings.GOOGLE_MAPS_API_KEY
+
+        # Pre-fill from URL params (for shared links)
+        context['drive_from'] = self.request.GET.get('from', '')
+        context['drive_to'] = self.request.GET.get('to', '')
+        context['drive_time'] = self.request.GET.get('time', 'now')
+
         return context
 
 

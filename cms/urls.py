@@ -31,6 +31,9 @@ from cms.views import (
     # Settings
     SettingsView, ToggleAPIView, UpdateAPISettingsView,
     SyncVenuesView, RefreshVenueView, SyncCityVenuesView,
+    # Drive Destinations
+    DriveDestinationListView, DriveDestinationCreateView,
+    DriveDestinationUpdateView, DriveDestinationDeleteView,
 )
 from cms.views.content import (
     VendorListView, VendorCreateView, VendorUpdateView, VendorDeleteView,
@@ -108,6 +111,12 @@ urlpatterns = [
     path('team/add/', TeamMemberCreateView.as_view(), name='team_create'),
     path('team/<int:pk>/edit/', TeamMemberUpdateView.as_view(), name='team_edit'),
     path('team/<int:pk>/delete/', TeamMemberDeleteView.as_view(), name='team_delete'),
+
+    # Drive Destinations (Drive Time Calculator)
+    path('drive-destinations/', DriveDestinationListView.as_view(), name='drive_destination_list'),
+    path('drive-destinations/add/', DriveDestinationCreateView.as_view(), name='drive_destination_create'),
+    path('drive-destinations/<slug:slug>/edit/', DriveDestinationUpdateView.as_view(), name='drive_destination_edit'),
+    path('drive-destinations/<slug:slug>/delete/', DriveDestinationDeleteView.as_view(), name='drive_destination_delete'),
 
     # AI Services
     path('ai/costs/', AICostReportView.as_view(), name='ai_cost_report'),

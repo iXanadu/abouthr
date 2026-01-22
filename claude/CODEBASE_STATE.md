@@ -60,6 +60,11 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 30. **Tunnels/bridges map added to /tunnels/ page** - 2026-01-22
 31. **Pulse widget: collapsible UI with partial-open default** - 2026-01-22
 32. **Pulse staleness fix: content always shows, never empty** - 2026-01-22
+33. **Drive Time Calculator on city pages** - 2026-01-22
+34. **DriveDestination model with 39 preset locations** - 2026-01-22
+35. **Google Maps/Places/Directions API integration** - 2026-01-22
+36. **CMS management for Drive Destinations** - 2026-01-22
+37. **Utilities section added to city Quick Info** - 2026-01-22
 
 ---
 
@@ -132,6 +137,7 @@ abouthr/
 | `Testimonial` | Client quotes | 7 |
 | `TeamMember` | Company team members | 2 |
 | `VenueAPIConfig` | Google/Yelp API configuration | 1 |
+| `DriveDestination` | Drive calculator preset locations | 39 |
 | `PulseContent` | Cached trends/headlines JSON | varies |
 | `AIProvider` | AI service providers | 5 |
 | `AIModel` | Available AI models | 17 |
@@ -173,7 +179,8 @@ abouthr/
 ## Next Planned Work
 
 ### IMMEDIATE
-- [ ] Add utility companies expandable section to city pages
+- [x] Add utility companies expandable section to city pages
+- [x] Drive Time Calculator on city pages
 - [ ] Test on real mobile devices
 - [ ] Optimize images (large files, up to 1.1MB)
 

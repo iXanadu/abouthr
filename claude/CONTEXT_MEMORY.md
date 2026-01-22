@@ -3,7 +3,7 @@
 **Last Updated:** 2026-01-22
 
 ## Current Status
-Phase 7 Complete. Added map images to military and tunnels pages. Improved Pulse widget with collapsible UI (partial-open default) and fixed staleness issue so content always displays.
+Phase 7+ Complete. Added Drive Time Calculator to city pages with Google Maps/Places/Directions API integration. 39 preset destinations (military bases, airports, hospitals, universities, beaches). Also added utilities section to city Quick Info sidebar.
 
 ---
 
@@ -23,6 +23,8 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 - **Pulse Caching:** Page loads only use cached data; API calls via timer/command only
 - **Grok for X trends:** Only provider with native X search capability
 - **RSS for headlines:** More reliable and cheaper than AI web search
+- **Two API keys for Google:** Server-side (IP restricted) vs client-side (HTTP referrer restricted)
+- **Modern Places API:** Using AutocompleteSuggestion instead of deprecated Autocomplete widget
 
 ### Patterns Being Used
 - **AI Services:** Configurable model-per-operation with fallback chain
@@ -52,10 +54,14 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 15. [COMPLETED] Tunnels/bridges map on /tunnels/ page
 16. [COMPLETED] Pulse widget collapsible UI with partial-open default
 17. [COMPLETED] Pulse staleness fix - content always shows
+18. [COMPLETED] Drive Time Calculator on city pages
+19. [COMPLETED] DriveDestination model with 39 preset locations
+20. [COMPLETED] Google Maps/Places/Directions API integration
+21. [COMPLETED] CMS management for Drive Destinations
+22. [COMPLETED] Utilities section added to city Quick Info
 
 ### Next Session
-1. [ ] Add utility companies expandable section to city pages
-2. [ ] Test on real mobile devices
+1. [ ] Test on real mobile devices
 3. [ ] Configure DNS for abouthamptonroads.com
 4. [ ] Deploy to production
 5. [ ] SSL certificate setup
@@ -132,7 +138,8 @@ All in `.keys` file:
 - XAI_API_KEY
 - OPENAI_API_KEY
 - GOOGLE_AI_API_KEY
-- GOOGLE_PLACES_API_KEY
+- GOOGLE_PLACES_API_KEY (server-side, IP restricted)
+- GOOGLE_MAPS_API_KEY (client-side, HTTP referrer restricted)
 - BFL_API_KEY (Black Forest Labs for images)
 
 ---
@@ -140,7 +147,8 @@ All in `.keys` file:
 ## Notes for Future Sessions
 
 ### Pending Features
-- [ ] Utility companies expandable section on city pages
+- [x] Utility companies section on city pages
+- [x] Drive Time Calculator on city pages
 - [ ] City-specific pulse content
 - [ ] Yelp integration (stub ready)
 - [ ] Search functionality

@@ -2,6 +2,17 @@
 {% load static %}
 {% load venue_tags %}
 
+{% block extra_js %}
+{% if google_maps_api_key %}
+<script>
+(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]);for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.googleapis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+  key: "{{ google_maps_api_key }}",
+  v: "weekly"
+});
+</script>
+{% endif %}
+{% endblock %}
+
 {% block title %}{{ city.name }} - Restaurants, Attractions & Things to Do{% endblock %}
 
 {% block meta_description %}Discover the best of {{ city.name }}, Virginia - top-rated restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
@@ -17,12 +28,15 @@
     </div>
 </section>
 
-<!-- City Description -->
+<!-- City Description & Drive Calculator -->
 <section class="py-4 py-md-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 <p class="lead">{{ city.description }}</p>
+
+                <!-- Drive Time Calculator -->
+                {% include 'guide/includes/drive_calculator.html' %}
             </div>
             <div class="col-lg-4">
                 {% if weather %}
@@ -70,6 +84,39 @@
                         {% endif %}
                     </ul>
                 </div>
+
+                {% with utilities=city.vendor_utilities.all %}
+                {% if utilities %}
+                <div class="info-card">
+                    <h4><i class="bi bi-plug me-2"></i>Utilities</h4>
+                    <ul class="utilities-list">
+                        {% regroup utilities by get_category_display as utilities_by_category %}
+                        {% for category in utilities_by_category %}
+                        {% for utility in category.list %}
+                        {% if utility.is_published %}
+                        <li>
+                            <strong>{{ category.grouper }}:</strong>
+                            {% if utility.website %}
+                            <a href="{{ utility.website }}" target="_blank" class="text-decoration-none">
+                                {{ utility.name }} <i class="bi bi-box-arrow-up-right small"></i>
+                            </a>
+                            {% else %}
+                            {{ utility.name }}
+                            {% endif %}
+                            {% if utility.phone %}
+                            <br><small class="text-muted"><i class="bi bi-telephone me-1"></i>{{ utility.phone }}</small>
+                            {% endif %}
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'guide:utilities' %}" class="btn btn-sm btn-outline-primary mt-2">
+                        <i class="bi bi-list-ul me-1"></i>All Utilities
+                    </a>
+                </div>
+                {% endif %}
+                {% endwith %}
             </div>
         </div>
     </div>

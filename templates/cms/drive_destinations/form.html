@@ -1,0 +1,31 @@
+{% extends 'cms/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if is_create %}Add{% else %}Edit{% endif %} Drive Destination - CMS{% endblock %}
+
+{% block cms_content %}
+<nav class="cms-breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'cms:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'cms:drive_destination_list' %}">Drive Destinations</a></li>
+        <li class="breadcrumb-item active">{% if is_create %}Add{% else %}Edit{% endif %}</li>
+    </ol>
+</nav>
+
+<div class="cms-header">
+    <h1>{% if is_create %}Add Drive Destination{% else %}Edit: {{ object.name }}{% endif %}</h1>
+    <p class="text-muted mb-0">
+        {% if is_create %}
+            Add a new destination for the Drive Time Calculator
+        {% else %}
+            Update destination information
+        {% endif %}
+    </p>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-body">
+        {% crispy form %}
+    </div>
+</div>
+{% endblock %}

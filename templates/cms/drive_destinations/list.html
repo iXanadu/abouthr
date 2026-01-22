@@ -1,0 +1,93 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Drive Destinations - CMS{% endblock %}
+
+{% block cms_content %}
+<div class="cms-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Drive Destinations</h1>
+        <p class="text-muted mb-0">Manage destinations for the Drive Time Calculator</p>
+    </div>
+    <a href="{% url 'cms:drive_destination_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Destination
+    </a>
+</div>
+
+<div class="cms-card">
+    <div class="cms-card-header">
+        <h5 class="mb-0">{{ destinations|length }} Destinations</h5>
+    </div>
+    <div class="cms-card-body p-0">
+        {% regroup destinations by get_category_display as destinations_grouped %}
+        {% for group in destinations_grouped %}
+        <div class="category-section">
+            <div class="category-header bg-light px-4 py-2 border-bottom">
+                <h6 class="mb-0 fw-bold text-primary">
+                    {% if group.grouper == 'Military Base' %}
+                        <i class="bi bi-shield-fill me-2"></i>
+                    {% elif group.grouper == 'Airport' %}
+                        <i class="bi bi-airplane me-2"></i>
+                    {% elif group.grouper == 'Hospital' %}
+                        <i class="bi bi-hospital me-2"></i>
+                    {% elif group.grouper == 'University' %}
+                        <i class="bi bi-mortarboard me-2"></i>
+                    {% elif group.grouper == 'Beach' %}
+                        <i class="bi bi-umbrella me-2"></i>
+                    {% endif %}
+                    {{ group.grouper }}s ({{ group.list|length }})
+                </h6>
+            </div>
+            <table class="cms-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Order</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dest in group.list %}
+                    <tr>
+                        <td>
+                            <strong>{{ dest.name }}</strong>
+                            <br>
+                            <small class="text-muted">{{ dest.slug }}</small>
+                        </td>
+                        <td>
+                            <small>{{ dest.address|truncatechars:50 }}</small>
+                            <br>
+                            <small class="text-muted">{{ dest.latitude }}, {{ dest.longitude }}</small>
+                        </td>
+                        <td class="text-center">
+                            {% if dest.is_published %}
+                                <span class="badge badge-published">Published</span>
+                            {% else %}
+                                <span class="badge badge-draft">Draft</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">{{ dest.order }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'cms:drive_destination_edit' slug=dest.slug %}" class="btn btn-sm btn-outline-primary btn-action">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'cms:drive_destination_delete' slug=dest.slug %}" class="btn btn-sm btn-outline-danger btn-action">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% empty %}
+        <div class="p-5 text-center text-muted">
+            <i class="bi bi-geo-alt display-4 mb-3"></i>
+            <p>No destinations yet.</p>
+            <a href="{% url 'cms:drive_destination_create' %}" class="btn btn-primary">Add Your First Destination</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
