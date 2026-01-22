@@ -1,83 +1,149 @@
-<!-- Hampton Roads Pulse Widget -->
-<div class="pulse-widget">
-    <div class="pulse-header">
-        <h3><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Hampton Roads Pulse</h3>
-        <small class="text-muted">What's happening now</small>
+<!-- Hampton Roads Pulse Widget - Partially Collapsible -->
+<div class="pulse-widget" id="pulseWidget">
+    <!-- Header -->
+    <div class="pulse-header-collapsible" id="pulseHeader">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="mb-0"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Hampton Roads Pulse</h3>
+                <small class="text-muted">What's happening now</small>
+            </div>
+            <div class="pulse-toggle" id="pulseToggleTop">
+                <i class="bi bi-chevron-down pulse-chevron"></i>
+            </div>
+        </div>
     </div>
 
-    <div class="row g-4">
-        <!-- Trending Topics -->
-        <div class="col-md-6">
-            <div class="pulse-section">
-                <h5 class="pulse-section-title">
-                    <i class="bi bi-twitter-x me-2"></i>Trending Now
-                </h5>
-                {% if pulse.trends.items %}
-                <ul class="pulse-list">
-                    {% for item in pulse.trends.items %}
-                    <li class="pulse-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="pulse-topic">{{ item.topic }}</div>
-                            {% if item.sentiment == 'positive' %}
-                            <span class="badge bg-success-subtle text-success">
-                                <i class="bi bi-emoji-smile"></i>
-                            </span>
-                            {% elif item.sentiment == 'negative' %}
-                            <span class="badge bg-danger-subtle text-danger">
-                                <i class="bi bi-exclamation-triangle"></i>
-                            </span>
+    <!-- Content with partial visibility -->
+    <div class="pulse-content-wrapper" id="pulseContentWrapper">
+        <div class="row g-4">
+            <!-- Trending Topics -->
+            <div class="col-md-6">
+                <div class="pulse-section">
+                    <h5 class="pulse-section-title">
+                        <i class="bi bi-twitter-x me-2"></i>Trending Now
+                    </h5>
+                    {% if pulse.trends.items %}
+                    <ul class="pulse-list">
+                        {% for item in pulse.trends.items %}
+                        <li class="pulse-item {% if forloop.counter > 2 %}pulse-item-extra{% endif %}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="pulse-topic">{{ item.topic }}</div>
+                                {% if item.sentiment == 'positive' %}
+                                <span class="badge bg-success-subtle text-success">
+                                    <i class="bi bi-emoji-smile"></i>
+                                </span>
+                                {% elif item.sentiment == 'negative' %}
+                                <span class="badge bg-danger-subtle text-danger">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="pulse-summary">{{ item.summary }}</div>
+                            {% if item.relevance %}
+                            <div class="pulse-relevance">{{ item.relevance }}</div>
                             {% endif %}
-                        </div>
-                        <div class="pulse-summary">{{ item.summary }}</div>
-                        {% if item.relevance %}
-                        <div class="pulse-relevance">{{ item.relevance }}</div>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% if pulse.trends_updated %}
-                <div class="pulse-timestamp">
-                    <i class="bi bi-clock me-1"></i>{{ pulse.trends_updated|timesince }} ago
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if pulse.trends_updated %}
+                    <div class="pulse-timestamp pulse-item-extra">
+                        <i class="bi bi-clock me-1"></i>{{ pulse.trends_updated|timesince }} ago
+                        {% if pulse.trends_stale %}<span class="text-warning ms-1">(updating soon)</span>{% endif %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="pulse-empty">
+                        <i class="bi bi-hourglass-split me-2"></i>Trends loading...
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                {% else %}
-                <div class="pulse-empty">
-                    <i class="bi bi-hourglass-split me-2"></i>Trends loading...
-                </div>
-                {% endif %}
             </div>
-        </div>
 
-        <!-- Local Headlines -->
-        <div class="col-md-6">
-            <div class="pulse-section">
-                <h5 class="pulse-section-title">
-                    <i class="bi bi-newspaper me-2"></i>Local Headlines
-                </h5>
-                {% if pulse.headlines.items %}
-                <ul class="pulse-list">
-                    {% for item in pulse.headlines.items %}
-                    <li class="pulse-item">
-                        <div class="pulse-headline">{{ item.headline }}</div>
-                        <div class="pulse-summary">{{ item.summary }}</div>
-                        <div class="pulse-meta">
-                            <span class="badge bg-light text-dark">{{ item.source }}</span>
-                            <span class="badge bg-{{ item.category }}-cat">{{ item.category|title }}</span>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% if pulse.headlines_updated %}
-                <div class="pulse-timestamp">
-                    <i class="bi bi-clock me-1"></i>{{ pulse.headlines_updated|timesince }} ago
+            <!-- Local Headlines -->
+            <div class="col-md-6">
+                <div class="pulse-section">
+                    <h5 class="pulse-section-title">
+                        <i class="bi bi-newspaper me-2"></i>Local Headlines
+                    </h5>
+                    {% if pulse.headlines.items %}
+                    <ul class="pulse-list">
+                        {% for item in pulse.headlines.items %}
+                        <li class="pulse-item {% if forloop.counter > 2 %}pulse-item-extra{% endif %}">
+                            <div class="pulse-headline">{{ item.headline }}</div>
+                            <div class="pulse-summary">{{ item.summary }}</div>
+                            <div class="pulse-meta">
+                                <span class="badge bg-light text-dark">{{ item.source }}</span>
+                                <span class="badge bg-{{ item.category }}-cat">{{ item.category|title }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% if pulse.headlines_updated %}
+                    <div class="pulse-timestamp pulse-item-extra">
+                        <i class="bi bi-clock me-1"></i>{{ pulse.headlines_updated|timesince }} ago
+                        {% if pulse.headlines_stale %}<span class="text-warning ms-1">(updating soon)</span>{% endif %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="pulse-empty">
+                        <i class="bi bi-hourglass-split me-2"></i>Headlines loading...
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                {% else %}
-                <div class="pulse-empty">
-                    <i class="bi bi-hourglass-split me-2"></i>Headlines loading...
-                </div>
-                {% endif %}
             </div>
         </div>
+    </div>
+
+    <!-- Bottom Expand/Collapse Button -->
+    <div class="pulse-bottom-toggle" id="pulseBottomToggle">
+        <button type="button" class="btn pulse-expand-btn" id="pulseExpandBtn">
+            <i class="bi bi-chevron-down me-2"></i><span>Expand</span>
+        </button>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const widget = document.getElementById('pulseWidget');
+    const header = document.getElementById('pulseHeader');
+    const topToggle = document.getElementById('pulseToggleTop');
+    const bottomBtn = document.getElementById('pulseExpandBtn');
+    const extraItems = document.querySelectorAll('.pulse-item-extra');
+    const chevron = document.querySelector('.pulse-chevron');
+
+    let isExpanded = false;
+
+    function togglePulse() {
+        isExpanded = !isExpanded;
+
+        // Toggle extra items visibility
+        extraItems.forEach(item => {
+            item.style.display = isExpanded ? '' : 'none';
+        });
+
+        // Update button text and icons
+        const btnText = bottomBtn.querySelector('span');
+        const btnIcon = bottomBtn.querySelector('i');
+        if (isExpanded) {
+            btnText.textContent = 'Collapse';
+            btnIcon.className = 'bi bi-chevron-up me-2';
+            chevron.style.transform = 'rotate(180deg)';
+            widget.classList.add('pulse-expanded');
+        } else {
+            btnText.textContent = 'Expand';
+            btnIcon.className = 'bi bi-chevron-down me-2';
+            chevron.style.transform = 'rotate(0deg)';
+            widget.classList.remove('pulse-expanded');
+        }
+    }
+
+    // Initialize - start collapsed (partial view)
+    extraItems.forEach(item => {
+        item.style.display = 'none';
+    });
+
+    // Click handlers
+    header.addEventListener('click', togglePulse);
+    bottomBtn.addEventListener('click', togglePulse);
+});
+</script>

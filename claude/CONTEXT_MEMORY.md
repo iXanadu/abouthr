@@ -1,9 +1,9 @@
 # About Hampton Roads - Context Memory
 
-**Last Updated:** 2026-01-21 (Evening)
+**Last Updated:** 2026-01-22
 
 ## Current Status
-Phase 7 Complete. AI Services infrastructure deployed with model switching and cost tracking. Hampton Roads Pulse live with X trends and local headlines. Weather integration on city pages. Systemd timers configured for automated refresh.
+Phase 7 Complete. Added map images to military and tunnels pages. Improved Pulse widget with collapsible UI (partial-open default) and fixed staleness issue so content always displays.
 
 ---
 
@@ -48,6 +48,10 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 11. [COMPLETED] Hampton Roads Pulse (X trends + headlines)
 12. [COMPLETED] Pulse Dashboard with timer controls
 13. [COMPLETED] Systemd timers for automated refresh
+14. [COMPLETED] Military bases map on /military/ page
+15. [COMPLETED] Tunnels/bridges map on /tunnels/ page
+16. [COMPLETED] Pulse widget collapsible UI with partial-open default
+17. [COMPLETED] Pulse staleness fix - content always shows
 
 ### Next Session
 1. [ ] Add utility companies expandable section to city pages
@@ -103,6 +107,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 - [ ] OpenGraph image URLs are relative - may need absolute for some platforms
 
 ### Recently Resolved
+- [x] Pulse showing empty when stale - now returns expired content as fallback
 - [x] AI Model Manager Bootstrap error - fixed with DOMContentLoaded wrapper
 - [x] AIUsageLog null constraint - added response_time_ms=0
 - [x] Sluggish page loads - pulse now only uses cached data

@@ -562,11 +562,42 @@ class PulseContent(models.Model):
         return f"{self.get_content_type_display()} - {self.generated_at.strftime('%Y-%m-%d %H:%M')}"
 
     @classmethod
-    def get_current(cls, content_type):
-        """Get current active content, or None if expired."""
+    def get_current(cls, content_type, include_stale=True):
+        """
+        Get current active content.
+
+        Args:
+            content_type: 'trends' or 'headlines'
+            include_stale: If True (default), return expired content as fallback.
+                          Content should always be visible to users.
+
+        Returns:
+            PulseContent instance or None
+        """
         from django.utils import timezone
-        return cls.objects.filter(
+        now = timezone.now()
+
+        # First try to get fresh content
+        fresh = cls.objects.filter(
             content_type=content_type,
             is_active=True,
-            expires_at__gt=timezone.now()
+            expires_at__gt=now
         ).first()
+
+        if fresh:
+            return fresh
+
+        # If include_stale, return most recent content even if expired
+        if include_stale:
+            return cls.objects.filter(
+                content_type=content_type,
+                is_active=True
+            ).first()
+
+        return None
+
+    @property
+    def is_stale(self):
+        """Check if this content has expired (but is still being shown)."""
+        from django.utils import timezone
+        return self.expires_at <= timezone.now()

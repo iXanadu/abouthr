@@ -50,20 +50,24 @@ class PulseService:
 
         Returns:
             dict with trends and headlines (may have empty sections)
+            Always returns content if available, even if stale.
         """
         if refresh_if_expired:
             trends = self._get_or_refresh('trends')
             headlines = self._get_or_refresh('headlines')
         else:
             # Only return cached data - don't block page loads
-            trends = PulseContent.get_current('trends')
-            headlines = PulseContent.get_current('headlines')
+            # include_stale=True ensures we always show something
+            trends = PulseContent.get_current('trends', include_stale=True)
+            headlines = PulseContent.get_current('headlines', include_stale=True)
 
         return {
             'trends': trends.content_json if trends else {'items': []},
             'trends_updated': trends.generated_at if trends else None,
+            'trends_stale': trends.is_stale if trends else False,
             'headlines': headlines.content_json if headlines else {'items': []},
             'headlines_updated': headlines.generated_at if headlines else None,
+            'headlines_stale': headlines.is_stale if headlines else False,
         }
 
     def _get_or_refresh(self, content_type: str) -> PulseContent | None:

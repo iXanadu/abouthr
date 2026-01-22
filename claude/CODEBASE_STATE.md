@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-21 (Evening)
+**Last Updated:** 2026-01-22
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -56,6 +56,10 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 26. **Phase 7: Hampton Roads Pulse (X trends + headlines)** - 2026-01-21
 27. **Phase 7: Pulse Dashboard with timer controls** - 2026-01-21
 28. **Phase 7: Systemd timers for automated refresh** - 2026-01-21
+29. **Military bases map added to /military/ page** - 2026-01-22
+30. **Tunnels/bridges map added to /tunnels/ page** - 2026-01-22
+31. **Pulse widget: collapsible UI with partial-open default** - 2026-01-22
+32. **Pulse staleness fix: content always shows, never empty** - 2026-01-22
 
 ---
 
@@ -192,7 +196,7 @@ abouthr/
 ## Environment Status
 | Environment | Status | URL | Last Deploy |
 |-------------|--------|-----|-------------|
-| Development | **Running** | dev.abouthamptonroads.com | 2026-01-21 |
+| Development | **Running** | dev.abouthamptonroads.com | 2026-01-22 |
 | Production | Not deployed | abouthamptonroads.com | - |
 
 ### Server Commands
