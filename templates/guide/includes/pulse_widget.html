@@ -1,0 +1,83 @@
+<!-- Hampton Roads Pulse Widget -->
+<div class="pulse-widget">
+    <div class="pulse-header">
+        <h3><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Hampton Roads Pulse</h3>
+        <small class="text-muted">What's happening now</small>
+    </div>
+
+    <div class="row g-4">
+        <!-- Trending Topics -->
+        <div class="col-md-6">
+            <div class="pulse-section">
+                <h5 class="pulse-section-title">
+                    <i class="bi bi-twitter-x me-2"></i>Trending Now
+                </h5>
+                {% if pulse.trends.items %}
+                <ul class="pulse-list">
+                    {% for item in pulse.trends.items %}
+                    <li class="pulse-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="pulse-topic">{{ item.topic }}</div>
+                            {% if item.sentiment == 'positive' %}
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-emoji-smile"></i>
+                            </span>
+                            {% elif item.sentiment == 'negative' %}
+                            <span class="badge bg-danger-subtle text-danger">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="pulse-summary">{{ item.summary }}</div>
+                        {% if item.relevance %}
+                        <div class="pulse-relevance">{{ item.relevance }}</div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if pulse.trends_updated %}
+                <div class="pulse-timestamp">
+                    <i class="bi bi-clock me-1"></i>{{ pulse.trends_updated|timesince }} ago
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="pulse-empty">
+                    <i class="bi bi-hourglass-split me-2"></i>Trends loading...
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Local Headlines -->
+        <div class="col-md-6">
+            <div class="pulse-section">
+                <h5 class="pulse-section-title">
+                    <i class="bi bi-newspaper me-2"></i>Local Headlines
+                </h5>
+                {% if pulse.headlines.items %}
+                <ul class="pulse-list">
+                    {% for item in pulse.headlines.items %}
+                    <li class="pulse-item">
+                        <div class="pulse-headline">{{ item.headline }}</div>
+                        <div class="pulse-summary">{{ item.summary }}</div>
+                        <div class="pulse-meta">
+                            <span class="badge bg-light text-dark">{{ item.source }}</span>
+                            <span class="badge bg-{{ item.category }}-cat">{{ item.category|title }}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if pulse.headlines_updated %}
+                <div class="pulse-timestamp">
+                    <i class="bi bi-clock me-1"></i>{{ pulse.headlines_updated|timesince }} ago
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="pulse-empty">
+                    <i class="bi bi-hourglass-split me-2"></i>Headlines loading...
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

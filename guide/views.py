@@ -28,6 +28,11 @@ class HomeView(TemplateView):
         context['regions'] = Region.objects.prefetch_related('cities').all()
         context['cities'] = City.objects.select_related('region').filter(is_published=True)
         context['testimonials'] = Testimonial.objects.filter(is_published=True, is_featured=True)[:3]
+
+        # Add Hampton Roads Pulse
+        from guide.services.pulse_service import pulse_service
+        context['pulse'] = pulse_service.get_pulse_data()
+
         return context
 
 
@@ -66,6 +71,10 @@ class CityDetailView(DetailView):
         context['other_cities'] = City.objects.select_related('region').filter(
             is_published=True
         ).exclude(pk=city.pk)
+
+        # Get weather for this city
+        from guide.services import weather_service
+        context['weather'] = weather_service.get_weather(city.slug)
 
         return context
 

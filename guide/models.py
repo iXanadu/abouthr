@@ -529,3 +529,44 @@ class VenueAPIConfig(BaseModel):
     def has_quota(self):
         """Check if there's remaining quota for today."""
         return self.quota_remaining > 0
+
+
+class PulseContent(models.Model):
+    """
+    Cached pulse content - trends and headlines for Hampton Roads Pulse.
+    One active record per content type at a time.
+    """
+    CONTENT_TYPES = [
+        ('trends', 'X Trends'),
+        ('headlines', 'Local Headlines'),
+    ]
+
+    content_type = models.CharField(max_length=20, choices=CONTENT_TYPES)
+    content_json = models.JSONField()
+    generated_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    model_used = models.CharField(max_length=100, blank=True)
+    tokens_used = models.PositiveIntegerField(default=0)
+    cost_usd = models.DecimalField(max_digits=10, decimal_places=6, default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-generated_at']
+        verbose_name = "Pulse Content"
+        verbose_name_plural = "Pulse Content"
+        indexes = [
+            models.Index(fields=['content_type', 'is_active']),
+        ]
+
+    def __str__(self):
+        return f"{self.get_content_type_display()} - {self.generated_at.strftime('%Y-%m-%d %H:%M')}"
+
+    @classmethod
+    def get_current(cls, content_type):
+        """Get current active content, or None if expired."""
+        from django.utils import timezone
+        return cls.objects.filter(
+            content_type=content_type,
+            is_active=True,
+            expires_at__gt=timezone.now()
+        ).first()

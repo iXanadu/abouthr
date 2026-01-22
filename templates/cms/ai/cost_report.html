@@ -1,0 +1,242 @@
+{% extends 'cms/base.html' %}
+{% load humanize %}
+
+{% block title %}AI Cost Report - CMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">AI Cost Report</h1>
+        <p class="text-muted mb-0">Usage and cost analysis for the last {{ days }} days</p>
+    </div>
+    <div class="btn-group">
+        <a href="?days=7" class="btn btn-sm {% if days == 7 %}btn-primary{% else %}btn-outline-secondary{% endif %}">7 days</a>
+        <a href="?days=30" class="btn btn-sm {% if days == 30 %}btn-primary{% else %}btn-outline-secondary{% endif %}">30 days</a>
+        <a href="?days=90" class="btn btn-sm {% if days == 90 %}btn-primary{% else %}btn-outline-secondary{% endif %}">90 days</a>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-currency-dollar text-success fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Total Cost</h6>
+                        <h3 class="mb-0">${{ summary.total_cost|floatformat:4 }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-lightning text-primary fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">API Calls</h6>
+                        <h3 class="mb-0">{{ summary.total_calls|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-hash text-info fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Total Tokens</h6>
+                        <h3 class="mb-0">{{ summary.total_tokens|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-check-circle text-warning fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Success Rate</h6>
+                        <h3 class="mb-0">{{ summary.success_rate }}%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Cost by Task Type -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Cost by Operation</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if cost_by_task %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Operation</th>
+                                <th class="text-end">Calls</th>
+                                <th class="text-end">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cost_by_task %}
+                            <tr>
+                                <td>{{ task_type_labels|default_if_none:item.task_type }}</td>
+                                <td class="text-end">{{ item.count|intcomma }}</td>
+                                <td class="text-end">${{ item.cost|floatformat:4 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-graph-up fs-1 opacity-25"></i>
+                    <p class="mt-2">No usage data for this period</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Cost by Provider -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Cost by Provider</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if cost_by_provider %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Provider</th>
+                                <th class="text-end">Calls</th>
+                                <th class="text-end">Tokens</th>
+                                <th class="text-end">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cost_by_provider %}
+                            <tr>
+                                <td>
+                                    {% if item.provider == 'anthropic' %}
+                                    <span class="badge bg-purple">Anthropic</span>
+                                    {% elif item.provider == 'openai' %}
+                                    <span class="badge bg-success">OpenAI</span>
+                                    {% elif item.provider == 'xai' %}
+                                    <span class="badge bg-dark">xAI</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ item.provider }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">{{ item.count|intcomma }}</td>
+                                <td class="text-end">{{ item.tokens|intcomma|default:"-" }}</td>
+                                <td class="text-end">${{ item.cost|floatformat:4 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-pie-chart fs-1 opacity-25"></i>
+                    <p class="mt-2">No usage data for this period</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Usage -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Recent Usage</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if recent_usage %}
+        <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Time</th>
+                        <th>Operation</th>
+                        <th>Model</th>
+                        <th class="text-end">Tokens</th>
+                        <th class="text-end">Cost</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in recent_usage %}
+                    <tr>
+                        <td class="text-nowrap">
+                            <small class="text-muted">{{ log.created_at|date:"M d, H:i" }}</small>
+                        </td>
+                        <td>
+                            <small>{{ task_type_labels|default_if_none:log.task_type }}</small>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ log.model }}</small>
+                        </td>
+                        <td class="text-end">
+                            <small>{{ log.total_tokens|intcomma|default:"-" }}</small>
+                        </td>
+                        <td class="text-end">
+                            <small>${{ log.cost_usd|floatformat:4 }}</small>
+                        </td>
+                        <td class="text-center">
+                            {% if log.success %}
+                            <span class="badge bg-success-subtle text-success">OK</span>
+                            {% else %}
+                            <span class="badge bg-danger-subtle text-danger" title="{{ log.error_message }}">Error</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-5">
+            <i class="bi bi-clock-history fs-1 opacity-25"></i>
+            <p class="mt-2">No recent usage</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.bg-purple { background-color: #6f42c1 !important; }
+</style>
+{% endblock %}

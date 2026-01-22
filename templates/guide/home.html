@@ -63,8 +63,17 @@
     </div>
 </section>
 
+<!-- Hampton Roads Pulse -->
+{% if pulse %}
+<section class="py-5">
+    <div class="container">
+        {% include 'guide/includes/pulse_widget.html' %}
+    </div>
+</section>
+{% endif %}
+
 <!-- Cities Section -->
-<section class="py-5" id="cities">
+<section class="py-5 bg-light-custom" id="cities">
     <div class="container">
         <div class="section-header text-center">
             <h2>Explore Our Cities</h2>

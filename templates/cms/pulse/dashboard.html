@@ -1,0 +1,393 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Pulse Dashboard - CMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">
+            <i class="bi bi-lightning-charge-fill text-warning me-2"></i>Hampton Roads Pulse
+        </h1>
+        <p class="text-muted mb-0">Manage trending topics and local news headlines</p>
+    </div>
+    <button class="btn btn-primary" id="refreshAllBtn" onclick="refreshPulse()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Refresh All
+    </button>
+</div>
+
+<!-- Status Cards -->
+<div class="row g-4 mb-4">
+    <!-- Trends Status -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-twitter-x me-2"></i>X Trends
+                </h5>
+                {% if stats.trends_active %}
+                <span class="badge bg-success">Active</span>
+                {% else %}
+                <span class="badge bg-warning">Expired</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if pulse_data.trends.items %}
+                <ul class="list-unstyled mb-3">
+                    {% for item in pulse_data.trends.items|slice:":3" %}
+                    <li class="mb-2 pb-2 border-bottom">
+                        <strong>{{ item.topic }}</strong>
+                        <br><small class="text-muted">{{ item.summary|truncatewords:15 }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-3">No trends loaded yet</p>
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        {% if stats.trends_updated %}
+                        Updated: {{ stats.trends_updated|timesince }} ago
+                        {% else %}
+                        Never updated
+                        {% endif %}
+                    </small>
+                    <button class="btn btn-sm btn-outline-primary" onclick="refreshPulse('trends')">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Headlines Status -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-newspaper me-2"></i>Local Headlines
+                </h5>
+                {% if stats.headlines_active %}
+                <span class="badge bg-success">Active</span>
+                {% else %}
+                <span class="badge bg-warning">Expired</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if pulse_data.headlines.items %}
+                <ul class="list-unstyled mb-3">
+                    {% for item in pulse_data.headlines.items|slice:":3" %}
+                    <li class="mb-2 pb-2 border-bottom">
+                        <strong>{{ item.headline|truncatewords:10 }}</strong>
+                        <br><small class="text-muted">{{ item.source }} - {{ item.category }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-3">No headlines loaded yet</p>
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        {% if stats.headlines_updated %}
+                        Updated: {{ stats.headlines_updated|timesince }} ago
+                        {% else %}
+                        Never updated
+                        {% endif %}
+                    </small>
+                    <button class="btn btn-sm btn-outline-primary" onclick="refreshPulse('headlines')">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cost Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h3 class="mb-1">${{ stats.month_cost|floatformat:4 }}</h3>
+                <small class="text-muted">This Month's Cost</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h3 class="mb-1">{{ stats.month_refreshes }}</h3>
+                <small class="text-muted">Refreshes This Month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h3 class="mb-1">{{ stats.month_tokens|default:0 }}</h3>
+                <small class="text-muted">Tokens Used</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scheduled Timers -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Scheduled Tasks</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            {% for timer in timers %}
+            <div class="col-md-6">
+                <div class="border rounded p-3 h-100" id="timer-card-{{ timer.id }}">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h6 class="mb-1">
+                                {% if timer.is_active %}
+                                <span class="badge bg-success me-1">Running</span>
+                                {% else %}
+                                <span class="badge bg-secondary me-1">Stopped</span>
+                                {% endif %}
+                                {{ timer.name }}
+                            </h6>
+                            <small class="text-muted">{{ timer.description }}</small>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 my-3">
+                        <div class="col-6">
+                            <div class="bg-light rounded p-2">
+                                <small class="text-muted d-block">Schedule</small>
+                                <small>{{ timer.schedule_description }}</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-2">
+                                <small class="text-muted d-block">Est. Cost</small>
+                                <small class="fw-medium">{{ timer.cost_estimate }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if timer.next_run %}
+                    <div class="mb-2">
+                        <small class="text-muted">Next Run:</small>
+                        <span class="small fw-medium">{{ timer.next_run }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if timer.error %}
+                    <div class="alert alert-warning py-1 px-2 mb-2">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i>{{ timer.error }}</small>
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2">
+                        {% if timer.is_active %}
+                        <button class="btn btn-sm btn-warning timer-action-btn"
+                                data-timer="{{ timer.id }}" data-action="stop">
+                            <i class="bi bi-stop-fill"></i> Stop
+                        </button>
+                        {% else %}
+                        <button class="btn btn-sm btn-success timer-action-btn"
+                                data-timer="{{ timer.id }}" data-action="start">
+                            <i class="bi bi-play-fill"></i> Start
+                        </button>
+                        {% endif %}
+
+                        {% if timer.is_enabled %}
+                        <button class="btn btn-sm btn-outline-secondary timer-action-btn"
+                                data-timer="{{ timer.id }}" data-action="disable"
+                                title="Disable auto-start on boot">
+                            <i class="bi bi-toggle-on"></i>
+                        </button>
+                        {% else %}
+                        <button class="btn btn-sm btn-outline-primary timer-action-btn"
+                                data-timer="{{ timer.id }}" data-action="enable"
+                                title="Enable auto-start on boot">
+                            <i class="bi bi-toggle-off"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="alert alert-info mt-3 mb-0">
+            <i class="bi bi-info-circle me-1"></i>
+            Timer controls require sudo access. If timers aren't installed yet, run the setup commands on the server.
+        </div>
+    </div>
+</div>
+
+<!-- Recent Content History -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-clock me-2"></i>Recent Refresh History</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Type</th>
+                        <th>Generated</th>
+                        <th>Model</th>
+                        <th>Tokens</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for content in recent_content %}
+                    <tr>
+                        <td>
+                            {% if content.content_type == 'trends' %}
+                            <i class="bi bi-twitter-x me-1"></i>
+                            {% else %}
+                            <i class="bi bi-newspaper me-1"></i>
+                            {% endif %}
+                            {{ content.get_content_type_display }}
+                        </td>
+                        <td>{{ content.generated_at|timesince }} ago</td>
+                        <td><code class="small">{{ content.model_used|default:"-" }}</code></td>
+                        <td>{{ content.tokens_used|default:"-" }}</td>
+                        <td>${{ content.cost_usd|floatformat:4 }}</td>
+                        <td>
+                            {% if content.is_active %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Expired</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No content generated yet
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Toast for notifications -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="actionToast" class="toast" role="alert">
+        <div class="toast-header">
+            <i class="bi bi-lightning-charge me-2" id="toastIcon"></i>
+            <strong class="me-auto" id="toastTitle">Pulse</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = '{{ csrf_token }}';
+
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('actionToast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+
+        toast.classList.remove('bg-success', 'bg-danger', 'text-white');
+        if (isError) {
+            toast.classList.add('bg-danger', 'text-white');
+            toastIcon.className = 'bi bi-exclamation-triangle me-2';
+            toastTitle.textContent = 'Error';
+        } else {
+            toast.classList.add('bg-success', 'text-white');
+            toastIcon.className = 'bi bi-check-circle me-2';
+            toastTitle.textContent = 'Success';
+        }
+
+        toastMessage.textContent = message;
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+    }
+
+    // Make refreshPulse global
+    window.refreshPulse = async function(contentType = null) {
+        const btn = document.getElementById('refreshAllBtn');
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Refreshing...';
+
+        try {
+            const formData = new FormData();
+            if (contentType) {
+                formData.append('content_type', contentType);
+            }
+
+            const response = await fetch('{% url "cms:pulse_refresh" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showToast(data.message);
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast(data.error || 'Refresh failed', true);
+            }
+        } catch (err) {
+            showToast('Network error: ' + err.message, true);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    };
+
+    // Timer action buttons
+    document.querySelectorAll('.timer-action-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const timerName = this.dataset.timer;
+            const action = this.dataset.action;
+            const originalHtml = this.innerHTML;
+
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+            try {
+                const response = await fetch(`/cms/pulse/timer/${timerName}/${action}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast(data.message);
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showToast(data.error || 'Action failed', true);
+                    this.disabled = false;
+                    this.innerHTML = originalHtml;
+                }
+            } catch (err) {
+                showToast('Network error: ' + err.message, true);
+                this.disabled = false;
+                this.innerHTML = originalHtml;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

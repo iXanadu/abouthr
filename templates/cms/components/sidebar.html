@@ -44,8 +44,17 @@
 
     <nav class="cms-sidebar-section">
         <div class="cms-sidebar-section-title">Configuration</div>
+        <a href="{% url 'cms:pulse_dashboard' %}" class="nav-link{% if 'pulse' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-lightning-charge"></i> Pulse Dashboard
+        </a>
         <a href="{% url 'cms:settings' %}" class="nav-link{% if request.resolver_match.url_name == 'settings' %} active{% endif %}">
-            <i class="bi bi-sliders"></i> API Settings
+            <i class="bi bi-sliders"></i> Venue API
+        </a>
+        <a href="{% url 'cms:ai_model_manager' %}" class="nav-link{% if 'ai_model' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-cpu"></i> AI Models
+        </a>
+        <a href="{% url 'cms:ai_cost_report' %}" class="nav-link{% if 'ai_cost' in request.resolver_match.url_name %} active{% endif %}">
+            <i class="bi bi-graph-up"></i> AI Costs
         </a>
         <a href="{% url 'admin:index' %}" class="nav-link" target="_blank">
             <i class="bi bi-gear"></i> Django Admin

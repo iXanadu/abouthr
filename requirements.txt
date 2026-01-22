@@ -25,3 +25,11 @@ gunicorn==23.0.0
 # PDF processing (dev tools)
 PyMuPDF==1.26.7
 pypdf==6.6.0
+pyyaml>=6.0
+
+# AI Services
+anthropic>=0.40.0
+openai>=1.50.0
+
+# RSS/News feeds
+feedparser>=6.0.0

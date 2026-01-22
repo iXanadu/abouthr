@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-21 (End of Day)
+**Last Updated:** 2026-01-21 (Evening)
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -15,15 +15,17 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 - **CSS:** Custom mobile-first stylesheet with CSS variables
 - **Forms:** crispy_forms + crispy_bootstrap5
 - **SEO:** OpenGraph, Twitter Cards, sitemap.xml, robots.txt
+- **AI:** Anthropic Claude, xAI Grok, OpenAI (configurable per operation)
+- **Weather:** Open-Meteo (free, no API key)
 
 ---
 
 ## Current State Summary
 
 ### Phase / Milestone
-- **Current Phase:** Phase 6 Complete - Venue Enrichment System Operational
-- **Progress:** 95%
-- **Status:** Dev deployed, Google Places integration complete, rich mobile display
+- **Current Phase:** Phase 7 - AI Services & Dynamic Content
+- **Progress:** 98%
+- **Status:** Dev deployed, AI infrastructure complete, Pulse system live
 
 ### Recent Major Work Completed
 1. Project initialization with Django - 2026-01-17
@@ -49,6 +51,11 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 21. **Phase 5: CMS Settings page with API controls** - 2026-01-21
 22. **Phase 6: Rich venue display with photos, ratings, hours** - 2026-01-21
 23. **Phase 6: Mobile-optimized venue cards (90% of traffic)** - 2026-01-21
+24. **Phase 7: AI Services infrastructure (models, pricing, tracking)** - 2026-01-21
+25. **Phase 7: Weather integration (Open-Meteo) on city pages** - 2026-01-21
+26. **Phase 7: Hampton Roads Pulse (X trends + headlines)** - 2026-01-21
+27. **Phase 7: Pulse Dashboard with timer controls** - 2026-01-21
+28. **Phase 7: Systemd timers for automated refresh** - 2026-01-21
 
 ---
 
@@ -60,47 +67,54 @@ abouthr/
 ├── accounts/          # User auth, profiles, multi-tenancy
 ├── core/              # Base models, shared utilities
 ├── guide/             # Domain models + public views + URLs
-│   ├── management/commands/seed_data.py  # Data seeding
-│   ├── models.py      # City, Venue, MilitaryBase, etc.
+│   ├── management/commands/
+│   │   ├── seed_data.py       # Data seeding
+│   │   ├── enrich_venues.py   # Google Places enrichment
+│   │   ├── refresh_venues.py  # Venue data refresh
+│   │   └── refresh_pulse.py   # Pulse content refresh
+│   ├── services/
+│   │   ├── google_places_service.py
+│   │   ├── venue_enrichment_service.py
+│   │   ├── weather_service.py      # Open-Meteo integration
+│   │   ├── trends_service.py       # Grok X search
+│   │   ├── headlines_service.py    # RSS + Claude
+│   │   └── pulse_service.py        # Orchestration
+│   ├── models.py      # City, Venue, MilitaryBase, PulseContent, etc.
 │   ├── views.py       # All page views + sitemap + robots
 │   └── urls.py        # URL routing
 ├── cms/               # Content Management System
 │   ├── forms.py       # ModelForms with crispy_forms
-│   ├── urls.py        # 33 URL patterns
+│   ├── urls.py        # 40+ URL patterns
 │   └── views/         # Dashboard, CRUD for all models
-│       ├── __init__.py
-│       ├── mixins.py      # CMSAccessMixin
-│       ├── dashboard.py   # Dashboard + Help views
-│       ├── cities.py      # City CRUD
-│       ├── venues.py      # Venue CRUD + HTMX toggle
-│       ├── military.py    # Military CRUD
-│       └── content.py     # Tunnels, Vacation, Vendors, Testimonials, Team
+│       ├── dashboard.py      # Dashboard + Help views
+│       ├── cities.py         # City CRUD
+│       ├── venues.py         # Venue CRUD + HTMX toggle
+│       ├── settings.py       # API configuration
+│       ├── ai_settings.py    # AI cost report + model manager
+│       └── pulse_dashboard.py # Pulse management
+├── ai_services/       # AI model management
+│   ├── models.py      # AIProvider, AIModel, AIOperationConfig, AIUsageLog
+│   ├── pricing.py     # Cost calculation
+│   ├── model_selector.py # Model configuration
+│   ├── config/providers.yaml
+│   └── management/commands/seed_ai_models.py
 ├── templates/
-│   ├── base.html          # Main template with SEO meta tags
-│   ├── guide/             # Public page templates (9 files)
-│   ├── cms/               # CMS templates
-│   │   ├── base.html      # CMS base with sidebar
-│   │   ├── dashboard.html
-│   │   ├── help.html      # Content guidelines
-│   │   ├── components/    # sidebar, publish_toggle
-│   │   ├── cities/        # list, detail, edit
-│   │   ├── venues/        # form, confirm_delete
-│   │   ├── military/      # list, form, confirm_delete
-│   │   ├── tunnels/       # list, form, confirm_delete
-│   │   ├── vacation/      # list, form, confirm_delete
-│   │   ├── vendors/       # list, form, confirm_delete
-│   │   ├── testimonials/  # list, form, confirm_delete
-│   │   └── team/          # list, form, confirm_delete
+│   ├── base.html
+│   ├── guide/             # Public page templates
+│   │   └── includes/
+│   │       └── pulse_widget.html
+│   ├── cms/
+│   │   ├── ai/            # AI management templates
+│   │   └── pulse/         # Pulse dashboard
 │   └── registration/
-│       └── login.html     # CMS login page
 └── static/
-    ├── css/style.css  # Custom styles with animations
-    └── images/        # Hero and city images
+    ├── css/style.css
+    └── images/
 ```
 
 ---
 
-## Key Models (guide/models.py)
+## Key Models
 
 | Model | Purpose | Count |
 |-------|---------|-------|
@@ -113,8 +127,12 @@ abouthr/
 | `VendorUtility` | Per-city utility contacts | 47 |
 | `Testimonial` | Client quotes | 7 |
 | `TeamMember` | Company team members | 2 |
-
-**Note:** All guide models use `BaseModel` (timestamps only), NOT `AccountScopedModel` - this is single-tenant shared content.
+| `VenueAPIConfig` | Google/Yelp API configuration | 1 |
+| `PulseContent` | Cached trends/headlines JSON | varies |
+| `AIProvider` | AI service providers | 5 |
+| `AIModel` | Available AI models | 17 |
+| `AIOperationConfig` | Operation-to-model mapping | 8 |
+| `AIUsageLog` | AI usage and cost tracking | varies |
 
 ---
 
@@ -123,8 +141,8 @@ abouthr/
 ### Public Site (guide/urls.py)
 | View | URL | Template |
 |------|-----|----------|
-| HomeView | `/` | home.html |
-| CityDetailView | `/city/<slug>/` | city_detail.html |
+| HomeView | `/` | home.html (includes pulse widget) |
+| CityDetailView | `/city/<slug>/` | city_detail.html (includes weather) |
 | MilitaryView | `/military/` | military.html |
 | TunnelsView | `/tunnels/` | tunnels.html |
 | VacationView | `/vacation/` | vacation.html |
@@ -132,34 +150,26 @@ abouthr/
 | TestimonialsView | `/testimonials/` | testimonials.html |
 | AboutView | `/about/` | about.html |
 | ContactView | `/contact/` | contact.html |
-| sitemap_xml | `/sitemap.xml` | (dynamic XML) |
-| robots_txt | `/robots.txt` | (dynamic text) |
+| venue_photo | `/venue/<id>/photo/` | (proxy to Google) |
 
-### CMS (cms/urls.py) - 33 patterns
+### CMS (cms/urls.py)
 | Section | URLs |
 |---------|------|
 | Dashboard | `/cms/`, `/cms/help/` |
-| Cities | `/cms/cities/`, `/cms/cities/<slug>/`, `/cms/cities/<slug>/edit/` |
-| Venues | `/cms/cities/<slug>/venues/add/<type>/`, `/cms/venues/<pk>/edit/`, `/cms/venues/<pk>/delete/`, `/cms/venues/<pk>/toggle/` |
-| Military | `/cms/military/`, `/cms/military/add/`, `/cms/military/<slug>/edit/`, `/cms/military/<slug>/delete/` |
-| Tunnels | `/cms/tunnels/`, `/cms/tunnels/add/`, etc. |
-| Vacation | `/cms/vacation/`, `/cms/vacation/add/`, etc. |
-| Vendors | `/cms/vendors/`, `/cms/vendors/add/`, etc. |
-| Testimonials | `/cms/testimonials/`, `/cms/testimonials/add/`, etc. |
-| Team | `/cms/team/`, `/cms/team/add/`, etc. |
-
-### Auth (django.contrib.auth.urls)
-| URL | Purpose |
-|-----|---------|
-| `/accounts/login/` | CMS login |
-| `/accounts/logout/` | Logout |
+| Pulse | `/cms/pulse/`, `/cms/pulse/refresh/`, `/cms/pulse/timer/<name>/<action>/` |
+| Settings | `/cms/settings/` |
+| AI | `/cms/ai/costs/`, `/cms/ai/models/`, `/cms/ai/operation/<op>/update/` |
+| Cities | `/cms/cities/`, etc. |
+| Venues | `/cms/venues/`, etc. |
+| Military | `/cms/military/`, etc. |
+| Content | tunnels, vacation, vendors, testimonials, team |
 
 ---
 
 ## Next Planned Work
 
 ### IMMEDIATE
-- [ ] Set up systemd timer for weekly venue refresh (optional)
+- [ ] Add utility companies expandable section to city pages
 - [ ] Test on real mobile devices
 - [ ] Optimize images (large files, up to 1.1MB)
 
@@ -172,8 +182,7 @@ abouthr/
 
 ### FUTURE / BACKLOG
 - [ ] Yelp integration (stub ready in yelp_service.py)
-- [ ] AI-generated events/happenings content
-- [ ] CMS drag-and-drop reordering
+- [ ] City-specific pulse content
 - [ ] Search functionality
 - [ ] Google Maps integration with venue coordinates
 - [ ] Contact form with email
@@ -183,12 +192,12 @@ abouthr/
 ## Environment Status
 | Environment | Status | URL | Last Deploy |
 |-------------|--------|-----|-------------|
-| Development | **Running** | dev.abouthamptonroads.com | 2026-01-18 |
+| Development | **Running** | dev.abouthamptonroads.com | 2026-01-21 |
 | Production | Not deployed | abouthamptonroads.com | - |
 
 ### Server Commands
 ```bash
-# Restart development server (after Python changes)
+# Restart development server
 sudo systemctl restart gunicorn_abouthamptonroads_dev
 
 # Check status
@@ -196,39 +205,15 @@ systemctl status gunicorn_abouthamptonroads_dev
 
 # View logs
 journalctl -u gunicorn_abouthamptonroads_dev -n 50
+
+# Pulse management
+python manage.py refresh_pulse --stats
+python manage.py refresh_pulse --force
+
+# Timer status
+systemctl list-timers pulse-refresh.timer
+systemctl list-timers venue-refresh.timer
 ```
-
----
-
-## Architecture Notes
-
-### Design Decisions
-1. **Single Venue Model:** Using `venue_type` discriminator instead of 5 separate models
-2. **Mobile-First:** Site designed for phone first, scales up to desktop
-3. **PDF as Source:** All content seeded from the 40-page PDF
-4. **Tabs/Accordions:** Desktop uses tabs for venue types, mobile uses accordions
-5. **Premium Fonts:** Montserrat (headers) + Inter (body) for modern look
-6. **CMS-Managed Images:** City images stored via ImageField, editable in CMS
-7. **Dynamic Sitemap:** Generated via view to auto-include new content
-8. **HTMX for CMS:** Publish toggles use HTMX for no-reload updates
-
-### CMS Access Control
-Users can access CMS if any of these are true:
-- `user.is_superuser`
-- `user.profile.is_admin`
-- `user.profile.system_role in ['account_owner', 'admin']`
-
----
-
-## Known Issues / Technical Debt
-
-### Issues
-- [ ] City images not uploaded yet (showing "No image" in CMS)
-- [ ] Image sizes large (up to 1.1MB) - optimize during deployment
-
-### Technical Debt
-- [ ] OpenGraph image URLs may need absolute paths for some platforms
-- [ ] No unit/integration tests implemented
 
 ---
 
@@ -237,9 +222,10 @@ Users can access CMS if any of these are true:
 - All CMS pages return 200 status (when authenticated)
 - sitemap.xml generates valid XML
 - robots.txt generates valid format
-- OpenGraph tags present in HTML
-- Lazy loading attributes added
-- CMS CRUD operations functional
+- Weather integration tested and working
+- Pulse refresh tested and working
+- AI Model Manager edit functionality fixed
+- Systemd timers installed and running
 - Unit tests: Not implemented
 - Integration tests: Not implemented
 
@@ -250,26 +236,25 @@ Users can access CMS if any of these are true:
 ### Important Files
 - `abouthr/settings.py` - Django configuration
 - `guide/models.py` - All domain models
-- `guide/views.py` - Public page views
-- `cms/views/` - CMS views
-- `cms/forms.py` - All CMS forms
-- `cms/urls.py` - CMS URL routing
-- `templates/base.html` - Main public template
-- `templates/cms/base.html` - CMS base template
-- `templates/cms/help.html` - CMS content guidelines
+- `guide/services/` - External service integrations
+- `cms/views/pulse_dashboard.py` - Pulse management
+- `ai_services/models.py` - AI infrastructure
 - `static/css/style.css` - Custom styles
-- `claude/SERVER_COMMANDS.md` - Gunicorn restart commands
 
 ### Common Commands
 ```bash
-python manage.py runserver          # Local dev server
-python manage.py seed_data          # Seed database from PDF content
-python manage.py createsuperuser    # Create admin user
-python manage.py collectstatic      # Collect static files
-python manage.py migrate            # Run migrations
+python manage.py runserver              # Local dev server
+python manage.py seed_data              # Seed database from PDF
+python manage.py seed_ai_models         # Seed AI models
+python manage.py refresh_pulse          # Refresh pulse content
+python manage.py refresh_pulse --force  # Force refresh
+python manage.py enrich_venues          # Enrich venues from Google
+python manage.py collectstatic          # Collect static files
 ```
 
 ### CMS URLs
 - Dashboard: `/cms/`
+- Pulse Dashboard: `/cms/pulse/`
+- AI Models: `/cms/ai/models/`
+- AI Costs: `/cms/ai/costs/`
 - Help: `/cms/help/`
-- Login: `/accounts/login/`

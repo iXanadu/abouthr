@@ -25,6 +25,35 @@
                 <p class="lead">{{ city.description }}</p>
             </div>
             <div class="col-lg-4">
+                {% if weather %}
+                <!-- Weather Card -->
+                <div class="weather-card mb-3">
+                    <div class="weather-current">
+                        <div class="weather-temp">
+                            <i class="{{ weather.current.icon }} weather-icon"></i>
+                            <span class="temp-value">{{ weather.current.temperature }}°</span>
+                        </div>
+                        <div class="weather-details">
+                            <div class="weather-desc">{{ weather.current.description }}</div>
+                            <div class="weather-feels">Feels like {{ weather.current.feels_like }}°</div>
+                            <div class="weather-meta">
+                                <span><i class="bi bi-droplet me-1"></i>{{ weather.current.humidity }}%</span>
+                                <span><i class="bi bi-wind me-1"></i>{{ weather.current.wind_speed }} mph</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-forecast">
+                        {% for day in weather.forecast %}
+                        <div class="forecast-day">
+                            <span class="forecast-date">{{ day.date|date:"D" }}</span>
+                            <i class="{{ day.icon }}"></i>
+                            <span class="forecast-temps">{{ day.high }}° / {{ day.low }}°</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="info-card">
                     <h4><i class="bi bi-info-circle me-2"></i>Quick Info</h4>
                     <ul>

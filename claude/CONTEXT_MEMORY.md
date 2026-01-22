@@ -1,66 +1,56 @@
 # About Hampton Roads - Context Memory
 
-**Last Updated:** 2026-01-21 (End of Day)
+**Last Updated:** 2026-01-21 (Evening)
 
 ## Current Status
-Phase 6 Complete. Venue Enrichment System fully operational with Google Places API integration. Rich venue display with photos, ratings, hours, and mobile-optimized cards. 150/265 venues enriched, 253/265 have photos.
+Phase 7 Complete. AI Services infrastructure deployed with model switching and cost tracking. Hampton Roads Pulse live with X trends and local headlines. Weather integration on city pages. Systemd timers configured for automated refresh.
 
 ---
 
 ## Working Context
 
 ### Active Focus Area
-Venue enrichment system deployed. Google Places API integration complete with rich mobile display.
+Dynamic content features complete. Site now has fresh, updating content that gives users a reason to return.
 
 ### Recent Decisions
 - **Single Venue Model:** Instead of 5 separate models, using one with `venue_type` discriminator
 - **Mobile-First Priority:** Perfect on phone > great on tablet > good on desktop
 - **PDF is THE Content:** Not reference material - the exact content to display
-- **CMS Deprioritized:** No content staff, focus on public site first
 - **BaseModel (not AccountScopedModel):** Guide content is single-tenant shared
 - **Font Choice:** Montserrat (headers) + Inter (body) - premium mobile-friendly fonts
 - **Tabs/Accordions:** Desktop uses tabs for content, mobile uses accordions for touch UX
-- **Static Images:** City images stored as static files, not in database
-- **Dynamic Sitemap:** Generated via view to auto-include new content
+- **Weather API:** Open-Meteo chosen (free, no API key, reliable)
+- **Pulse Caching:** Page loads only use cached data; API calls via timer/command only
+- **Grok for X trends:** Only provider with native X search capability
+- **RSS for headlines:** More reliable and cheaper than AI web search
 
 ### Patterns Being Used
-- **BaseModel:** Abstract model with created_at/updated_at timestamps
-- **Venue with venue_type:** Unified model for restaurants, cafes, attractions, events, beaches
-- **Region/City hierarchy:** Peninsula vs Southside geographic organization
-- **Class-based views:** TemplateView, ListView, DetailView for all pages
-- **CSS Variables:** Centralized theming with custom properties
-- **Lazy Loading:** Native browser lazy loading for images
+- **AI Services:** Configurable model-per-operation with fallback chain
+- **Service Layer:** Separate services for weather, trends, headlines, pulse orchestration
+- **Cached Content:** PulseContent model stores JSON with expiration
+- **Systemd Timers:** Automated refresh every 4 hours for pulse
 
 ---
 
 ## Session Priorities
 
-### Completed (Phases 1-3)
+### Completed (All Phases)
 1. [COMPLETED] All PDF content seeded to database (501 venues, 16 bases, etc.)
 2. [COMPLETED] Base template with Bootstrap 5 + Montserrat/Inter fonts
-3. [COMPLETED] Homepage with hero, city cards, quick links
-4. [COMPLETED] City detail pages with tabs/accordions for venues
-5. [COMPLETED] All special pages (military, tunnels, vacation, utilities, testimonials, about, contact)
-6. [COMPLETED] URL routing for all pages
-7. [COMPLETED] Hero and city images added
-8. [COMPLETED] CSS polish with animations and transitions
-9. [COMPLETED] OpenGraph and Twitter Card meta tags
-10. [COMPLETED] Dynamic sitemap.xml and robots.txt
-11. [COMPLETED] Lazy loading for all images
-12. [COMPLETED] requirements.txt created for deployment
-13. [COMPLETED] Utility scripts added (check_env, push_keys)
-
-### Completed (Venue Enrichment - Phase 5-6)
-14. [COMPLETED] Google Places API service layer - 2026-01-21
-15. [COMPLETED] Venue model enrichment fields - 2026-01-21
-16. [COMPLETED] CMS settings page for API management - 2026-01-21
-17. [COMPLETED] Management commands (enrich_venues, refresh_venues) - 2026-01-21
-18. [COMPLETED] Rich venue display with photos, ratings, hours - 2026-01-21
-19. [COMPLETED] Mobile-optimized venue cards (90% of traffic) - 2026-01-21
-20. [COMPLETED] Photo proxy endpoint with caching - 2026-01-21
+3. [COMPLETED] All 9 page templates + views + routing
+4. [COMPLETED] OpenGraph, Twitter Cards, sitemap.xml, robots.txt
+5. [COMPLETED] CMS infrastructure with all CRUD operations
+6. [COMPLETED] Google Places API integration for venue enrichment
+7. [COMPLETED] Rich venue display with photos, ratings, hours
+8. [COMPLETED] Mobile-optimized venue cards
+9. [COMPLETED] AI Services infrastructure (models, pricing, tracking)
+10. [COMPLETED] Weather integration (Open-Meteo) on city pages
+11. [COMPLETED] Hampton Roads Pulse (X trends + headlines)
+12. [COMPLETED] Pulse Dashboard with timer controls
+13. [COMPLETED] Systemd timers for automated refresh
 
 ### Next Session
-1. [ ] Set up systemd timer for weekly venue refresh (optional)
+1. [ ] Add utility companies expandable section to city pages
 2. [ ] Test on real mobile devices
 3. [ ] Configure DNS for abouthamptonroads.com
 4. [ ] Deploy to production
@@ -75,36 +65,34 @@ Venue enrichment system deployed. Google Places API integration complete with ri
 - This is a relocation guide for Hampton Roads, VA region
 - Content comes directly from the 40-page PDF brochure
 - Target audience: Military families and others relocating to the area
-- Future feature: AI-generated events/happenings content
+- Dynamic content (pulse) keeps users returning
 
 ### Technical Constraints
 - Domain: abouthamptonroads.com
 - **Mobile-first is critical** - many users viewing on phones during relocation
 - Images need optimization during deployment (some up to 1.1MB)
 
-### The 9 Cities
+### AI Services Configuration
+| Operation | Provider | Model | Use Case |
+|-----------|----------|-------|----------|
+| research_happenings | xAI | grok-3-fast | X trends for Pulse |
+| research_events | Anthropic | claude-haiku-4-5 | Headlines summarization |
+| content_venue_description | Anthropic | claude-haiku-4-5 | Venue descriptions |
+| content_city_description | Anthropic | claude-sonnet-4 | City descriptions |
 
-**Southside (South of James River):**
-- Virginia Beach (has beaches)
-- Chesapeake
-- Norfolk
-- Portsmouth
-- Suffolk
-- Smithfield
+### Systemd Timers
+| Timer | Schedule | Purpose |
+|-------|----------|---------|
+| pulse-refresh | Every 4 hours | X trends + headlines |
+| venue-refresh | Sundays 3 AM | Google Places refresh |
 
-**Peninsula (North of James River):**
-- Hampton
-- Newport News
-- Williamsburg/Yorktown
-
-### City Page Content Pattern
-Each city has:
-- Description paragraph
-- Restaurants list (15-20 items)
-- Cafes & Breweries list (10-15 items)
-- Attractions list (20+ items)
-- Events & Festivals list
-- Beaches (Virginia Beach primarily)
+### Monthly Cost Estimates
+| Service | Cost |
+|---------|------|
+| Pulse (trends + headlines) | ~$2-5/month |
+| Venue refresh | ~$2/month |
+| Weather | FREE |
+| Google Places | ~$5-10/month |
 
 ---
 
@@ -115,17 +103,11 @@ Each city has:
 - [ ] OpenGraph image URLs are relative - may need absolute for some platforms
 
 ### Recently Resolved
-- [x] Venue enrichment API timeout - fixed by limiting web sync to single cities
-- [x] CMS app completed with settings page for API management
-
-### Recently Resolved
-- [x] MilitaryBase slug field too short - increased to 255
-- [x] VendorUtility phone field too short - increased to 50
-- [x] All pages return 200 status
-- [x] Static files loading correctly
-- [x] Hero and city images added
-- [x] SEO meta tags implemented
-- [x] Sitemap and robots.txt working
+- [x] AI Model Manager Bootstrap error - fixed with DOMContentLoaded wrapper
+- [x] AIUsageLog null constraint - added response_time_ms=0
+- [x] Sluggish page loads - pulse now only uses cached data
+- [x] Venue enrichment API timeout - fixed by limiting web sync
+- [x] Systemd timer permissions - configured sudoers for abouthr_user
 
 ---
 
@@ -136,46 +118,54 @@ Each city has:
 
 ### External Documentation
 - Relocation guide PDF: `claude/specs/abouthr.pdf` (40 pages)
-- Split pages: `claude/specs/pages/page_*.pdf`
-- Extracted images: `claude/specs/images/`
 - Trustworthy Agents website: www.trustworthyagents.com
 - Home search site: explorevirginiahomes.com
 
-### Reference Projects
-- `../tagApp` - Good infrastructure patterns (Django app)
-- `../trustworthyagents.com/prod` - Website patterns (can do better)
+### API Keys Configured
+All in `.keys` file:
+- ANTHROPIC_API_KEY
+- XAI_API_KEY
+- OPENAI_API_KEY
+- GOOGLE_AI_API_KEY
+- GOOGLE_PLACES_API_KEY
+- BFL_API_KEY (Black Forest Labs for images)
 
 ---
 
 ## Notes for Future Sessions
 
-### Design Direction - IMPLEMENTED
-- Mobile-first responsive design - DONE
-- Montserrat (headers) + Inter (body) fonts - DONE
-- Clean layout optimized for web/mobile - DONE
-- Bootstrap 5 as foundation - DONE
-- CSS animations and transitions - DONE
+### Pending Features
+- [ ] Utility companies expandable section on city pages
+- [ ] City-specific pulse content
+- [ ] Yelp integration (stub ready)
+- [ ] Search functionality
+- [ ] Contact form with email
 
-### Content Seeded - ALL DONE
-- [x] Pages 4-5: About Hampton Roads overview text
-- [x] Pages 8-25: All 9 city content (descriptions, venue lists) - 501 venues
-- [x] Page 28: Military bases list - 16 bases
-- [x] Page 29: Tunnel descriptions - 6 tunnels
-- [x] Page 30: Vacation destinations - 13 destinations
-- [x] Page 31: Vendor utilities per city - 47 utilities
-- [x] Pages 32-34: Testimonials - 7 testimonials
-- [x] Team members: Robert & Nate Pickles - 2 members
+### Server Files Created
+```
+/etc/systemd/system/pulse-refresh.timer
+/etc/systemd/system/pulse-refresh.service
+/etc/systemd/system/venue-refresh.timer
+/etc/systemd/system/venue-refresh.service
+/etc/sudoers.d/abouthr-timers
+```
 
-### SEO - IMPLEMENTED
-- [x] OpenGraph meta tags
-- [x] Twitter Card meta tags
-- [x] Dynamic sitemap.xml (17 URLs)
-- [x] robots.txt
+### Useful Commands
+```bash
+# Pulse management
+python manage.py refresh_pulse --stats
+python manage.py refresh_pulse --force
+python manage.py refresh_pulse --trends
+python manage.py refresh_pulse --headlines
 
-### Future AI Features (Phase 4)
-- Current events in each city
-- Upcoming events and happenings
-- Dynamic content layer over static guide content
+# Timer management
+systemctl list-timers pulse-refresh.timer
+sudo systemctl start pulse-refresh.timer
+sudo systemctl stop pulse-refresh.timer
+
+# AI models
+python manage.py seed_ai_models
+```
 
 ### Contact Info (in site footer and contact page)
 - Office: 757-361-0106

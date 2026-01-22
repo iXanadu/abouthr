@@ -111,10 +111,11 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Local apps
-    'core',      # Shared base models and utilities
-    'accounts',  # Multi-tenant account management
-    'guide',     # Hampton Roads guide domain models
-    'cms',       # Content management system
+    'core',         # Shared base models and utilities
+    'accounts',     # Multi-tenant account management
+    'guide',        # Hampton Roads guide domain models
+    'cms',          # Content management system
+    'ai_services',  # AI model management and cost tracking
 ]
 
 MIDDLEWARE = [

@@ -35,6 +35,13 @@ from cms.views import (
 from cms.views.content import (
     VendorListView, VendorCreateView, VendorUpdateView, VendorDeleteView,
 )
+from cms.views.ai_settings import (
+    AICostReportView, AIModelManagerView, update_operation_ajax,
+)
+from cms.views.pulse_dashboard import (
+    PulseDashboardView, api_pulse_refresh, api_timer_action,
+    api_timer_status, api_pulse_stats,
+)
 
 app_name = 'cms'
 
@@ -101,4 +108,16 @@ urlpatterns = [
     path('team/add/', TeamMemberCreateView.as_view(), name='team_create'),
     path('team/<int:pk>/edit/', TeamMemberUpdateView.as_view(), name='team_edit'),
     path('team/<int:pk>/delete/', TeamMemberDeleteView.as_view(), name='team_delete'),
+
+    # AI Services
+    path('ai/costs/', AICostReportView.as_view(), name='ai_cost_report'),
+    path('ai/models/', AIModelManagerView.as_view(), name='ai_model_manager'),
+    path('ai/operation/<str:operation>/update/', update_operation_ajax, name='ai_update_operation'),
+
+    # Pulse Dashboard
+    path('pulse/', PulseDashboardView.as_view(), name='pulse_dashboard'),
+    path('pulse/refresh/', api_pulse_refresh, name='pulse_refresh'),
+    path('pulse/stats/', api_pulse_stats, name='pulse_stats'),
+    path('pulse/timer/<str:timer_name>/<str:action>/', api_timer_action, name='pulse_timer_action'),
+    path('pulse/timer/<str:timer_name>/status/', api_timer_status, name='pulse_timer_status'),
 ]
