@@ -7,7 +7,7 @@
 
 Phase 7+ Complete. Site deployed to production with all features working: Drive Time Calculator, Hampton Roads Pulse, venue enrichment, weather integration. Systemd timers configured for automated content refresh.
 
-Production troubleshooting completed 2026-01-23: Fixed nginx port mismatch and Google Maps API referrer restrictions.
+SEO tagline added 2026-01-23: "Hampton Roads Interactive Relocation Guide" now appears in all meta tags, OG/Twitter cards, and visibly in the homepage hero section.
 
 ---
 
@@ -70,6 +70,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 25. [COMPLETED] Production deployment guide & sync_content command
 26. [COMPLETED] **PRODUCTION DEPLOYED** - https://abouthamptonroads.com
 27. [COMPLETED] Pulse headlines prompt fix - no crime/tragedy content
+28. [COMPLETED] SEO tagline "Hampton Roads Interactive Relocation Guide" - all meta tags + visible hero
 
 ### Next Session
 1. [ ] Add favicon.ico (currently 404)

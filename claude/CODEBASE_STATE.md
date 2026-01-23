@@ -73,6 +73,7 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 43. **Production troubleshooting** - Fixed nginx port mismatch (8009→8014) - 2026-01-23
 44. **Google Maps API fix** - Added bare domain to referrer restrictions - 2026-01-23
 45. **Infrastructure docs** - Clarified user vs Claude responsibilities - 2026-01-23
+46. **SEO tagline** - "Hampton Roads Interactive Relocation Guide" across all meta tags + hero - 2026-01-23
 
 ---
 
