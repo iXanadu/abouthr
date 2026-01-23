@@ -9,6 +9,8 @@ Phase 7+ Complete. Site deployed to production with all features working: Drive 
 
 SEO tagline added 2026-01-23: "Hampton Roads Interactive Relocation Guide" now appears in all meta tags, OG/Twitter cards, and visibly in the homepage hero section.
 
+Drive Calculator promoted 2026-01-23: Added to main nav, footer (all pages), and homepage CTA section. Ready for sitemap submission to Google/Bing.
+
 ---
 
 ## Working Context
@@ -71,14 +73,16 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 26. [COMPLETED] **PRODUCTION DEPLOYED** - https://abouthamptonroads.com
 27. [COMPLETED] Pulse headlines prompt fix - no crime/tragedy content
 28. [COMPLETED] SEO tagline "Hampton Roads Interactive Relocation Guide" - all meta tags + visible hero
+29. [COMPLETED] Drive Calculator visibility - nav menu, footer, homepage CTA section
 
 ### Next Session
 1. [ ] **REMINDER: Add favicon.ico** (currently 404 - user requested reminder)
-2. [ ] Test on real mobile devices
-3. [ ] Monitor production logs for errors
-4. [ ] Consider www redirect setup (www → non-www)
-5. [ ] City-specific pulse content
-6. [ ] Search functionality
+2. [ ] Submit sitemap to Google/Bing (ready now)
+3. [ ] Test on real mobile devices
+4. [ ] Monitor production logs for errors
+5. [ ] Consider www redirect setup (www → non-www)
+6. [ ] City-specific pulse content
+7. [ ] Search functionality
 
 ---
 

@@ -1,7 +1,7 @@
-# Session Progress: SEO Tagline Update
+# Session Progress: SEO & Drive Calculator Visibility
 
 **Date:** 2026-01-23
-**Focus:** Add SEO-optimized tagline for crawler visibility and user experience
+**Focus:** Add SEO-optimized tagline and promote Drive Calculator for crawler visibility
 
 ---
 
@@ -65,14 +65,64 @@ Added eyebrow text above the main hero headline:
 
 ---
 
+### 4. Drive Calculator Site-Wide Visibility
+
+Added Drive Calculator links throughout the site to boost SEO signal before sitemap submission.
+
+**Main Navigation:**
+- Added "Drive Times" link between Tunnels and Vacation
+
+**Footer (all pages):**
+- Added "Drive Times" to Resources section
+
+**Homepage CTA Section:**
+- New promotional section after Cities grid
+- Features tunnels map image
+- "Plan Your Commute Before You Move" headline
+- 4 bullet points: military bases, rush hour, airports, beaches
+- Large CTA button to /drive-calculator/
+
+---
+
+## Files Modified
+
+| File | Changes |
+|------|---------|
+| `templates/base.html` | Updated meta tags, added Drive Times to nav menu and footer |
+| `templates/guide/home.html` | Updated title/meta, added hero tagline, added Drive Calculator CTA section |
+| `static/css/style.css` | Added `.hero-tagline` class |
+
+---
+
+## Technical Decisions
+
+### SEO Keyword Strategy
+- **Keywords first:** "Hampton Roads" at the start for location-based searches
+- **Intent keyword:** "Relocation Guide" matches search queries
+- **Differentiator:** "Interactive" sets apart from static content, improves CTR
+- No filler words ("The", "Your") in meta tags to maximize keyword density
+
+### Drive Calculator SEO Strategy
+- Internal links from every page (nav + footer) = high crawler priority
+- Prominent homepage placement signals importance
+- Ready for Google/Bing sitemap submission
+
+### Visual Hierarchy
+- Eyebrow text pattern (small text above main headline) is a common premium design pattern
+- Gold color provides contrast against dark hero background
+- Letter-spacing creates sophisticated, professional feel
+
+---
+
 ## Pending / Next Session
 
-1. [ ] Add favicon.ico (still 404)
-2. [ ] Test on real mobile devices
-3. [ ] Monitor production logs
-4. [ ] WWW redirect (user infrastructure task)
-5. [ ] City-specific pulse content (future)
-6. [ ] Search functionality (future)
+1. [ ] **REMINDER: Add favicon.ico** (currently 404)
+2. [ ] Submit sitemap to Google/Bing (ready now)
+3. [ ] Test on real mobile devices
+4. [ ] Monitor production logs
+5. [ ] WWW redirect (user infrastructure task)
+6. [ ] City-specific pulse content (future)
+7. [ ] Search functionality (future)
 
 ---
 
@@ -81,3 +131,9 @@ Added eyebrow text above the main hero headline:
 ```bash
 python manage.py collectstatic --no-input  # 1 static file copied (style.css)
 ```
+
+## Commits
+
+1. `5d27747` - Add SEO tagline: Hampton Roads Interactive Relocation Guide
+2. `34eadd6` - Add favicon reminder for next session
+3. `68480fc` - Add Drive Calculator to nav, footer, and homepage CTA
