@@ -68,6 +68,7 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 38. **Drive Calculator landing page for ads/campaigns** - 2026-01-22
 39. **Optimized hero image (9MB→441KB)** - 2026-01-22
 40. **Production deployment guide & sync_content command** - 2026-01-22
+41. **PRODUCTION DEPLOYED** - https://abouthamptonroads.com - 2026-01-22
 
 ---
 
@@ -208,7 +209,7 @@ abouthr/
 | Environment | Status | URL | Last Deploy |
 |-------------|--------|-----|-------------|
 | Development | **Running** | dev.abouthamptonroads.com | 2026-01-22 |
-| Production | Not deployed | abouthamptonroads.com | - |
+| Production | **Running** | abouthamptonroads.com | 2026-01-22 |
 
 ### Server Commands
 ```bash
