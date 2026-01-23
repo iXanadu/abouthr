@@ -1,11 +1,13 @@
 # About Hampton Roads - Context Memory
 
-**Last Updated:** 2026-01-22 (evening)
+**Last Updated:** 2026-01-23
 
 ## Current Status
-**PRODUCTION LIVE** at https://abouthamptonroads.com
+**PRODUCTION LIVE & VERIFIED** at https://abouthamptonroads.com
 
-Phase 7+ Complete. Site deployed to production with all features: Drive Time Calculator, Hampton Roads Pulse, venue enrichment, weather integration. Systemd timers configured for automated content refresh.
+Phase 7+ Complete. Site deployed to production with all features working: Drive Time Calculator, Hampton Roads Pulse, venue enrichment, weather integration. Systemd timers configured for automated content refresh.
+
+Production troubleshooting completed 2026-01-23: Fixed nginx port mismatch and Google Maps API referrer restrictions.
 
 ---
 
@@ -28,6 +30,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 - **Two API keys for Google:** Server-side (IP restricted) vs client-side (HTTP referrer restricted)
 - **Modern Places API:** Using AutocompleteSuggestion instead of deprecated Autocomplete widget
 - **Pulse Content Policy:** NO crime, fires, deaths, missing persons - this is a relocation guide, show positive community content
+- **Infrastructure Ownership:** User's setup script handles nginx/SSL/gunicorn; Claude handles Django code only
 
 ### Patterns Being Used
 - **AI Services:** Configurable model-per-operation with fallback chain
@@ -69,11 +72,12 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 27. [COMPLETED] Pulse headlines prompt fix - no crime/tragedy content
 
 ### Next Session
-1. [ ] Test on real mobile devices
-2. [ ] Monitor production logs
-3. [ ] Consider www redirect setup
-4. [ ] City-specific pulse content
-5. [ ] Search functionality
+1. [ ] Add favicon.ico (currently 404)
+2. [ ] Test on real mobile devices
+3. [ ] Monitor production logs for errors
+4. [ ] Consider www redirect setup (www → non-www)
+5. [ ] City-specific pulse content
+6. [ ] Search functionality
 
 ---
 
@@ -117,10 +121,13 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 ## Known Issues Being Tracked
 
 ### Active Issues
+- [ ] Favicon.ico missing (404 error)
 - [ ] Image sizes large (up to 1.1MB) - optimize during deployment
 - [ ] OpenGraph image URLs are relative - may need absolute for some platforms
 
 ### Recently Resolved
+- [x] Production 400 error - nginx proxying to wrong port (8009→8014) - 2026-01-23
+- [x] Google Maps API 403 - bare domain needed in referrer restrictions - 2026-01-23
 - [x] Pulse showing empty when stale - now returns expired content as fallback
 - [x] AI Model Manager Bootstrap error - fixed with DOMContentLoaded wrapper
 - [x] AIUsageLog null constraint - added response_time_ms=0

@@ -107,6 +107,17 @@ git push origin branch-name
 3. User manually SSHs to server, runs `git pull`, restarts service
 4. Claude leaves handoff notes when server-side actions are needed
 
+### Infrastructure Setup - USER RESPONSIBILITY
+
+**Claude should NEVER configure server infrastructure.** These are handled by the user's website setup script:
+- Nginx configuration (sites-available/sites-enabled)
+- SSL certificates (Let's Encrypt/Certbot)
+- Gunicorn systemd services and ports
+- Systemd timers
+- User accounts and permissions
+
+If infrastructure changes are needed, Claude should **ask first** and document requirements in `DEV_HANDOFF.md` rather than making changes directly.
+
 ### DEV_HANDOFF.md Pattern
 
 When pushing changes that require server-side actions beyond `git pull`:

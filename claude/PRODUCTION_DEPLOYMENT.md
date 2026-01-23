@@ -1,5 +1,26 @@
 # Production Deployment Guide
 
+## IMPORTANT: Infrastructure Setup
+
+**Claude should NOT configure server infrastructure.** The following are set up by the user using their website setup script:
+
+- Nginx configuration (sites-available/sites-enabled)
+- SSL certificates (Let's Encrypt/Certbot)
+- Gunicorn systemd services
+- Systemd timers
+- User accounts and permissions
+- Firewall rules
+
+Claude's role is limited to:
+- Django application code and configuration
+- Database migrations and seeding
+- Static file collection
+- Documentation
+
+If infrastructure changes are needed, Claude should document what's required in `DEV_HANDOFF.md` and let the user handle the actual setup.
+
+---
+
 ## Environment Overview
 
 ```

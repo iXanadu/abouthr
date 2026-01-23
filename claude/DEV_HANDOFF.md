@@ -6,7 +6,30 @@ This file contains server-side actions needed after `git pull`.
 
 ---
 
-## 2026-01-22: Drive Calculator Landing Page
+## IMPORTANT: Infrastructure Setup Responsibility
+
+**Claude should NOT configure:**
+- Nginx configs
+- SSL certificates
+- Gunicorn systemd services
+- Server infrastructure
+
+These are handled by the user's website setup script. Claude should only document what's needed and let the user configure infrastructure.
+
+---
+
+## 2026-01-23: Production Troubleshooting Complete
+
+### Issue Resolved
+- nginx was proxying to wrong port (8009 instead of 8014)
+- Google Maps API key needed bare domain `https://abouthamptonroads.com/*` added to referrer restrictions (wildcard `*.domain.com` doesn't match bare domain)
+
+### No Actions Needed
+Production is now fully operational at https://abouthamptonroads.com
+
+---
+
+## Archive: 2026-01-22: Drive Calculator Landing Page
 
 ### Summary
 Added a standalone landing page for the Drive Time Calculator at `/drive-calculator/`. This page is designed for ads and drip campaigns, featuring a hero section with the tunnels/bridges map and the full calculator widget.

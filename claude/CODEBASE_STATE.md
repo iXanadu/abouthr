@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-22 (evening)
+**Last Updated:** 2026-01-23
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -70,6 +70,9 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 40. **Production deployment guide & sync_content command** - 2026-01-22
 41. **PRODUCTION DEPLOYED** - https://abouthamptonroads.com - 2026-01-22
 42. **Pulse headlines prompt fix** - exclude crime/tragedy content - 2026-01-22
+43. **Production troubleshooting** - Fixed nginx port mismatch (8009→8014) - 2026-01-23
+44. **Google Maps API fix** - Added bare domain to referrer restrictions - 2026-01-23
+45. **Infrastructure docs** - Clarified user vs Claude responsibilities - 2026-01-23
 
 ---
 
@@ -187,14 +190,14 @@ abouthr/
 ### IMMEDIATE
 - [x] Add utility companies expandable section to city pages
 - [x] Drive Time Calculator on city pages
+- [x] Production deployment and troubleshooting
+- [ ] Add favicon.ico (currently 404)
 - [ ] Test on real mobile devices
 - [ ] Optimize images (large files, up to 1.1MB)
 
-### PRODUCTION DEPLOYMENT
-- [ ] Configure DNS for abouthamptonroads.com
-- [ ] Deploy to production environment
-- [ ] SSL certificate setup
-- [ ] Performance optimization
+### PRODUCTION MAINTENANCE
+- [ ] Monitor production logs
+- [ ] Consider www redirect (www.abouthamptonroads.com → abouthamptonroads.com)
 - [ ] Backup strategy
 
 ### FUTURE / BACKLOG
