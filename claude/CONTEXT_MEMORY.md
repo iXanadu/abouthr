@@ -61,6 +61,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 22. [COMPLETED] Utilities section added to city Quick Info
 23. [COMPLETED] Drive Calculator landing page for marketing campaigns
 24. [COMPLETED] Optimized landing page hero image (9MB→441KB)
+25. [COMPLETED] Production deployment guide & sync_content command
 
 ### Next Session
 1. [ ] Test on real mobile devices

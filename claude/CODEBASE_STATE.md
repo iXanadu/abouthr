@@ -67,6 +67,7 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 37. **Utilities section added to city Quick Info** - 2026-01-22
 38. **Drive Calculator landing page for ads/campaigns** - 2026-01-22
 39. **Optimized hero image (9MB→441KB)** - 2026-01-22
+40. **Production deployment guide & sync_content command** - 2026-01-22
 
 ---
 

@@ -2,6 +2,8 @@
 
 This file contains server-side actions needed after `git pull`.
 
+**For full production deployment instructions, see:** `claude/PRODUCTION_DEPLOYMENT.md`
+
 ---
 
 ## 2026-01-22: Drive Calculator Landing Page
