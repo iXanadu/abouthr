@@ -27,6 +27,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 - **RSS for headlines:** More reliable and cheaper than AI web search
 - **Two API keys for Google:** Server-side (IP restricted) vs client-side (HTTP referrer restricted)
 - **Modern Places API:** Using AutocompleteSuggestion instead of deprecated Autocomplete widget
+- **Pulse Content Policy:** NO crime, fires, deaths, missing persons - this is a relocation guide, show positive community content
 
 ### Patterns Being Used
 - **AI Services:** Configurable model-per-operation with fallback chain
@@ -65,6 +66,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 24. [COMPLETED] Optimized landing page hero image (9MB→441KB)
 25. [COMPLETED] Production deployment guide & sync_content command
 26. [COMPLETED] **PRODUCTION DEPLOYED** - https://abouthamptonroads.com
+27. [COMPLETED] Pulse headlines prompt fix - no crime/tragedy content
 
 ### Next Session
 1. [ ] Test on real mobile devices

@@ -69,6 +69,7 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 39. **Optimized hero image (9MB→441KB)** - 2026-01-22
 40. **Production deployment guide & sync_content command** - 2026-01-22
 41. **PRODUCTION DEPLOYED** - https://abouthamptonroads.com - 2026-01-22
+42. **Pulse headlines prompt fix** - exclude crime/tragedy content - 2026-01-22
 
 ---
 
