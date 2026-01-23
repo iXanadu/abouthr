@@ -64,14 +64,18 @@ CONTENT PRIORITIES (in order):
 5. Weather alerts (only if significant)
 6. Local politics that affect quality of life
 
-STRICT LIMITS:
-- Maximum 1 crime/accident story, and ONLY if it's a major public safety issue (not routine crime)
-- NO shootings, murders, or violent crime unless it's an extraordinary regional emergency
-- NO routine traffic accidents
-- NO obituaries or death notices
+ABSOLUTELY EXCLUDE (non-negotiable):
+- NO crime stories of any kind (shootings, murders, robberies, assaults)
+- NO fires, accidents, or deaths
+- NO missing persons cases
+- NO court cases or arrests
+- NO obituaries
+- NO tragedy or disaster stories
 - NO national news without strong local angle
 
-Remember: People use this site to decide if they want to MOVE here. Show them a vibrant, welcoming community."""
+If the news feed is mostly negative/crime stories, select FEWER items (3-4) rather than including negative content. It's better to have fewer positive stories than to include ANY crime or tragedy.
+
+Remember: People use this site to decide if they want to MOVE here. Would this headline make someone excited to relocate? If not, skip it."""
 
 
 class HeadlinesService:
