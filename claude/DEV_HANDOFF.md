@@ -4,6 +4,42 @@ This file contains server-side actions needed after `git pull`.
 
 ---
 
+## 2026-01-22: Drive Calculator Landing Page
+
+### Summary
+Added a standalone landing page for the Drive Time Calculator at `/drive-calculator/`. This page is designed for ads and drip campaigns, featuring a hero section with the tunnels/bridges map and the full calculator widget.
+
+### Required Actions After `git pull`
+
+1. **Collect static files:**
+   ```bash
+   python manage.py collectstatic --no-input
+   ```
+
+2. **Restart the service:**
+   ```bash
+   sudo systemctl restart gunicorn_abouthamptonroads_dev
+   ```
+
+### New/Modified Files
+- `templates/guide/drive_calculator.html` - New landing page template
+- `guide/views.py` - Added DriveCalculatorView, added /drive-calculator/ to sitemap
+- `guide/urls.py` - Added /drive-calculator/ route
+- `static/css/style.css` - Added hero section styles
+
+### Landing Page URL
+- Dev: https://dev.abouthamptonroads.com/drive-calculator/
+- Prod: https://abouthamptonroads.com/drive-calculator/
+
+### Marketing Features
+- Hero section with tunnels/bridges map image
+- Strong CTAs for contacting Trustworthy Agents
+- Lists all 39 preset destinations by category
+- SEO optimized with meta tags
+- OpenGraph image set to tunnels map for social sharing
+
+---
+
 ## 2026-01-22: Drive Time Calculator
 
 ### Summary

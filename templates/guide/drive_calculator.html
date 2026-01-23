@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Drive Time Calculator - Hampton Roads{% endblock %}
+
+{% block meta_description %}Calculate drive times to military bases, beaches, airports, hospitals, and universities in Hampton Roads, Virginia. Plan your commute before relocating.{% endblock %}
+
+{% block og_title %}Drive Time Calculator - Hampton Roads{% endblock %}
+{% block og_description %}Plan your commute to Naval Station Norfolk, Langley AFB, Virginia Beach, and 35+ destinations. Real-time traffic estimates for Hampton Roads.{% endblock %}
+{% block og_image %}{% static 'images/hero/drive-calculator-hero.jpg' %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Map -->
+<section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('{% static 'images/hero/drive-calculator-hero.jpg' %}');">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1><i class="bi bi-car-front me-2"></i>Drive Time Calculator</h1>
+                <p class="hero-subtitle mx-auto">
+                    Planning a move to Hampton Roads? Calculate your commute times to military bases,
+                    beaches, hospitals, universities, and airports before you decide where to live.
+                </p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-building me-1"></i>16 Military Bases
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-umbrella-beach me-1"></i>6 Beaches
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-airplane me-1"></i>3 Airports
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-hospital me-1"></i>8 Hospitals
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Calculator Section -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% include 'guide/includes/drive_calculator.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Use This Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Plan Your Commute?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto"
+                         style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-sign-merge-right fs-4"></i>
+                    </div>
+                    <h5>Unique Geography</h5>
+                    <p class="text-muted">
+                        Hampton Roads is connected by bridges and tunnels. Traffic patterns here are different
+                        from anywhere else. Know your route options before you commit.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto"
+                         style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-clock-history fs-4"></i>
+                    </div>
+                    <h5>Rush Hour Reality</h5>
+                    <p class="text-muted">
+                        A 15-minute drive can become 45 minutes during rush hour. Test morning and evening
+                        commute times to find the best neighborhood for your situation.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto"
+                         style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-house-heart fs-4"></i>
+                    </div>
+                    <h5>Find Your Home</h5>
+                    <p class="text-muted">
+                        Living close to work means more time with family. Use this calculator to compare
+                        neighborhoods and find the perfect balance of commute and lifestyle.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Destinations Quick Reference -->
+<section class="py-5 bg-light-custom">
+    <div class="container">
+        <h2 class="text-center mb-4">Popular Destinations</h2>
+        <p class="text-center text-muted mb-5">
+            We've pre-loaded 39 key destinations. Select any of these in the calculator above.
+        </p>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-building text-primary me-2"></i>Military Bases</h5>
+                    <ul class="list-unstyled mb-0 small">
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Naval Station Norfolk</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>NAS Oceana</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Joint Base Langley-Eustis</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Norfolk Naval Shipyard</li>
+                        <li class="text-muted">+ 12 more bases</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-umbrella-beach text-primary me-2"></i>Beaches</h5>
+                    <ul class="list-unstyled mb-0 small">
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Virginia Beach Oceanfront</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Sandbridge Beach</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Buckroe Beach</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Ocean View Beach</li>
+                        <li class="text-muted">+ 2 more beaches</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-mortarboard text-primary me-2"></i>Universities</h5>
+                    <ul class="list-unstyled mb-0 small">
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Old Dominion University</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Norfolk State University</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>College of William & Mary</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Christopher Newport University</li>
+                        <li class="text-muted">+ 2 more schools</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-hospital text-primary me-2"></i>Hospitals</h5>
+                    <ul class="list-unstyled mb-0 small">
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Sentara Norfolk General</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>CHKD (Children's Hospital)</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Naval Medical Center Portsmouth</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Riverside Regional</li>
+                        <li class="text-muted">+ 4 more hospitals</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-airplane text-primary me-2"></i>Airports</h5>
+                    <ul class="list-unstyled mb-0 small">
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Norfolk International (ORF)</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Newport News/Williamsburg (PHF)</li>
+                        <li><i class="bi bi-geo-alt me-1 text-muted"></i>Richmond International (RIC)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="info-card h-100">
+                    <h5><i class="bi bi-info-circle text-primary me-2"></i>Need Help?</h5>
+                    <p class="small text-muted mb-3">
+                        Our team specializes in helping military families and professionals
+                        relocating to Hampton Roads find the perfect home.
+                    </p>
+                    <a href="{% url 'guide:contact' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-telephone me-1"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-3">Ready to Find Your Hampton Roads Home?</h2>
+        <p class="lead mb-4 opacity-75">
+            We've helped hundreds of families relocate to Hampton Roads. Let us help you too.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'guide:home' %}" class="btn btn-light btn-lg">
+                <i class="bi bi-compass me-2"></i>Explore the Region
+            </a>
+            <a href="{% url 'guide:contact' %}" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-telephone me-2"></i>Talk to an Expert
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+{% if google_maps_api_key %}
+<script>
+(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+  key: "{{ google_maps_api_key }}",
+  v: "weekly"
+});
+</script>
+{% endif %}
+{% endblock %}

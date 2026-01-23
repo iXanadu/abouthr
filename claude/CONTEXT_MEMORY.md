@@ -1,9 +1,9 @@
 # About Hampton Roads - Context Memory
 
-**Last Updated:** 2026-01-22
+**Last Updated:** 2026-01-22 (evening)
 
 ## Current Status
-Phase 7+ Complete. Added Drive Time Calculator to city pages with Google Maps/Places/Directions API integration. 39 preset destinations (military bases, airports, hospitals, universities, beaches). Also added utilities section to city Quick Info sidebar.
+Phase 7+ Complete. Added Drive Time Calculator to city pages with Google Maps/Places/Directions API integration. 39 preset destinations (military bases, airports, hospitals, universities, beaches). Also added utilities section to city Quick Info sidebar. Created standalone Drive Calculator landing page at `/drive-calculator/` for ads/drip campaigns.
 
 ---
 
@@ -59,6 +59,8 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 20. [COMPLETED] Google Maps/Places/Directions API integration
 21. [COMPLETED] CMS management for Drive Destinations
 22. [COMPLETED] Utilities section added to city Quick Info
+23. [COMPLETED] Drive Calculator landing page for marketing campaigns
+24. [COMPLETED] Optimized landing page hero image (9MB→441KB)
 
 ### Next Session
 1. [ ] Test on real mobile devices

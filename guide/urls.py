@@ -17,6 +17,7 @@ urlpatterns = [
     path('testimonials/', views.TestimonialsView.as_view(), name='testimonials'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('contact/', views.ContactView.as_view(), name='contact'),
+    path('drive-calculator/', views.DriveCalculatorView.as_view(), name='drive_calculator'),
     # Venue photos
     path('venue/<int:venue_id>/photo/', views.venue_photo, name='venue_photo'),
     path('venue/<int:venue_id>/photo/<int:photo_index>/', views.venue_photo, name='venue_photo_index'),

@@ -1,6 +1,6 @@
 # About Hampton Roads - Codebase State
 
-**Last Updated:** 2026-01-22
+**Last Updated:** 2026-01-22 (evening)
 
 ## Project Overview
 Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trustworthy Agents Group's relocation guide PDF, providing comprehensive information about the Hampton Roads/Tidewater region for people relocating to the area.
@@ -65,6 +65,8 @@ Web-based Hampton Roads, Virginia relocation guide. Digital version of the Trust
 35. **Google Maps/Places/Directions API integration** - 2026-01-22
 36. **CMS management for Drive Destinations** - 2026-01-22
 37. **Utilities section added to city Quick Info** - 2026-01-22
+38. **Drive Calculator landing page for ads/campaigns** - 2026-01-22
+39. **Optimized hero image (9MB→441KB)** - 2026-01-22
 
 ---
 
@@ -160,6 +162,7 @@ abouthr/
 | TestimonialsView | `/testimonials/` | testimonials.html |
 | AboutView | `/about/` | about.html |
 | ContactView | `/contact/` | contact.html |
+| DriveCalculatorView | `/drive-calculator/` | drive_calculator.html |
 | venue_photo | `/venue/<id>/photo/` | (proxy to Google) |
 
 ### CMS (cms/urls.py)

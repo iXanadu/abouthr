@@ -128,13 +128,42 @@ For the Drive Calculator to work, the Google Cloud Console API key needs:
 
 ---
 
+### 6. Drive Calculator Landing Page
+- Created standalone landing page at `/drive-calculator/` for ads/drip campaigns
+- Hero section with tunnels/bridges map image as background
+- Full drive calculator widget
+- Marketing-focused CTAs and destination listings
+- SEO optimized with OpenGraph tags
+
+---
+
+## Files Created (Landing Page Addition)
+
+| File | Purpose |
+|------|---------|
+| `templates/guide/drive_calculator.html` | Standalone landing page for marketing |
+
+---
+
+## Files Modified (Landing Page Addition)
+
+| File | Changes |
+|------|---------|
+| `guide/views.py` | Added DriveCalculatorView, added to sitemap |
+| `guide/urls.py` | Added /drive-calculator/ route |
+| `static/css/style.css` | Added hero section styles |
+| `claude/DEV_HANDOFF.md` | Added deployment instructions |
+
+---
+
 ## Pending / Next Session
 
-1. [ ] Test drive calculator on mobile devices
-2. [ ] Consider adding travel time display to preset destination cards
-3. [ ] Production deployment with API key configuration
-4. [ ] Image optimization
-5. [ ] DNS configuration for abouthamptonroads.com
+1. [ ] Restart server to deploy landing page
+2. [ ] Test drive calculator on mobile devices
+3. [ ] Consider adding travel time display to preset destination cards
+4. [ ] Production deployment with API key configuration
+5. [ ] Image optimization
+6. [ ] DNS configuration for abouthamptonroads.com
 
 ---
 

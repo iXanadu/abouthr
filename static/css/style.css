@@ -1279,6 +1279,11 @@ html {
     }
 }
 
+/* Landing page has padding, so remove calculator margin */
+.bg-light-custom .drive-calculator {
+    margin-top: 0;
+}
+
 /* ===== Drive Time Calculator ===== */
 .drive-calculator {
     background: var(--bg-white);

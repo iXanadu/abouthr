@@ -168,12 +168,35 @@ class ContactView(TemplateView):
     template_name = 'guide/contact.html'
 
 
+class DriveCalculatorView(TemplateView):
+    """Standalone Drive Time Calculator landing page for marketing campaigns."""
+    template_name = 'guide/drive_calculator.html'
+
+    def get_context_data(self, **kwargs):
+        from guide.models import DriveDestination
+        from django.conf import settings
+
+        context = super().get_context_data(**kwargs)
+        context['drive_destinations'] = DriveDestination.objects.filter(
+            is_published=True
+        ).order_by('category', 'order', 'name')
+        context['google_maps_api_key'] = settings.GOOGLE_MAPS_API_KEY
+
+        # Pre-fill from URL params (for shared links)
+        context['drive_from'] = self.request.GET.get('from', '')
+        context['drive_to'] = self.request.GET.get('to', '')
+        context['drive_time'] = self.request.GET.get('time', 'now')
+
+        return context
+
+
 def sitemap_xml(request):
     """Generate sitemap.xml dynamically."""
     base_url = 'https://abouthamptonroads.com'
 
     urls = [
         {'loc': base_url + '/', 'priority': '1.0', 'changefreq': 'weekly'},
+        {'loc': base_url + '/drive-calculator/', 'priority': '0.9', 'changefreq': 'monthly'},
         {'loc': base_url + '/military/', 'priority': '0.8', 'changefreq': 'monthly'},
         {'loc': base_url + '/tunnels/', 'priority': '0.7', 'changefreq': 'monthly'},
         {'loc': base_url + '/vacation/', 'priority': '0.7', 'changefreq': 'monthly'},
