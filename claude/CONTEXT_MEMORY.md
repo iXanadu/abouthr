@@ -73,7 +73,7 @@ Dynamic content features complete. Site now has fresh, updating content that giv
 28. [COMPLETED] SEO tagline "Hampton Roads Interactive Relocation Guide" - all meta tags + visible hero
 
 ### Next Session
-1. [ ] Add favicon.ico (currently 404)
+1. [ ] **REMINDER: Add favicon.ico** (currently 404 - user requested reminder)
 2. [ ] Test on real mobile devices
 3. [ ] Monitor production logs for errors
 4. [ ] Consider www redirect setup (www → non-www)
