@@ -18,7 +18,46 @@ These are handled by the user's website setup script. Claude should only documen
 
 ---
 
-## 2026-01-23: Production Troubleshooting Complete
+## 2026-01-23: WWW Redirect & Dev Robots.txt
+
+### Code Changes (after `git pull`)
+- `robots.txt` is now environment-aware: blocks crawling on dev, allows on production
+- No migrations or collectstatic needed
+
+### Infrastructure Action Needed: WWW Redirect
+
+Add a new nginx server block to redirect `www.abouthamptonroads.com` → `abouthamptonroads.com`:
+
+```nginx
+# WWW to non-WWW redirect for abouthamptonroads.com
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name www.abouthamptonroads.com;
+
+    ssl_certificate /etc/letsencrypt/live/abouthamptonroads.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/abouthamptonroads.com/privkey.pem;
+
+    return 301 https://abouthamptonroads.com$request_uri;
+}
+```
+
+**Note:** The SSL certificate paths may differ based on your certbot setup. Check your existing prod nginx config for the correct paths.
+
+After adding, test and reload:
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+### Google Maps API Key Update
+Added explicit referrer entries (wildcards unreliable):
+- `https://abouthamptonroads.com/*`
+- `https://www.abouthamptonroads.com/*`
+- `https://dev.abouthamptonroads.com/*`
+
+---
+
+## Archive: 2026-01-23: Production Troubleshooting Complete
 
 ### Issue Resolved
 - nginx was proxying to wrong port (8009 instead of 8014)

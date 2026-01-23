@@ -231,11 +231,23 @@ def sitemap_xml(request):
 
 
 def robots_txt(request):
-    """Generate robots.txt."""
-    content = """User-agent: *
+    """Generate robots.txt - blocks crawling on non-production environments."""
+    from django.conf import settings
+
+    environment = getattr(settings, 'ENVIRONMENT', 'production')
+
+    if environment == 'production':
+        content = """User-agent: *
 Allow: /
 
 Sitemap: https://abouthamptonroads.com/sitemap.xml
+"""
+    else:
+        # Block all crawling on dev/local environments
+        content = """User-agent: *
+Disallow: /
+
+# This is a development/staging environment - do not index
 """
     return HttpResponse(content, content_type='text/plain')
 
