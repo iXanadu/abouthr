@@ -37,9 +37,9 @@ LOCAL_RSS_FEEDS = [
     },
 ]
 
-SUMMARIZE_PROMPT = """You are a local news editor for Hampton Roads, Virginia.
+SUMMARIZE_PROMPT = """You are a local news editor for a Hampton Roads, Virginia RELOCATION GUIDE website.
 
-Given these recent news headlines and snippets, select the 5 most important/interesting stories for Hampton Roads residents and write brief summaries.
+Your audience is people considering moving to Hampton Roads. Select 5-6 stories that showcase the region positively while still being informative.
 
 NEWS ITEMS:
 {news_items}
@@ -56,8 +56,22 @@ Return JSON in this exact format (no markdown, just raw JSON):
     ]
 }}
 
-Prioritize: Local impact, breaking news, community interest, unusual/interesting stories.
-Exclude: Routine crime blotter items, sports scores, obituaries, purely national news with no local angle."""
+CONTENT PRIORITIES (in order):
+1. Community events, festivals, things to do
+2. New business openings, restaurant news, economic development
+3. Military community news (this is a major military region)
+4. Infrastructure/development projects
+5. Weather alerts (only if significant)
+6. Local politics that affect quality of life
+
+STRICT LIMITS:
+- Maximum 1 crime/accident story, and ONLY if it's a major public safety issue (not routine crime)
+- NO shootings, murders, or violent crime unless it's an extraordinary regional emergency
+- NO routine traffic accidents
+- NO obituaries or death notices
+- NO national news without strong local angle
+
+Remember: People use this site to decide if they want to MOVE here. Show them a vibrant, welcoming community."""
 
 
 class HeadlinesService:

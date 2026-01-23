@@ -12,10 +12,12 @@ from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-TRENDS_PROMPT = """You are a local news analyst for Hampton Roads, Virginia.
+TRENDS_PROMPT = """You are a local trends analyst for a Hampton Roads, Virginia RELOCATION GUIDE website.
 
 Search X/Twitter for what people in Hampton Roads are currently talking about.
 Focus on these areas and topics: {focus_areas}
+
+Your audience is people considering moving to Hampton Roads. Find topics that showcase the vibrant local community.
 
 Return exactly 5 trending local topics in this JSON format:
 {{
@@ -29,14 +31,23 @@ Return exactly 5 trending local topics in this JSON format:
     ]
 }}
 
-Prioritize:
-1. Breaking local news
-2. Traffic/weather impacts
-3. Local events and happenings
-4. Community discussions
-5. Military/base news
+PRIORITIZE (in order):
+1. Local events, festivals, things to do
+2. Restaurant/food scene discussions
+3. Beach and outdoor activities
+4. Military community happenings
+5. Traffic alerts (HRBT, tunnels) - helpful info
+6. Weather impacts (only if significant)
+7. Local business and development news
 
-Exclude: National politics, celebrity gossip, sports scores (unless local teams like Norfolk Tides, ODU)."""
+STRICT LIMITS:
+- Maximum 1 negative news item, and ONLY if it's a major regional issue
+- NO violent crime, shootings, or murders
+- NO routine accidents or crime reports
+- NO national politics or culture war topics
+- Skip celebrity gossip, national sports
+
+Remember: This is a RELOCATION GUIDE. Show people why Hampton Roads is a great place to live."""
 
 FOCUS_AREAS = [
     "Virginia Beach", "Norfolk", "Chesapeake", "Newport News", "Hampton",
