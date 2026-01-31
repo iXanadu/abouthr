@@ -5,6 +5,33 @@
 
 {% block meta_description %}Contact Trustworthy Agents Group for your Hampton Roads relocation. Office in Chesapeake, serving all of Hampton Roads.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Trustworthy Agents Group",
+    "description": "Contact us for Hampton Roads relocation assistance",
+    "url": "{{ request.build_absolute_uri }}",
+    "mainEntity": {
+        "@type": "RealEstateAgent",
+        "name": "Trustworthy Agents Group",
+        "url": "https://www.trustworthyagents.com",
+        "telephone": "+1-757-500-2404",
+        "email": "info@trustworthyagents.com",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "1100 Volvo Parkway, Suite #200",
+            "addressLocality": "Chesapeake",
+            "addressRegion": "VA",
+            "postalCode": "23320",
+            "addressCountry": "US"
+        }
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">

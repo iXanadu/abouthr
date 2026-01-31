@@ -5,6 +5,18 @@
 
 {% block meta_description %}Set up utilities in Hampton Roads - electric, gas, water, trash services by city. Dominion, Virginia Natural Gas, and more.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Hampton Roads Utilities and Vendors Guide",
+    "description": "Set up utilities and services in Hampton Roads Virginia by city",
+    "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">

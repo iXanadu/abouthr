@@ -5,6 +5,18 @@
 
 {% block meta_description %}Read what our clients say about working with Trustworthy Agents Group for their Hampton Roads relocation.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Client Testimonials - Trustworthy Agents Group",
+    "description": "Client reviews and testimonials for Hampton Roads relocation services",
+    "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">

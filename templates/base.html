@@ -9,7 +9,7 @@
     <!-- OpenGraph Meta Tags -->
     <meta property="og:title" content="{% block og_title %}Hampton Roads Interactive Relocation Guide{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Hampton Roads Interactive Relocation Guide - Explore Virginia Beach, Norfolk, Chesapeake, and all 9 cities with drive time calculators, live weather, and local insights.{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.webp' %}{% endblock %}">
     <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="About Hampton Roads">
@@ -18,7 +18,10 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}Hampton Roads Interactive Relocation Guide{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Hampton Roads Interactive Relocation Guide - Explore all 9 cities with drive time calculators, live weather, and local insights.{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.jpg' %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero/pier-sunset.webp' %}{% endblock %}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
 
     <title>{% block title %}About Hampton Roads{% endblock %} | Hampton Roads Interactive Relocation Guide</title>
 
@@ -37,6 +40,19 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
     {% block extra_css %}{% endblock %}
+
+    <!-- Structured Data (JSON-LD) -->
+    {% block json_ld %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "About Hampton Roads",
+        "url": "{{ request.scheme }}://{{ request.get_host }}/",
+        "description": "Hampton Roads Interactive Relocation Guide"
+    }
+    </script>
+    {% endblock %}
 </head>
 <body>
     <!-- Navigation -->

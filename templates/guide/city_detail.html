@@ -17,9 +17,26 @@
 
 {% block meta_description %}Discover the best of {{ city.name }}, Virginia - top-rated restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "City",
+    "name": "{{ city.name }}",
+    "description": "{{ city.description|truncatewords:50 }}",
+    "url": "{{ request.build_absolute_uri }}",
+    "containedInPlace": {
+        "@type": "State",
+        "name": "Virginia",
+        "addressCountry": "US"
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- City Hero -->
-<section class="city-hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('{% static 'images/cities/' %}{{ city.slug }}.jpg');">
+<section class="city-hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('{% static 'images/cities/' %}{{ city.slug }}.webp');">
     <div class="container">
         <span class="region-badge {% if city.region.slug == 'southside' %}southside{% else %}peninsula{% endif %} mb-3">
             {{ city.region.name }}

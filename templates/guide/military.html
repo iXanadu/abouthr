@@ -5,6 +5,18 @@
 
 {% block meta_description %}Hampton Roads military relocation guide - Naval Station Norfolk, Langley AFB, and all military bases. PCS resources for active duty and families.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Military Relocation Guide - Hampton Roads",
+    "description": "Guide to military bases in Hampton Roads including Naval Station Norfolk and Langley AFB",
+    "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">

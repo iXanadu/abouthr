@@ -5,9 +5,36 @@
 
 {% block meta_description %}Hampton Roads Interactive Relocation Guide - Explore Virginia Beach, Norfolk, Chesapeake, and all 9 cities. Drive time calculators, live weather, local trends, and military PCS resources.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "About Hampton Roads",
+    "url": "{{ request.scheme }}://{{ request.get_host }}/",
+    "description": "Hampton Roads Interactive Relocation Guide",
+    "publisher": {
+        "@type": "RealEstateAgent",
+        "name": "Trustworthy Agents Group",
+        "url": "https://www.trustworthyagents.com",
+        "telephone": "+1-757-500-2404",
+        "email": "info@trustworthyagents.com",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "1100 Volvo Parkway, Suite #200",
+            "addressLocality": "Chesapeake",
+            "addressRegion": "VA",
+            "postalCode": "23320",
+            "addressCountry": "US"
+        }
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
-<section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('{% static 'images/hero/pier-sunset.jpg' %}');">
+<section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('{% static 'images/hero/pier-sunset.webp' %}');">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-8">

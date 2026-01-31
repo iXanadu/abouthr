@@ -5,6 +5,18 @@
 
 {% block meta_description %}Vacation like a local - weekend getaways and day trips from Hampton Roads to D.C., Outer Banks, Shenandoah, and more.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Vacation Destinations Near Hampton Roads",
+    "description": "Weekend getaways and day trips from Hampton Roads Virginia",
+    "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">

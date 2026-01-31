@@ -5,6 +5,18 @@
 
 {% block meta_description %}Guide to Hampton Roads tunnel systems - HRBT, Downtown Tunnel, Midtown Tunnel, CBBT, and more. Connecting Southside and Peninsula.{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Hampton Roads Tunnel Systems Guide",
+    "description": "Guide to bridges and tunnels connecting Southside and Peninsula in Hampton Roads",
+    "url": "{{ request.build_absolute_uri }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">
