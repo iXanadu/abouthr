@@ -27,6 +27,9 @@ PyMuPDF==1.26.7
 pypdf==6.6.0
 pyyaml>=6.0
 
+# HTTP client
+requests>=2.31.0
+
 # AI Services
 anthropic>=0.40.0
 openai>=1.50.0
