@@ -13,9 +13,9 @@
 {% endif %}
 {% endblock %}
 
-{% block title %}{{ city.name }} - Restaurants, Attractions & Things to Do{% endblock %}
+{% block title %}{{ city.name }} City Guide{% endblock %}
 
-{% block meta_description %}Discover the best of {{ city.name }}, Virginia - top-rated restaurants, cafes, attractions, events{% if city.has_beaches %}, and beaches{% endif %}. Your complete guide to living in {{ city.name }}.{% endblock %}
+{% block meta_description %}{{ city.name }}, Virginia guide - restaurants, attractions{% if city.has_beaches %}, beaches{% endif %} & things to do. Plan your move to {{ city.name }}.{% endblock %}
 
 {% block json_ld %}
 <script type="application/ld+json">
